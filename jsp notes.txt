@@ -1,4 +1,4 @@
-```
+ï»¿```
 <%
 	for (int a = 1; a <= 5; a++) {
 		out.println(a + "<br>");
@@ -14,40 +14,40 @@
 <% } %>
 ```
 
-System.out.printlnÀ¸·Î ÇÏ¸é ÄÜ¼ÖÃ¢¿¡ Ãâ·Â
-out.printlnÀ¸·Î ÇÏ¸é À¥¿¡ Ãâ·Â
+System.out.printlnìœ¼ë¡œ í•˜ë©´ ì½˜ì†”ì°½ì— ì¶œë ¥
+out.printlnìœ¼ë¡œ í•˜ë©´ ì›¹ì— ì¶œë ¥
 
 ```
 <% out.println(i); %>
 <%=i%>
 
-À§ÀÇ 2°³ °°Àº ÀÇ¹ÌÀÌ´Ù.
+ìœ„ì˜ 2ê°œ ê°™ì€ ì˜ë¯¸ì´ë‹¤.
 ```
 
-model1 ¹æ½Ä -> html + java -> ½ºÆÄ°ÔÆ¼
-model2 ¹æ½Ä -> html / java
+model1 ë°©ì‹ -> html + java -> ìŠ¤íŒŒê²Œí‹°
+model2 ë°©ì‹ -> html / java
 
 
 <%! %>
-- ¼±¾ð¹® : ¸à¹öº¯¼ö ¶Ç´Â ¸â¹ö¸Þ¼Òµå·Î »ç¿ëÇÏ°íÀÚ ÇÒ ¶§, Áï Àü¿ªº¯¼ö. °ÅÀÇ ¾È¾¸.
+- ì„ ì–¸ë¬¸ : ë©˜ë²„ë³€ìˆ˜ ë˜ëŠ” ë©¤ë²„ë©”ì†Œë“œë¡œ ì‚¬ìš©í•˜ê³ ìž í•  ë•Œ, ì¦‰ ì „ì—­ë³€ìˆ˜. ê±°ì˜ ì•ˆì”€.
 
 <% %>
-- ½ºÅ©¸³Æ®¸´ : Áö¿ªº¯¼ö
+- ìŠ¤í¬ë¦½íŠ¸ë¦¿ : ì§€ì—­ë³€ìˆ˜
 
 <%= %>
-- Ç¥Çö½Ä(Expression), out.println(), EL: ${}, °£´ÜÇÑ º¯¼ö, °ª
+- í‘œí˜„ì‹(Expression), out.println(), EL: ${}, ê°„ë‹¨í•œ ë³€ìˆ˜, ê°’
 
 
-formÅÂ±×ÀÇ ÇÑ±ÛÀÌ ±úÁöÁö ¾Ê°Ô ÇÏ·Á¸é µ¥ÀÌÅÍ ¹Þ´Â ÆäÀÌÁö¿¡ ¾Æ·¡ ÁÙ Ãß°¡.
+formíƒœê·¸ì˜ í•œê¸€ì´ ê¹¨ì§€ì§€ ì•Šê²Œ í•˜ë ¤ë©´ ë°ì´í„° ë°›ëŠ” íŽ˜ì´ì§€ì— ì•„ëž˜ ì¤„ ì¶”ê°€.
 <% request.setCharacterEncoding("UTF-8"); %>
 
 
 
-* ¹Ýº¹¹®À» ÅëÇØ formÀÇ Á¤º¸¸¦ ¹Þ´Â ¹æ¹ý
-- counter¸¦ ¼±¾ðÇØ¼­ ¹Ýº¹¹® µ¹ ¶§¸¶´Ù 1¾¿ µî°¡½ÃÅ² ´ÙÀ½,
-type="hidden"ÀÇ ÅÂ±×¸¦ ÅëÇØ¼­ counterÀÇ °ªÀ» Àü´Þ ÇÒ ¼ö ÀÖ´Ù.
-- ¹Ýº¹¹®ÀÇ int i ¸¦ ¹Ýº¹¹® ¹Ù±ù¿¡ ¼±¾ðÇÑ ´ÙÀ½,
-±× i¸¦ type="hidden"À¸·Î ´Ù¸¥ ¹®¼­¿¡ Àü´Þ.
+* ë°˜ë³µë¬¸ì„ í†µí•´ formì˜ ì •ë³´ë¥¼ ë°›ëŠ” ë°©ë²•
+- counterë¥¼ ì„ ì–¸í•´ì„œ ë°˜ë³µë¬¸ ëŒ ë•Œë§ˆë‹¤ 1ì”© ë“±ê°€ì‹œí‚¨ ë‹¤ìŒ,
+type="hidden"ì˜ íƒœê·¸ë¥¼ í†µí•´ì„œ counterì˜ ê°’ì„ ì „ë‹¬ í•  ìˆ˜ ìžˆë‹¤.
+- ë°˜ë³µë¬¸ì˜ int i ë¥¼ ë°˜ë³µë¬¸ ë°”ê¹¥ì— ì„ ì–¸í•œ ë‹¤ìŒ,
+ê·¸ ië¥¼ type="hidden"ìœ¼ë¡œ ë‹¤ë¥¸ ë¬¸ì„œì— ì „ë‹¬.
 
 
 	String[] foods = request.getParameterValues("food");
@@ -55,54 +55,54 @@ type="hidden"ÀÇ ÅÂ±×¸¦ ÅëÇØ¼­ counterÀÇ °ªÀ» Àü´Þ ÇÒ ¼ö ÀÖ´Ù.
 		out.println(foods[i] + "<br>");
 	}
 
-¹ÞÀº Á¤º¸¸¦ Ã³¸®ÇÏ´Â ÆäÀÌÁö¿¡¼­´Â º¸Åë Ãâ·ÂÀ» ÇÏÁö¾Ê°í µ¥ÀÌÅÍ Ã³¸®¸¸ ÇÑ´Ù.
-Ã³¸®ÇÏ°í ±× Á¤º¸¸¦ ´ÙÀ½ ÆäÀÌÁö¿¡ ³Ñ±â·Á¸é Èå¸§ Á¦¾î¸¦ ÀÌ¿ëÇÑ´Ù.
-response.sendRedirect("point2.jsp?studentInfos=" + studentInfos); //Èå¸§ Á¦¾î -> getÀ¸·Î ³Ñ±è
+ë°›ì€ ì •ë³´ë¥¼ ì²˜ë¦¬í•˜ëŠ” íŽ˜ì´ì§€ì—ì„œëŠ” ë³´í†µ ì¶œë ¥ì„ í•˜ì§€ì•Šê³  ë°ì´í„° ì²˜ë¦¬ë§Œ í•œë‹¤.
+ì²˜ë¦¬í•˜ê³  ê·¸ ì •ë³´ë¥¼ ë‹¤ìŒ íŽ˜ì´ì§€ì— ë„˜ê¸°ë ¤ë©´ íë¦„ ì œì–´ë¥¼ ì´ìš©í•œë‹¤.
+response.sendRedirect("point2.jsp?studentInfos=" + studentInfos); //íë¦„ ì œì–´ -> getìœ¼ë¡œ ë„˜ê¹€
 => queryString
 
 <script>
 	location.href="point2.jsp?name=<%=name%>&tot=<%=tot%>";
 </script>
-=> ÀÚ¹Ù½ºÅ©¸³Æ®·Î ÇÏ´Â ¹æ¹ý -> getÀ¸·Î ³Ñ±è
+=> ìžë°”ìŠ¤í¬ë¦½íŠ¸ë¡œ í•˜ëŠ” ë°©ë²• -> getìœ¼ë¡œ ë„˜ê¹€
 
-=> ÆûÅÂ±×¸¦ ´Ù½Ã ½á¼­ º¸³»´Â ¹æ¹ý -> post·Î ³Ñ±è
+=> í¼íƒœê·¸ë¥¼ ë‹¤ì‹œ ì¨ì„œ ë³´ë‚´ëŠ” ë°©ë²• -> postë¡œ ë„˜ê¹€
 
 
 
 <%@ include file="18_top.jsp" %>
 18.jsp
-<%@ include file="18_bottom.jsp" %>   -> include Áö½ÃÀÚ
-includeÇÑ ÆÄÀÏÀ» ÇÕÃÄ¼­ ÄÄÆÄÀÏÇÑ´Ù.
-»ó¼Ó? º¸´Ù´Â ¼öÆòÀûÀÌ´Ù. 18.jsp¿¡ ¼±¾ðÇÑ º¯¼ö¸¦ 18_top.jsp¿¡¼­ »ç¿ëÇÒ ¼ö ÀÖ´Ù.
-18_top¿¡¼­´Â <%=name %> ÀÌ·¸°Ô »ç¿ë
-table¾È¿¡ table ³Ö´Â ½ÄÀ¸·Î È°¿ëÇÒ ¼ö ÀÖ´Ù.
-include Áö½ÃÀÚ·Î ÇÕÄ¥¶§´Â !doctypeÁö¿î´Ù.
+<%@ include file="18_bottom.jsp" %>   -> include ì§€ì‹œìž
+includeí•œ íŒŒì¼ì„ í•©ì³ì„œ ì»´íŒŒì¼í•œë‹¤.
+ìƒì†? ë³´ë‹¤ëŠ” ìˆ˜í‰ì ì´ë‹¤. 18.jspì— ì„ ì–¸í•œ ë³€ìˆ˜ë¥¼ 18_top.jspì—ì„œ ì‚¬ìš©í•  ìˆ˜ ìžˆë‹¤.
+18_topì—ì„œëŠ” <%=name %> ì´ë ‡ê²Œ ì‚¬ìš©
+tableì•ˆì— table ë„£ëŠ” ì‹ìœ¼ë¡œ í™œìš©í•  ìˆ˜ ìžˆë‹¤.
+include ì§€ì‹œìžë¡œ í•©ì¹ ë•ŒëŠ” !doctypeì§€ìš´ë‹¤.
 
 
-<jsp:include page="18_top.jsp" flush="false" />   -> jsp ¾×¼ÇÅÂ±×
-18_topÀ» ¸ÕÀú ÄÄÆÄÀÏÇÏ°í 18¿¡ Áý¾î³Ö±â ¶§¹®¿¡ 18¿¡ ¼±¾ðÇÑ º¯¼ö¸¦ ÀÎ½ÄÇÏÁö ¸øÇÑ´Ù.
+<jsp:include page="18_top.jsp" flush="false" />   -> jsp ì•¡ì…˜íƒœê·¸
+18_topì„ ë¨¼ì € ì»´íŒŒì¼í•˜ê³  18ì— ì§‘ì–´ë„£ê¸° ë•Œë¬¸ì— 18ì— ì„ ì–¸í•œ ë³€ìˆ˜ë¥¼ ì¸ì‹í•˜ì§€ ëª»í•œë‹¤.
 <jsp:include page="18_top.jsp" flush="false">
 	<jsp:param value="<%=name %>" name="name"/>
-</jsp:include> -> ÀÌ·± ½ÄÀ¸·Î º¸³»°í
-18_top¿¡¼­ ¹ÞÀ» ¶§´Â
+</jsp:include> -> ì´ëŸ° ì‹ìœ¼ë¡œ ë³´ë‚´ê³ 
+18_topì—ì„œ ë°›ì„ ë•ŒëŠ”
 <%
 	String name = request.getParameter("name");
-%> -> ÀÌ·±½ÄÀ¸·Î ¹ÞÀ½. ÆûÅÂ±×·Î ³Ñ±ä °Í Ã³·³.
-¾×¼ÇÅÂ±×·Î ÀÎÅ¬·çµå ½ÃÅ³¶§´Â !doctypeÁö¿ìÁö ¾Ê´Â´Ù.
+%> -> ì´ëŸ°ì‹ìœ¼ë¡œ ë°›ìŒ. í¼íƒœê·¸ë¡œ ë„˜ê¸´ ê²ƒ ì²˜ëŸ¼.
+ì•¡ì…˜íƒœê·¸ë¡œ ì¸í´ë£¨ë“œ ì‹œí‚¬ë•ŒëŠ” !doctypeì§€ìš°ì§€ ì•ŠëŠ”ë‹¤.
 
 
 
-* <jsp:useBean> ¾×¼ÇÅÂ±×
+* <jsp:useBean> ì•¡ì…˜íƒœê·¸
 <jsp:useBean id="dto" class="test.Test19DTO" scope="page"> 
- => Å¬·¡½º¸¦ ÀÌ¿ëÇØ¼­ dto(Å¬·¡½ºº¯¼ö, ÀÓÀÇ·Î ¸¸µå´Â °Í)¶ó´Â °´Ã¼¸¦ »ý¼ºÇØ¶ó
+ => í´ëž˜ìŠ¤ë¥¼ ì´ìš©í•´ì„œ dto(í´ëž˜ìŠ¤ë³€ìˆ˜, ìž„ì˜ë¡œ ë§Œë“œëŠ” ê²ƒ)ë¼ëŠ” ê°ì²´ë¥¼ ìƒì„±í•´ë¼
 
 
-//µ¥ÀÌÅÍº£ÀÌ½º ÀúÀå¹æ¹ý
+//ë°ì´í„°ë² ì´ìŠ¤ ì €ìž¥ë°©ë²•
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.Connection"%>
 
-//µ¥ÀÌÅ¸º£ÀÌ½º ÀúÀå
+//ë°ì´íƒ€ë² ì´ìŠ¤ ì €ìž¥
 Connection conn = null;
 PreparedStatement pstmt = null;
 ResultSet rs = null;
@@ -117,7 +117,7 @@ try {
 	
 	Class.forName(driver);
 	conn = DriverManager.getConnection(dbUrl, dbId, dbPasswd);
-	System.out.println("-- ¿À¶óÅ¬ Á¢¼Ó ¼º°ø --");
+	System.out.println("-- ì˜¤ë¼í´ ì ‘ì† ì„±ê³µ --");
 	
 	String sql = "insert into boss values (seq_boss.nextval, ?, ?, ?)";
 	pstmt = conn.prepareStatement(sql);
@@ -126,24 +126,24 @@ try {
 	pstmt.setString(3, boss_3);
 	result = pstmt.executeUpdate();
 	
-	if (result > 0) { // ¼º°ø
+	if (result > 0) { // ì„±ê³µ
 		// response.sendRedirect("list.jsp");
 	
 		out.println("<script>");
-		out.println("alert('Á¤»ó Ã³¸® µÇ¾ú½À´Ï´Ù.');");
+		out.println("alert('ì •ìƒ ì²˜ë¦¬ ë˜ì—ˆìŠµë‹ˆë‹¤.');");
 		out.println("location.href='list.jsp';");
 		out.println("</script>");
-	} else { // ½ÇÆÐ
+	} else { // ì‹¤íŒ¨
 		out.println("<script>");
-		out.println("alert('Ã³¸®Áß ¿À·ù°¡ ¹ß»ýÇß½À´Ï´Ù.');");
+		out.println("alert('ì²˜ë¦¬ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.');");
 		out.println("location.href='boss.jsp';");
 		out.println("</script>");
 	}
 	
 	System.out.println(result);
 } catch(Exception e) {
-	System.out.println("-- ¿À¶óÅ¬ Á¢¼Ó ½ÇÆÐ --");
+	System.out.println("-- ì˜¤ë¼í´ ì ‘ì† ì‹¤íŒ¨ --");
 	e.printStackTrace();
 }
 
-WebContent > WEB-INF > lib ¾È¿¡ ojdbc6.jar ³Ö±â
+WebContent > WEB-INF > lib ì•ˆì— ojdbc6.jar ë„£ê¸°
