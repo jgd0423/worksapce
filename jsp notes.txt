@@ -89,3 +89,61 @@ include 지시자로 합칠때는 !doctype지운다.
 	String name = request.getParameter("name");
 %> -> 이런식으로 받음. 폼태그로 넘긴 것 처럼.
 액션태그로 인클루드 시킬때는 !doctype지우지 않는다.
+
+
+
+* <jsp:useBean> 액션태그
+<jsp:useBean id="dto" class="test.Test19DTO" scope="page"> 
+ => 클래스를 이용해서 dto(클래스변수, 임의로 만드는 것)라는 객체를 생성해라
+
+
+//데이터베이스 저장방법
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+
+//데이타베이스 저장
+Connection conn = null;
+PreparedStatement pstmt = null;
+ResultSet rs = null;
+
+int result = 0;
+
+try {
+	String driver = "oracle.jdbc.driver.OracleDriver";
+	String dbUrl = "jdbc:oracle:thin:@localhost:1521/xe";
+	String dbId = "jspTest";
+	String dbPasswd = "1234";
+	
+	Class.forName(driver);
+	conn = DriverManager.getConnection(dbUrl, dbId, dbPasswd);
+	System.out.println("-- 오라클 접속 성공 --");
+	
+	String sql = "insert into boss values (seq_boss.nextval, ?, ?, ?)";
+	pstmt = conn.prepareStatement(sql);
+	pstmt.setString(1, boss_1);
+	pstmt.setString(2, boss_2);
+	pstmt.setString(3, boss_3);
+	result = pstmt.executeUpdate();
+	
+	if (result > 0) { // 성공
+		// response.sendRedirect("list.jsp");
+	
+		out.println("<script>");
+		out.println("alert('정상 처리 되었습니다.');");
+		out.println("location.href='list.jsp';");
+		out.println("</script>");
+	} else { // 실패
+		out.println("<script>");
+		out.println("alert('처리중 오류가 발생했습니다.');");
+		out.println("location.href='boss.jsp';");
+		out.println("</script>");
+	}
+	
+	System.out.println(result);
+} catch(Exception e) {
+	System.out.println("-- 오라클 접속 실패 --");
+	e.printStackTrace();
+}
+
+WebContent > WEB-INF > lib 안에 ojdbc6.jar 넣기
