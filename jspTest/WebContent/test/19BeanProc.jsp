@@ -2,16 +2,14 @@
     pageEncoding="UTF-8"%>
 <% request.setCharacterEncoding("UTF-8"); %>
 
-<jsp:useBean id="dto" class="test.Test19DTO" scope="page">
+<jsp:useBean id="dto" class="test.Test19DTO" scope="page"></jsp:useBean>
 	<!--  
 	<jsp:setProperty name="dto" property="boss_1" />
 	<jsp:setProperty name="dto" property="boss_2" />
 	<jsp:setProperty name="dto" property="boss_3" />
 	-->
-	<jsp:setProperty name="dto" property="*" />
-</jsp:useBean>
+<jsp:setProperty name="dto" property="*" />
 
-<jsp:setProperty name="dto" property="boss_1" value="jung"/>
 
 <%
 	String boss_1 = dto.getBoss_1();
