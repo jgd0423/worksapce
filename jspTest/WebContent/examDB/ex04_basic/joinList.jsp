@@ -6,6 +6,12 @@
 <%@page import="java.sql.*"%>
 
 <%
+
+String cookId = null;
+if (session.getAttribute("cookId") != null) {
+	cookId = (String) session.getAttribute("cookId");
+}
+
 Connection conn = null;
 PreparedStatement pstmt = null;
 ResultSet rs = null;
@@ -57,6 +63,7 @@ try {
 	System.out.println("-- 오라클 접속 실패 --");
 	e.printStackTrace();
 }
+
 %>
 
 <!DOCTYPE html>
@@ -67,7 +74,7 @@ try {
 </head>
 <body>
 
-<h1>회원목록</h1>
+<h1>회원목록 - <%=cookId %></h1>
 <table border="1">
 	<tr>
 		<td>아이디</td>
@@ -101,6 +108,7 @@ try {
 		</tr>
 	<% } %>
 </table>
+<a href="logout.jsp">[로그아웃]</a>
 
 </body>
 </html>

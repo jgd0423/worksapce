@@ -22,7 +22,6 @@ String phone = null;
 String email = null;
 String birthYear = null;
 
-
 Connection conn = null;
 PreparedStatement pstmt = null;
 ResultSet rs = null;
@@ -50,16 +49,15 @@ try {
 		email = rs.getString("email");
 		birthYear = rs.getString("birthYear");
 	}
-	
-	
 	/**/
-
-	pstmt.executeUpdate();
+	if (rs != null) { rs.close(); }
+	if (pstmt != null) { pstmt.close(); }
+	if (conn != null) { conn.close(); }
 	
 } catch(Exception e) {
 	System.out.println("-- 오라클 접속 실패 --");
 	e.printStackTrace();
-}
+} 
 
 %>
 
@@ -71,70 +69,51 @@ try {
 </head>
 <body>
 
+<h1>회원정보수정 - <%=cookId %></h1>
 
-
-<h1>회원정보 상세보기 - <%=cookId %></h1>
-<table>
-	<tr>
-		<td>아이디 :</td>
-		<td><%=id %></td>
-	</tr>
+<form name="modify">
+	<table>
 		<tr>
-		<td>비밀번호 :</td>
-		<td><%=pw %></td>
-	</tr>
+			<td>아이디</td>
+			<td><%=id %><input type="hidden" name="id" value="<%=id %>"></td>
+		</tr>
 		<tr>
-		<td>이름 :</td>
-		<td><%=name %></td>
-	</tr>
+			<td>비밀번호</td>
+			<td><input type="text" name="pw" value=""></td>
+		</tr>
 		<tr>
-		<td>전화번호 :</td>
-		<td><%=phone %></td>
-	</tr>
+			<td>이름</td>
+			<td><input type="text" name="name" value="<%=name %>"></td>
+		</tr>
 		<tr>
-		<td>이메일 :</td>
-		<td><%=email %></td>
-	</tr>
+			<td>전화번호</td>
+			<td><input type="text" name="phone" value="<%=phone %>"></td>
+		</tr>
 		<tr>
-		<td>출생년도 :</td>
-		<td><%=birthYear %></td>
-	</tr>
-</table>
-<a href="modify.jsp?id=<%=id%>">[수정하기]</a>
-<a href="erase.jsp?id=<%=id%>">[삭제하기]</a>
-<br><br>
-<a href="#" onclick="move('M', '<%=id%>')">[수정하기]</a>
-<a href="#" onclick="move('D', '<%=id%>');">[삭제하기]</a>
-<br><br>
-<a href="#" onclick="modify('<%=id%>')">[수정하기]</a>
-<a href="#" onclick="erase('<%=id%>');">[삭제하기]</a>
-<br><br>
-<a href="logout.jsp">[로그아웃]</a>
+			<td>이메일</td>
+			<td><input type="text" name="email" value="<%=email %>"></td>
+		</tr>
+		<tr>
+			<td>출생년도</td>
+			<td><input type="text" name="birthYear" value="<%=birthYear %>"></td>
+		</tr>
+	</table>
+	<a href="#" onclick="modifyInfo();">[수정하기]</a><br>
+	<a href="logout.jsp">[로그아웃]</a>
+</form>
 
 <script>
 
-function move(value1, value2) {
-	if (value1 == 'M') {
-	alert('수정하기 페이지로 이동합니다. - ' + value2);
-	location.href = 'modify.jsp?id=' + value2;
-	} else {
-		alert('삭제하기 페이지로 이동합니다. - ' + value2);
-		location.href = 'erase.jsp?id=' + value2;
+function modifyInfo() {
+	if (confirm('수정하시겠습니까?')) {
+		modify.method = "post";
+		modify.action = "modifyProc.jsp";
+		modify.submit();
 	}
 }
-
-function modify(value1) {
-	alert('수정하기 페이지로 이동합니다. - ' + value1);
-	location.href = 'modify.jsp?id=' + value1;
-}
-
-function erase(value1) {
-	alert('삭제하기 페이지로 이동합니다. - ' + value1);
-	location.href = 'erase.jsp?id=' + value1;
-}
-
 
 </script>
 
 </body>
 </html>
+

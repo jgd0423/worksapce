@@ -152,3 +152,21 @@ WebContent > WEB-INF > lib 안에 ojdbc6.jar 넣기
 스크립트릿 밖에서 실행할 때 주의해야할 점이 있다.
 out.println안에 (..."\n"...)이 있으면 그 안에 있는 html 문서 자체의
 줄바꿈이 일어난다. 그래서 오류 발생.
+
+
+* 세션(session) -> 도메인, 모든 페이지에서 인식시키기 위해서 사용. 서버에 저장
+* 쿠키(cookies) -> 클라이언트에 저장
+
+loginProc.jsp에서 로그인 성공 했을 때 아래 줄 추가 후
+session.setAttribute("cookId", id); // 세션 등록
+
+로그인 없이 접근 불가 페이지에 아래 줄 추가
+String cookId = null;
+if (session.getAttribute("cookId") == null) {
+	out.println("<script>");
+	out.println("alert('로그인 후 이용하세요');");
+	out.println("location.href='login.jsp';");
+	out.println("</script>");
+} else {
+	cookId = (String) session.getAttribute("cookId");
+}

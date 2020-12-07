@@ -32,7 +32,7 @@ public class PrimeGenerator {
 			multiplesOfPrimeFactors.add(candidate);
 			return false;
 		}
-		return isNotmultipleOfAnyPreviousPrimeFactor(candidate);
+		return isNotMultipleOfAnyPreviousPrimeFactor(candidate);
 	}
 	
 	private static boolean isLeastRelevantMultipleOfNextLargerPrimeFactor(int candidate) {
@@ -41,7 +41,7 @@ public class PrimeGenerator {
 		return candidate == leastRelevantMultiple;
 	}
 	
-	private static boolean isNotmultipleOfAnyPreviousPrimeFactor(int candidate)	{
+	private static boolean isNotMultipleOfAnyPreviousPrimeFactor(int candidate)	{
 		for (int n = 1; n < multiplesOfPrimeFactors.size(); n++) {
 			if (isMultipleOfNthPrimeFactor(candidate, n)) {
 				return false;
