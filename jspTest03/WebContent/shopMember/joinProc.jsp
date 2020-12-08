@@ -1,14 +1,14 @@
-<%@page import="member.MemberDAO"%>
+<%@page import="shopMember.ShopMemberDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:useBean id="dto" class="member.MemberDTO" scope="page"></jsp:useBean>
+<jsp:useBean id="dto" class="shopMember.ShopMemberDTO" scope="page"></jsp:useBean>
 <jsp:setProperty property="*" name="dto"/>
 
 <%
 
-MemberDAO dao = new MemberDAO();
-int result = dao.setInsert(dto);
+ShopMemberDAO dao = new ShopMemberDAO();
+int result = dao.insertMemberInfo(dto);
 
 if (result > 0) {
 	out.println("<script>");
