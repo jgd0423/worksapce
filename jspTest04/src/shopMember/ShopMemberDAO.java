@@ -22,7 +22,7 @@ public class ShopMemberDAO {
 		try {
 			String driver = "oracle.jdbc.driver.OracleDriver";
 			String dbUrl = "jdbc:oracle:thin:@localhost:1521/xe";
-			String dbId = "jspTest";
+			String dbId = "jspSample";
 			String dbPasswd = "1234";
 			
 			Class.forName(driver);
@@ -38,15 +38,14 @@ public class ShopMemberDAO {
 		getConn();
 		int result = 0;
 		try {
-			String sql = "insert into joinTBL02 values (seq_tbl02.nextval, ?, ?, ?, ?, ?, ?, SYSDATE, ?)";
+			String sql = "insert into member values (seq_mem.nextval, ?, ?, ?, ?, ?, ?, SYSDATE)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getId());
-			pstmt.setString(2, dto.getPassword());
+			pstmt.setString(2, dto.getPasswd());
 			pstmt.setString(3, dto.getName());
 			pstmt.setString(4, dto.getPhone());
 			pstmt.setString(5, dto.getEmail());
-			pstmt.setInt(6, dto.getAge());
-			pstmt.setString(7, "1");
+			pstmt.setInt(6, dto.getBirthYear());
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -54,11 +53,17 @@ public class ShopMemberDAO {
 		return result;
 	}
 	
-	public ArrayList<ShopMemberDTO> getListAll() {
+	public ArrayList<ShopMemberDTO> getListByState(String state) {
 		getConn();
 		ArrayList<ShopMemberDTO> memberList = new ArrayList<>();
 		try {
-			String sql = "select * from joinTBL02 order by name asc";
+			String sql = "";
+			if (state.equals("1")) {
+				sql = "select * from member order by name asc";
+			} else {
+				sql = "select * from member where state = " + "'" + state + "'" + " order by name asc";
+				System.out.println(sql);
+			}
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
@@ -66,12 +71,12 @@ public class ShopMemberDAO {
 				ShopMemberDTO dto = new ShopMemberDTO();
 				dto.setNo(rs.getInt("no"));
 				dto.setId(rs.getString("id"));
-				dto.setPassword(rs.getString("password"));
+				dto.setPasswd(rs.getString("passwd"));
 				dto.setName(rs.getString("name"));
 				dto.setPhone(rs.getString("phone"));
 				dto.setEmail(rs.getString("email"));
-				dto.setAge(rs.getInt("age"));
-				dto.setJoinDate(rs.getString("joinDate"));
+				dto.setBirthYear(rs.getInt("birthYear"));
+				dto.setwDate(rs.getString("wDate"));
 				
 				memberList.add(dto);
 			}
@@ -83,11 +88,11 @@ public class ShopMemberDAO {
 		return memberList;
 	}
 	
-	public ArrayList<ShopMemberDTO> getMemberList() {
+	public ArrayList<ShopMemberDTO> getJoinedMemberList() {
 		getConn();
 		ArrayList<ShopMemberDTO> memberList = new ArrayList<>();
 		try {
-			String sql = "select * from jointbl02 where ismember = '1' order by name asc";
+			String sql = "select * from member where state = 'a'";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
@@ -95,12 +100,12 @@ public class ShopMemberDAO {
 				ShopMemberDTO dto = new ShopMemberDTO();
 				dto.setNo(rs.getInt("no"));
 				dto.setId(rs.getString("id"));
-				dto.setPassword(rs.getString("password"));
+				dto.setPasswd(rs.getString("passwd"));
 				dto.setName(rs.getString("name"));
 				dto.setPhone(rs.getString("phone"));
 				dto.setEmail(rs.getString("email"));
-				dto.setAge(rs.getInt("age"));
-				dto.setJoinDate(rs.getString("joinDate"));
+				dto.setBirthYear(rs.getInt("birthYear"));
+				dto.setwDate(rs.getString("wDate"));
 				
 				memberList.add(dto);
 			}
@@ -112,24 +117,25 @@ public class ShopMemberDAO {
 		return memberList;
 	}
 	
-	public ShopMemberDTO getMemberInfo(String no) {
+	public ShopMemberDTO getMemberInfo(String no, String id) {
 		getConn();
 		ShopMemberDTO dto = new ShopMemberDTO();
 		try {
-			String sql = "select * from joinTBL02 where no = ?";
+			String sql = "select * from member where (no = ? and id = ?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, no);
+			pstmt.setString(2, id);
 			rs = pstmt.executeQuery();
 			
 			if (rs.next()) {
 				dto.setNo(rs.getInt("no"));
 				dto.setId(rs.getString("id"));
-				dto.setPassword(rs.getString("password"));
+				dto.setPasswd(rs.getString("passwd"));
 				dto.setName(rs.getString("name"));
 				dto.setPhone(rs.getString("phone"));
 				dto.setEmail(rs.getString("email"));
-				dto.setAge(rs.getInt("age"));
-				dto.setJoinDate(rs.getString("joinDate"));
+				dto.setBirthYear(rs.getInt("birthYear"));
+				dto.setwDate(rs.getString("wDate"));
 			}
 			if (rs != null) { rs.close(); }
 			if (pstmt != null) { pstmt.close(); }
@@ -143,11 +149,12 @@ public class ShopMemberDAO {
 		getConn();
 		int result = 0;
 		try {
-			String sql = "update joinTBL02 set phone = ?, email = ? where no = ?";
+			String sql = "update member set phone = ?, email = ? where (no = ? and id = ?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getPhone());
 			pstmt.setString(2, dto.getEmail());
 			pstmt.setInt(3, dto.getNo());
+			pstmt.setString(4, dto.getId());
 			result = pstmt.executeUpdate();
 			
 			if (pstmt != null) { pstmt.close(); }
@@ -157,14 +164,14 @@ public class ShopMemberDAO {
 		return result;
 	}
 	
-	public int deleteMemberInfo(ShopMemberDTO dto) {
+	public int setMemberStateDelete(ShopMemberDTO dto) {
 		getConn();
-		int no = dto.getNo();
 		int result = 0;
 		try {
-			String sql = "update joinTBL02 set isMember = '0' where no = ?";
+			String sql = "update member set memberState = '2' where (no = ? and id = ?)";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, no);
+			pstmt.setInt(1, dto.getNo());
+			pstmt.setString(2, dto.getId());
 			result = pstmt.executeUpdate();
 			
 			if (pstmt != null) { pstmt.close(); }
