@@ -33,7 +33,7 @@ public class WriteDAO {
 		}
 	}
 	
-	public int getTotalNumberOfWrittenArticles () {
+	public int getNumberOfTotalWrittenPosts () {
 		int result = 0;
 		getConn();
 		try {
@@ -44,27 +44,27 @@ public class WriteDAO {
 				result = rs.getInt("maxNum");
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+			e.printStackTrace(); 
 		}
 		return result;
 	}
 	
 	public int insertBoardInfo(WriteDTO dto) {
 		getConn();
-		int totalWrittenArticles = getTotalNumberOfWrittenArticles();
+		int totalWrittenPosts = getNumberOfTotalWrittenPosts();
 		int result = 0;
 		try {
 			String sql = "INSERT INTO writetbl01 values";
 			sql += "(seq_writeTBL_01.nextval, ";
 			sql += "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate)";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, totalWrittenArticles + 1);
+			pstmt.setInt(1, totalWrittenPosts + 1);
 			pstmt.setString(2, dto.getWriter());
 			pstmt.setString(3, dto.getSubject());
 			pstmt.setString(4, dto.getContent());
 			pstmt.setString(5, dto.getEmail());
 			pstmt.setString(6, dto.getPasswd());
-			pstmt.setInt(7, totalWrittenArticles + 1);
+			pstmt.setInt(7, totalWrittenPosts + 1);
 			pstmt.setInt(8, 0);
 			pstmt.setInt(9, 0);
 			pstmt.setInt(10, 0);

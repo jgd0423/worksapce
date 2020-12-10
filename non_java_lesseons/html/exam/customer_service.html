@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/customer_service.css" />
+  </head>
+  <body>
+    <section class="service-form">
+      <h1>1:1 E-MAIL 상담</h1>
+      <form name="service-form" method="POST" action="cerviceProc.jsp">
+        <table border="1" id="service-table">
+          <tr>
+            <td colspan="2" class="info-title">상담정보</td>
+          </tr>
+          <tr>
+            <td class="info-type">상담분류</td>
+            <td>
+              <select name="counseling-type">
+                <option value="">선택</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="info-title">회원정보</td>
+          </tr>
+          <tr>
+            <td class="info-type">이름</td>
+            <td><input type="text" /></td>
+          </tr>
+          <tr>
+            <td class="info-type">연락처(선택)</td>
+            <td>
+              <select name="phone-start-number">
+                <option value="010">010</option>
+              </select>
+              -
+              <input type="text" />
+              -
+              <input type="text" />
+            </td>
+          </tr>
+          <tr>
+            <td class="info-type">답변 E-MAIL</td>
+            <td>
+              <input type="text" />
+              @
+              <input type="text" />
+              <select name="email-select">
+                <option value="">직접 입력</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="info-title">질문내용</td>
+          </tr>
+          <tr>
+            <td class="info-type">제목</td>
+            <td>
+              <input type="text">
+            </td>
+          </tr>
+          <tr>
+            <td class="info-type">내용</td>
+            <td>
+              <textarea name="memo" cols="50" rows="10"></textarea>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </section>
+  </body>
+</html>

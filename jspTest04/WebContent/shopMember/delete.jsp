@@ -1,4 +1,3 @@
-<%@page import="com.sun.xml.internal.bind.api.Bridge"%>
 <%@page import="shopMember.ShopMemberDTO"%>
 <%@page import="shopMember.ShopMemberDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"

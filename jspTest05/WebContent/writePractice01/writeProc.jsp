@@ -9,7 +9,7 @@
 
 WriteDAO dao = new WriteDAO();
 int result = dao.insertBoardInfo(dto);
-dao.getTotalNumberOfWrittenArticles();
+dao.getNumberOfTotalWrittenPosts();
 
 if (result > 0) {
 	out.println("<script>");

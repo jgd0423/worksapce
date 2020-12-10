@@ -1,0 +1,3 @@
+﻿db name: exam
+user id: exam
+user pw: 1234

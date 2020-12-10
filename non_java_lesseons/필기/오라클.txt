@@ -1,0 +1,531 @@
+﻿오라클
+xe(데이터베이스) -> 유저(스키마) -> 테이블
+
+mysql
+데이터베이스 = 스키마
+
+--스키마 생성
+CREATE USER exam01 IDENTIFIED BY 1234
+DEFAULT TABLESPACE USERS
+TEMPORARY TABLESPACE TEMP;
+
+--사용자 권한 부여
+GRANT connect, resource, dba TO exam01;
+
+-- 사용자 계정 목록 보기
+SELECT * FROM all_users;
+
+-- 권한 회수
+REVOKE dba FROM exam01;
+
+-- 사용자 계정 삭제
+DROP USER exam01 CASCADE;
+
+-- 잠긴 계정 풀기
+ALTER USER hr ACCOUNT UNLOCK IDENTIFIED BY 1234;
+
+-- 사용자 비밀번호 변경
+ALTER USER SYSTEM IDENTIFIED BY "1111";
+
+-- 스크립트 정리
+CLEAR SCR;
+
+프라이머리 키 나중에 주기
+alter table board add primary key(no);
+
+-- null을 처리하는 함수
+NVL(commission_pct, 0)
+NVL2(expr1, expr2, expr3)
+expr1을 검사하여 그 결과가 null이 아니면 expr2를 반납하고, null이면 expr3을 반환한다.
+
+-- 고윳값만 추리기
+DISTINCT()
+
+-- dual 테이블
+가상의 테이블. 테스트용 테이블
+쿼리문의 수행 결과가 하나의 로우로 출력되도록 하기 위해서
+단 하나의 로우를 구성하고 있음
+간단한 계산 하거나 출력값 하나 보고 싶을 때 사용
+
+-- sysdate
+
+-- sql 문장 안에서 큰 따옴표 사용하면 오류, 함수 안에 들어가는 것은 큰 따옴표 가능.
+
+-- and, between / or, in
+
+-- 스키마
+
+-- 문자열 함수
+UPPER 
+LOWER 
+INITCAP : 첫 글자만 대문자
+LENGTH
+LENGTHB : Byte
+SUBSTR(문자열, 문자열 시작점(인덱스는 1부터임. 음수도 됨.), 몇글자)
+SUBSTR(대상, 시작위치)
+SUBSTRB(대상, 시작위치, 추출할 바이트수)
+INSTR(문자열, 찾을 문자) : 특정 문자의 위치
+INSTR(대상, 시작위치, 몇번째발견)
+INSTR(문자열, 찾을 문자, 몇번째 글자부터, 몇번째의 문자)
+LPAD, RPAD
+LTRIM, RTRIM, TRIM
+CONCAT : 최대 2개. Oracle에서 문자열 합치려면 문자열 사이에 || 사용. ||는 column에도 됨.
+
+-- 숫자 함수
+ABS : 절댓값
+FLOOR : 내림
+ROUND : 반올림
+TRUNC : 지정한 자리 수까지만 남김
+MOD : 나머지
+POWER : n제곱
+EXP : 자연로그의 n제곱
+SIGN : 음수 양수 판단
+
+-- 날짜함수
+SYSDATE : 현재 날짜
+MONTHS_BETWEEN() : 개월 수. TRUNC, ROUND 등 같이 사용가능
+```
+SELECT 
+    first_name, 
+    SYSDATE,
+    hire_date,
+    TRUNC(MONTHS_BETWEEN(SYSDATE, hire_date))
+FROM employees;
+```
+ADD_MONTHS() : 개월 수 더하기
+NEXT_DAY() : 현재 날짜 기준으로 가장 가까운 요일 날짜
+LAST_DAY() : 입력한 달의 마지막 날짜
+
+ROWNUM : 행(레코드)번호
+ROWID : 행(레코드)의 주소값
+
+-- 형변환
+TO_CHAR : 날짜형, 숫자형을 문자형으로
+```
+SELECT
+    TO_CHAR(SYSDATE, 'yyyy-mm-dd am hh24:mi:ss')
+FROM dual;
+```
+
+TO_DATE('문자', 'format') : 문자형을 날짜형으로
+```
+SELECT
+    first_name, 
+    hire_date
+FROM employees
+WHERE hire_date = '20030617';
+
+SELECT
+    first_name, 
+    hire_date
+FROM employees
+WHERE hire_date = TO_DATE(20030617, 'YYYYMMDD');
+
+SELECT TRUNC(SYSDATE - TO_DATE('2008/01/01', 'YYYY/MM/DD')) FROM dual;
+SELECT TRUNC(SYSDATE - '2008/01/01') FROM dual; -> 오류남.
+SELECT TO_DATE('2015-12-31 12:23:03', 'yyyy-mm-dd hh:mi:ss') FROM dual; -> 포멧을 맞춰줘야함.
+```
+
+TO_NUMBER : 문자형을 숫자형으로
+
+-- 일반 함수
+NULLIF(expr1, expr2) : 두 표현식을 비교하여 동일한 경우에는 null을 반환, 다르면 첫번째 표현식 반환
+COALESCE : 인수 중에서 null이 아닌 첫번째 인수를 반환하는 함수
+DECODE : switch case문과 비슷
+DECODE(표현식, 
+       조건1, 결과1,
+       조건2, 결과2,
+       조건3, 결과3
+       기본결과 n)
+CASE : if ~ else와 동일
+CASE expr
+    WHEN 조건1 THEN 결과1
+    WHEN 조건2 THEN 결과2
+    WHEN 조건3 THEN 결과3
+    ELSE 결과n
+END
+
+-- 집계함수와 단순 칼럼 같이 놓으면 -> error
+
+* GROUP BY (그룹화)
+
+* 서브쿼리
+ - IN 안에 서브쿼리 넣을 수 있다
+```
+SELECT 
+    department_id,
+    first_name,
+    salary
+FROM employees
+WHERE salary in (
+    SELECT MIN(salary) 
+    FROM employees 
+    GROUP BY department_id
+);
+```
+
+- ANY 사용법
+ANY 연산자는 서브쿼리가 반환하는 각각의 값과 비교한다.
+> ANY는 최솟값보다 큰 것을 나타내고,
+< ANY는 최댓값보다 작은 것을 나타낸다
+= ANY는 IN과 동일하다.
+```
+SELECT
+    employee_id,
+    first_name,
+    job_id,
+    salary
+FROM employees
+WHERE salary < ANY (SELECT salary FROM employees WHERE job_id = 'IT_PROG') AND job_id != 'IT_PROG';
+```
+
+- ALL 사용법
+ALL 연산자는 서브쿼리에서 반환하는 모든 값과 비교한다.
+> ALL은 최댓값보다 큰 것을 나타내고,
+< ALL은 최솟값보다 작은 것을 나타낸다.
+```
+SELECT
+    employee_id,
+    first_name,
+    job_id,
+    salary
+FROM employees
+WHERE salary < ALL (SELECT salary FROM employees WHERE job_id = 'IT_PROG') AND job_id != 'IT_PROG';
+```
+
+```
+SELECT first_name,
+    (SELECT department_name 
+     FROM departments 
+     WHERE departments.department_id = employees.department_id) AS d_id
+FROM employees;
+```
+
+* JOIN
+
+- 카다시안 곱
+조건없이 테이블을 조인할 경우
+```
+SELECT COUNT(*)
+FROM employees, departments;
+```
+
+-- INNER JOIN, 동등 조인, EQUI JOIN, 내부 조인
+```
+SELECT 
+    employees.employee_id,
+    employees.first_name,
+    employees.department_id,
+    departments.department_name
+FROM employees, departments -- INNER JOIN 오라클 문법
+WHERE employees.department_id = departments.department_id;
+```
+
+별칭에 AS 못씀
+```
+SELECT 
+    e.employee_id,
+    e.first_name,
+    e.department_id,
+    d.department_name
+FROM employees e, departments d -- INNER JOIN
+WHERE e.department_id = d.department_id;
+```
+
+INNER JOIN 쓰는게 표준임
+```
+SELECT 
+    e.employee_id,
+    e.first_name,
+    e.department_id,
+    d.department_name
+FROM employees e INNER JOIN departments d -- INNER JOIN
+ON e.department_id = d.department_id;
+```
+
+```
+SELECT 
+    e.employee_id,
+    e.first_name,
+    e.department_id,
+    d.department_name
+FROM employees e INNER JOIN departments d -- INNER JOIN
+ON e.department_id = d.department_id
+WHERE e.first_name = 'Lex';
+```
+
+-- 외부 조인, OUTER JOIN. LEFT, RIGHT
+- LEFT OUTER JOIN : 왼쪽의 테이블은 일단 다 출력해
+```
+SELECT 
+    e.first_name,
+    e.hire_date,
+    e.salary,
+    d.department_name
+FROM employees e, departments d
+WHERE e.department_id = d.department_id(+); -- null이 출력되는 테이블에 (+)를 붙인다.
+```
+
+
+-- 폴더 지정해서 유저 만들기, 테이블 스페이스 생성
+```
+CREATE TABLESPACE sample02
+DATAFILE 'c:/sqldata/sample02.dbf' SIZE 50m
+AUTOEXTEND ON
+NEXT 10m
+MAXSIZE UNLIMITED;
+```
+
+-- 사용자 계정 만들기
+CREATE USER sample02 IDENTIFIED BY 1234
+DEFAULT TABLESPACE sample02;
+
+-- 사용 권한 부여
+GRANT connect, resource, dba TO sample02;
+
+-- 시퀀스 생성 (auto_increment 같은거)
+CREATE SEQUENCE seq_aaa START WITH 1 INCREMENT BY 1 MINVALUE 1;
+INSERT INTO aaa VALUES
+(SEQ_AAA.nextval, '홍길동1', '경기1');
+SEQ_AAA.nextval대신에 직접 값을 넣을 수 있지만 값증가가 꼬인다. 임의로 넣지 말 것!
+
+-- 테이블에 칼럼 추가
+ALTER TABLE aaa ADD vend_phone varchar2(20);
+
+-- 테이블 칼럼 데이터타입 수정
+ALTER TABLE aaa MODIFY addr varchar2(100);
+
+-- 테이블 칼럼 이름 수정
+ALTER TABLE aaa RENAME COLUMN addr TO address;
+
+-- 테이블 칼럼 삭제
+ALTER TABLE aaa DROP COLUMN vend_phone;
+
+-- 테이블 이름 변경
+RENAME aaa TO aaaNew;
+
+insert > delete > update > select 속도 순서
+
+-- 시점 저장 Transaction 트렌젝션. 커밋 이후부터.
+SAVEPOINT a;
+ROLLBACK TO a;
+
+* 제약조건
+primary key : 중복x, NOT NULL
+foreign key
+unique : 중복X, NULL
+ex) 
+no : UNIQUE, NN
+id : PK
+pwd :
+check     -- CHECK(phone LIKE '3429-%') -- 전화번호는 꼭 3429-로 시작해야한다는 조건
+not null
+default
+
+
+* 뷰, VIEW
+
+CREATE VIEW test_view AS 
+SELECT
+    employee_id,
+    first_name,
+    job_id
+FROM employees;
+
+CREATE OR REPLACE VIEW test_view AS 
+SELECT
+    employee_id,
+    first_name,
+    job_id
+FROM employees;
+
+SELECT * FROM user_views;
+
+* 저장프로시저 (stored procedure) -> 성능개선
+-- 프로시저 생성하기
+CREATE OR REPLACE PROCEDURE hr.counter
+AS
+    var1 INT;  -- 변수 선언
+    var2 INT;  -- 변수 선언
+BEGIN
+    SELECT COUNT(*) INTO var1 FROM HR.employees;
+    SELECT COUNT(*) INTO var2 FROM HR.departments;
+    DBMS_OUTPUT.PUT_LINE(var1 + var2); -- 화면에 출력되도록 하는 것
+END;
+
+-- 프로시저 출력
+SET SERVEROUTPUT ON;
+EXECUTE hr.counter;
+
+-- 프로시저 생성
+CREATE OR REPLACE PROCEDURE Proc_bbbb
+(
+    p_id IN bbbb.id%type,
+    p_name IN bbbb.name%type,
+    p_location IN bbbb.location%type
+)
+AS
+BEGIN
+    INSERT INTO bbbb VALUES (p_id, p_name, p_location);
+    COMMIT;
+END;
+
+-- 프로시저로 자료 입력하기
+EXECUTE Proc_bbbb('hong', '홍길동', '대구');
+
+
+-- 프로시저 제거하기
+DROP PROCEDURE hr.counter;
+
+-- 프로시저 생성
+CREATE OR REPLACE PROCEDURE sp_salary
+AS
+    v_salary employees.salary%type;
+BEGIN
+    SELECT salary INTO v_salary
+    FROM employees
+    WHERE first_name = 'Steven' AND last_name = 'King';
+    DBMS_OUTPUT.PUT_LINE('STEVEN의 급여는 ' || v_salary || '입니다.');
+END;
+
+-- 프로시저 이용해서 출력
+SET SERVEROUTPUT ON;
+EXECUTE sp_salary;
+
+-- 프로시저 생성
+CREATE OR REPLACE PROCEDURE sp_salary_ename
+(
+    v_first_name in employees.first_name%type,              -- 매개변수
+    v_last_name in employees.last_name%type
+)
+AS
+    v_salary employees.salary%type;          -- 로컬변수
+BEGIN
+    SELECT SALARY INTO v_salary
+    FROM employees
+    WHERE first_name = v_first_name AND last_name = v_last_name;
+    DBMS_OUTPUT.PUT_LINE(v_first_name || ' ' || v_last_name || '의 급여는 ' || v_salary || '입니다.');
+END;
+
+-- 프로시저 이용해서 출력
+SET SERVEROUTPUT ON;
+EXECUTE sp_salary_ename('Steven', 'King');
+
+
+-- 프로시저 생성
+CREATE OR REPLACE PROCEDURE sp_salary_ename2
+(
+    v_first_name IN employees.first_name%TYPE,
+    v_last_name IN employees.last_name%TYPE,
+    v_salary OUT employees.salary%TYPE
+)
+AS
+BEGIN
+    SELECT salary INTO v_salary
+    FROM employees
+    WHERE first_name = v_first_name AND last_name = v_last_name;
+END;
+
+
+-- 프로시저의 OUT(리턴값)을 출력하는 방법
+SET SERVEROUTPUT ON;
+VARIABLE v_salary VARCHAR2(14); -- OUT값을 받을 변수 선언
+EXECUTE sp_salary_ename2('Steven', 'King', :v_salary);
+PRINT v_salary;
+
+
+Cursor : SELECT문의 실행결과는 메모리에 저장되는데, 이 메모리 공간을 커서라고 한다.
+Fetch : 커서에서 원하는 결괏값을 추출하는 것.
+
+Cursor 사용하는 이유:
+SELECT의 결과가 하나의 행인 경우는 INTO절을 이용해서 변수에 저정할 수 있다. 그러나 복수행일 경우는
+INTO절을 사용할 수가 없다. 이렇게 복수행의 결과를 행단위로 처리하기 위해 사용하는 것이 커서이다.
+
+
+-- Cursor example 01)
+
+CREATE OR REPLACE PROCEDURE cursor_c2
+AS
+    v_dept departments%rowtype;
+    CURSOR c2
+    IS
+        SELECT 
+            department_id, 
+            department_name, 
+            location_id
+        FROM departments;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('부서번호   부서명   지역명');
+    DBMS_OUTPUT.PUT_LINE('----------------------------------');
+    OPEN c2;
+        LOOP
+            FETCH c2 
+            INTO 
+                v_dept.department_id,
+                v_dept.department_name,
+                v_dept.location_id;
+            EXIT WHEN c2%notfound;
+            DBMS_OUTPUT.PUT_LINE(v_dept.department_id || '   ' || v_dept.department_name || '   ' || v_dept.location_id);
+        END LOOP;
+    CLOSE c2;
+END;
+
+SET SERVEROUTPUT ON;
+EXEC cursor_c2();
+
+-- 서브 쿼리문으로 부서테이블의 구조와 데이타 복사하기
+CREATE TABLE departments_second AS SELECT * FROM hr.departments;
+
+CREATE TABLE ccc AS SELECT * FROM hr.employees
+WHERE department_id = 20;
+
+-- 부서 테이블의 구조만 복사하기
+CREATE TABLE dept_third
+AS
+    SELECT department_id, department_name
+    FROM hr.departments
+    WHERE 0 = 1;
+
+
+* 트리거 (Trigger) : 테이블에 트리거를 부착한다. 일정 자료를 다른 테이블로 옮기고 그 자료를 지운다.
+-- 사용자가 사용하는 테이블 생성하기
+CREATE TABLE dept_original
+AS
+    SELECT * FROM departments WHERE 0 = 1;
+
+-- 트리거에 의해서 사용되는 백업 테이블 생성하기
+CREATE TABLE dept_original
+AS
+    SELECT * FROM departments WHERE 0 = 1;
+
+-- insert 트리거 생성
+CREATE OR REPLACE TRIGGER trigger_sample1
+    AFTER INSERT     -- 원본테이블에 INSERT 작업이 일어난 후에 실행문 동작
+    ON dept_original  -- 테이블에 트리거를 부착해라
+    FOR EACH ROW
+BEGIN
+    IF INSERTING THEN
+        DBMS_OUTPUT.PUT_LINE('Insert Trigger 발생');
+        INSERT INTO dept_copy
+        VALUES (:NEW.department_id, :NEW.department_name, :NEW.manager_id, :NEW.location_id);
+    END IF;
+END;
+
+-- 테이블에 데이타 추가하기
+INSERT INTO dept_original
+VALUES (10, 'ACCOUNTING', 3, 5);
+-> dept_copy에도 똑같은 row가 들어간다.
+
+-- Delete 트리거 생성하기
+CREATE OR REPLACE TRIGGER trigger_sample2
+    AFTER DELETE -- 원본 테이블에 삭제가 일어나면 트리거가 일어난다.
+    ON dept_original
+    FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Delete Trigger 발생');
+    DELETE FROM dept_copy
+    WHERE dept_copy.department_id = :old.department_id;
+END;
+
+:NEW, :OLD는 임시테이블이다.
+

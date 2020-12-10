@@ -1,0 +1,25 @@
+#service-table {
+  width: 700px;
+}
+
+#service-table td {
+  padding-left: 10px;
+}
+
+#service-table .info-title {
+  height: 40px;
+  font-weight: bold;
+  border-bottom: 2px solid;
+}
+
+#service-table .info-type {
+  width: 200px;
+  background-color: lightgray;
+}
+
+#service-table textarea {
+  width: 90%;
+  border: 0;
+  padding: 10px;
+  resize: none;
+}

@@ -1,0 +1,3 @@
+﻿netstat -a -n -o -p tcp
+taskkill /f /pid ????
+톰캣 오류 관련 명령어
