@@ -247,7 +247,7 @@ public class BoardDAO {
 		int maxStepNo = findSameRefNoMaxStepNo(dto);
 		ArrayList<Integer> lastChildlist = new ArrayList<>();
 		try {
-			String sql = "select * from board where refNo = ? and isDelete = '0' and ((levelNO != stepNo) or (stepNo = ?))";
+			String sql = "select * from board where refNo = ? and isDelete = '0' and ((levelNo != stepNo) or (stepNo = ?))";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, refNo);
 			pstmt.setInt(2, maxStepNo);
