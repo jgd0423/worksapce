@@ -10,9 +10,20 @@
 
 BoardDAO dao = new BoardDAO();
 BoardDTO dbDto = dao.getSelectOne(dto.getNo());
+
+int no = dto.getNo();
 String passwd = dto.getPasswd();
 String dbPasswd = dbDto.getPasswd();
-int result = dao.deletePost(dto);
+
+int result = dao.setIsDeleteTrue(dto);
+
+if (dao.isSoloContent(dbDto) == false && dao.isLastChild(dbDto) == false) {
+	out.println("<script>");
+	out.println("alert('삭제할 수 없습니다.')");
+	out.println("history.back();");
+	out.println("</script>");
+	return;
+}
 
 if (!passwd.equals(dbPasswd)) {
 	out.println("<script>");

@@ -7,13 +7,30 @@
 <jsp:setProperty property="*" name="dto"/>
 
 <%
+String no_ = request.getParameter("no");
+int no = Integer.parseInt(no_);
 BoardDAO dao = new BoardDAO();
-
-int num = dao.getMaxNum() + 1;
-int refNo = num;
-int stepNo = 0;
-int levelNo = 0;
+int num;
+int refNo;
+int stepNo;
+int levelNo;
 int hit = 0;
+String isDelete = "0";
+
+if (no > 0) { // 답변글
+	BoardDTO dbDto = dao.getSelectOne(no);
+	num = dao.getMaxValue("num") + 1;
+	refNo = dbDto.getRefNo();
+	stepNo = dbDto.getStepNo() + 1;
+	levelNo = dbDto.getLevelNo() + 1;
+	dao.setUpdateReLevel(dbDto);
+} else { // 새글
+	num = dao.getMaxValue("num") + 1;
+	refNo = dao.getMaxValue("refNo") + 1;
+	stepNo = 1;
+	levelNo = 1;
+}
+
 
 %>
 
@@ -22,6 +39,7 @@ int hit = 0;
 <jsp:setProperty property="stepNo" name="dto" value="<%=stepNo %>"/>
 <jsp:setProperty property="levelNo" name="dto" value="<%=levelNo %>"/>
 <jsp:setProperty property="hit" name="dto" value="<%=hit %>"/>
+<jsp:setProperty property="isDelete" name="dto" value="<%=isDelete %>"/>
 
 <%
 

@@ -16,6 +16,7 @@ public class BoardDTO {
     private int levelNo;
     private int hit;
     private Date regiDate;
+    private String isDelete;
     
 	// Constructor
 	public BoardDTO() {}
@@ -117,5 +118,13 @@ public class BoardDTO {
 	
 	public void setRegiDate(Date regiDate) {
 		this.regiDate = regiDate;
+	}
+
+	public String getIsDelete() {
+		return isDelete;
+	}
+
+	public void setIsDelete(String isDelete) {
+		this.isDelete = isDelete;
 	}
 }

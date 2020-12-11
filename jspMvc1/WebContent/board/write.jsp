@@ -1,6 +1,36 @@
+<%@page import="board.BoardDAO"%>
+<%@page import="board.BoardDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% request.setCharacterEncoding("UTF-8"); %>
+
+<%
+
+int no;
+String no_ = request.getParameter("no");
+if (no_ == null || no_.length() <= 0) {
+	no = 0;
+} else {
+	no = Integer.parseInt(no_);
+}
+
+BoardDAO dao = new BoardDAO();
+BoardDTO dto = dao.getSelectOne(no);
+
+String subject = "";
+String content = "";
+
+if (no != 0) {
+	subject = dto.getSubject();
+	content = "";
+	content += "[원본글]\n";
+	content += dto.getContent();
+	content += "\n-----------------------------\n ";
+}
+
+
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,6 +42,7 @@
 <h2>게시글 쓰기</h2>
 
 <form name="writeForm">
+	<input type="hidden" name="no" value="<%=no %>">
 	<table border="1" width="600">
 		<tr>
 			<td>작성자 : </td>
@@ -27,11 +58,13 @@
 		</tr>
 		<tr>
 			<td>제목 : </td>
-			<td><input type="text" name="subject"></td>
+			<td><input type="text" name="subject" value=<%=subject%>></td>
 		</tr>
 		<tr>
 			<td>내용 : </td>
-			<td><textarea name="content" style="width:300px; height:100px;"></textarea></td>
+			<td>
+				<textarea id="content" name="content" rows="5" cols="50" wrap="hard"><%=content%></textarea>
+			</td>
 		</tr>
 		<tr>
 			<td colspan="2">
@@ -44,6 +77,9 @@
 <script>
 
 function save() {
+	console.log(document.querySelector('#content').value);
+	console.log(document.querySelector('#content').value.replace('\n', '<br>'));
+	
 	if (document.writeForm.writer.value === "") {
 		alert("작성자를 입력하세요.");
 		document.writeForm.writer.focus();
@@ -80,6 +116,8 @@ function save() {
 		document.writeForm.submit();		
 	}
 }
+
+
 
 </script>
 

@@ -30,32 +30,48 @@ ArrayList<BoardDTO> list = dao.getSelectAll();
 				<td>등록일</td>
 				<td>조회수</td>
 			</tr>
+			<% for (int i = 0; i < list.size(); i++) { %>
+				<% BoardDTO dto = list.get(i); %>
+				<tr>
+					<td><%=dto.getNo() %></td>
+					<% if (dto.getStepNo() > 1) { %>
+						<% String padding = (20 * (dto.getStepNo() - 1)) + "px"; %>
+						<% String re = ""; %>
+						<% for (int j = 0; j < dto.getStepNo() - 1; j++) { %>
+							<% re += "Re:"; %>
+						<% } %>
+						<td>
+							<a href="#" onclick="view('<%=dto.getNo()%>');" style="padding-left:<%=padding%>">
+								<%=re %> <%=dto.getSubject() %>
+							</a>
+						</td>
+					<% } else { %>
+						<td><a href="#" onclick="view('<%=dto.getNo()%>');"><%=dto.getSubject() %></a></td>
+					<% } %>
+					<td><%=dto.getWriter() %></td>
+					<td><%=dto.getRegiDate() %></td>	
+					<td><%=dto.getHit() %></td>
+				</tr>
+			<% } %>
 			<% if (list.size() == 0) { %>
 				<tr>
-					<td colspan="5" height="300" align="center">글이 없습니다.</td>
+					<td colspan="5" height="250px" align="center">글이 없습니다.</td>
 				</tr>
-			<% } else { %>
-				<% for (int i = 0; i < list.size(); i++) { %>
-					<% BoardDTO dto = list.get(i); %>
-					<tr>
-						<td><%=dto.getNo() %></td>
-						<td><a href="#" onclick="view('<%=dto.getNo()%>');"><%=dto.getSubject() %></a></td>
-						<td><%=dto.getWriter() %></td>
-						<td><%=dto.getRegiDate() %></td>
-						<td><%=dto.getHit() %></td>
-					</tr>
-				<% } %>
 			<% } %>
 		</table>
+	<br>
+	<button type="button" onclick="goToWrite();">글쓰기</button>
 	</div>
-	<br><br>
-	<button type="button">글쓰기</button>
 </form>
 
 <script>
 
 function view(no) {
 	location.href='view.jsp?no=' + no;
+}
+
+function goToWrite() {
+	location.href='write.jsp';
 }
 
 </script>

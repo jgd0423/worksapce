@@ -47,7 +47,7 @@ public class BoardDAO {
 		int result = 0;
 		try {
 			String sql = "insert into board values (seq_board.nextval, "
-					+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate)";
+					+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate, ?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getNum());
 			pstmt.setString(2, dto.getWriter());
@@ -59,6 +59,7 @@ public class BoardDAO {
 			pstmt.setInt(8, dto.getStepNo());
 			pstmt.setInt(9, dto.getLevelNo());
 			pstmt.setInt(10, dto.getHit());
+			pstmt.setString(11, dto.getIsDelete());
 			result = pstmt.executeUpdate();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -68,11 +69,11 @@ public class BoardDAO {
 		return result;
 	}
 	
-	public int getMaxNum() {
+	public int getMaxValue(String columnName) {
 		getConn();
 		int result = 0;
 		try {
-			String sql = "select nvl(max(num, 0)) as maxNum from board";
+			String sql = "select nvl(max(" + columnName + "), 0) from board";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -90,7 +91,7 @@ public class BoardDAO {
 		getConn();
 		ArrayList<BoardDTO> arrayList = new ArrayList<>();
 		try {
-			String sql = "select * from board order by no desc";
+			String sql = "select * from board where isdelete = '0' order by refNo desc, levelNo asc";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
@@ -161,11 +162,26 @@ public class BoardDAO {
 		}
 	}
 	
+	public void setUpdateReLevel(BoardDTO dto) {
+		getConn();
+		try {
+			String sql = "update board set levelNo = (levelNo + 1) where refNo = ? and levelNo > ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getRefNo());
+			pstmt.setInt(2, dto.getLevelNo());
+			pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose();
+		}
+	}
+	
 	public int setUpdate(BoardDTO dto) {
-		
+		getConn();
 		int result = 0;
 		try {
-			String sql = "update board set subject = ?, email = ?, content = ? where no = ? ";
+			String sql = "update board set subject = ?, email = ?, content = ? where no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getSubject());
 			pstmt.setString(2, dto.getEmail());
@@ -178,6 +194,81 @@ public class BoardDAO {
 			getConnClose();
 		}
 		
+		return result;
+	}
+	
+	public boolean isSoloContent(BoardDTO dto) {
+		getConn();
+		boolean result = false;
+		int refNo = dto.getRefNo();
+		int refNoCount = 0;
+		try {
+			String sql = "select count(*) from board where refNo = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, refNo);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				refNoCount = rs.getInt(1);
+			}
+			if (refNoCount == 1) {
+				result = true;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose();
+		}
+		return result;
+	}
+	
+	public int findSameRefNoMaxStepNo(BoardDTO dto) {
+		getConn();
+		int result = 0;
+		int refNo = dto.getRefNo();
+		try {
+			String sql = "select max(stepNo) from board where refNo = ? and isDelete = '0'";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, refNo);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} 
+		
+		return result;
+	}
+	
+	public boolean isLastChild(BoardDTO dto) {
+		getConn();
+		boolean result = false;
+		int refNo = dto.getRefNo();
+		int maxStepNo = findSameRefNoMaxStepNo(dto);
+		ArrayList<Integer> lastChildlist = new ArrayList<>();
+		try {
+			String sql = "select * from board where refNo = ? and isDelete = '0' and ((levelNO != stepNo) or (stepNo = ?))";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, refNo);
+			pstmt.setInt(2, maxStepNo);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				lastChildlist.add(rs.getInt("no"));
+			}
+			
+			if (lastChildlist.contains(dto.getNo())) {
+				result = true;
+			}
+			
+			System.out.println(refNo);
+			System.out.println(findSameRefNoMaxStepNo(dto));
+			
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose();
+		}
 		return result;
 	}
 	
@@ -194,6 +285,23 @@ public class BoardDAO {
 		} finally {
 			getConnClose();
 		}
+		return result;
+	}
+	
+	public int setIsDeleteTrue(BoardDTO dto) {
+		getConn();
+		int result = 0;
+		try {
+			String sql = "update board set isdelete = 1 where no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getNo());
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose();
+		}
+		
 		return result;
 	}
 }

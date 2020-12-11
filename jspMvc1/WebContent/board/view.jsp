@@ -50,15 +50,21 @@ BoardDTO dto = dao.getSelectOne(no);
 	</tr>
 </table>
 
+<a href="#" onclick="move('A', '<%=no%>');">[답변하기]</a>
+&nbsp;&nbsp;
 <a href="#" onclick="move('M', '<%=no%>');">[수정하기]</a>
 &nbsp;&nbsp;
-<a href="#" onclick="move('D', '<%=no%>');">[삭제하기]</a>
+<% if (dao.isLastChild(dto)) { %>
+	<a href="#" onclick="move('D', '<%=no%>');">[삭제하기]</a>
+<% } %>
 
 
 <script>
 
 function move(value1, value2) {
-	if (value1 === 'M') {
+	if (value1 === 'A') {
+		location.href='write.jsp?no=' + value2;
+	} else if (value1 === 'M') {
 		location.href='modify.jsp?no=' + value2;
 	} else if (value1 === 'D') {
 		location.href='delete.jsp?no=' + value2;
