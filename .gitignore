@@ -4,7 +4,10 @@
 
 ### Eclipse ###
 .metadata
+<<<<<<< HEAD
 Servers/
+=======
+>>>>>>> 8ff3b2a1193b28a335665299d3ebf6d29a1320fb
 bin/
 tmp/
 *.tmp
@@ -72,8 +75,11 @@ local.properties
 ### Java ###
 # Compiled class file
 *.class
+<<<<<<< HEAD
 .classpath
 *.xml
+=======
+>>>>>>> 8ff3b2a1193b28a335665299d3ebf6d29a1320fb
 
 # Log file
 *.log
@@ -84,6 +90,13 @@ local.properties
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+<<<<<<< HEAD
+=======
+.classpath
+.project
+Servers/
+
+>>>>>>> 8ff3b2a1193b28a335665299d3ebf6d29a1320fb
 # Package Files #
 *.jar
 *.war
