@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>layout(div)</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      #header {
+        background-color: gray;
+        height: 100px;
+        text-align: center;
+        line-height: 100px;
+      }
+
+      #nav {
+        background-color: #333333;
+        color: #ffffff;
+        width: 30%;
+        height: 300px;
+        text-align: center;
+        line-height: 300px;
+        float: left;
+      }
+
+      #main {
+        background-color: yellow;
+        width: 70%;
+        height: 300px;
+        text-align: center;
+        line-height: 300px;
+        float: left;
+      }
+
+      .clear {
+        clear: both;
+      }
+
+      #footer {
+        background-color: gray;
+        height: 100px;
+        text-align: center;
+        line-height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header">
+      <h2>Header</h2>
+    </div>
+    <div id="nav">
+      <h2>nav</h2>
+    </div>
+    <div id="main">
+      <p>main</p>
+    </div>
+    <div class="clear"></div>
+    <div id="footer">
+      <h2>Footer</h2>
+    </div>
+  </body>
+</html>

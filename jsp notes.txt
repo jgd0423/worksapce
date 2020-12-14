@@ -1,0 +1,172 @@
+﻿```
+<%
+	for (int a = 1; a <= 5; a++) {
+		out.println(a + "<br>");
+	}
+%>
+```
+
+<hr>
+
+```
+<% for (int i = 1; i <= 5; i++) { %>
+	<%=i%><br>
+<% } %>
+```
+
+System.out.println으로 하면 콘솔창에 출력
+out.println으로 하면 웹에 출력
+
+```
+<% out.println(i); %>
+<%=i%>
+
+위의 2개 같은 의미이다.
+```
+
+model1 방식 -> html + java -> 스파게티
+model2 방식 -> html / java
+
+
+<%! %>
+- 선언문 : 멤버변수 또는 멤버메소드로 사용하고자 할 때, 즉 전역변수. 거의 안씀.
+
+<% %>
+- 스크립트릿 : 지역변수
+
+<%= %>
+- 표현식(Expression), out.println(), EL: ${}, 간단한 변수, 값
+
+
+form태그의 한글이 깨지지 않게 하려면 데이터 받는 페이지에 아래 줄 추가.
+<% request.setCharacterEncoding("UTF-8"); %>
+
+
+
+* 반복문을 통해 form의 정보를 받는 방법
+- counter를 선언해서 반복문 돌 때마다 1씩 등가시킨 다음,
+type="hidden"의 태그를 통해서 counter의 값을 전달 할 수 있다.
+- 반복문의 int i 를 반복문 바깥에 선언한 다음,
+그 i를 type="hidden"으로 다른 문서에 전달.
+
+
+	String[] foods = request.getParameterValues("food");
+	for (int i = 0; i < foods.length; i++) {
+		out.println(foods[i] + "<br>");
+	}
+
+받은 정보를 처리하는 페이지에서는 보통 출력을 하지않고 데이터 처리만 한다.
+처리하고 그 정보를 다음 페이지에 넘기려면 흐름 제어를 이용한다.
+response.sendRedirect("point2.jsp?studentInfos=" + studentInfos); //흐름 제어 -> get으로 넘김
+=> queryString
+
+<script>
+	location.href="point2.jsp?name=<%=name%>&tot=<%=tot%>";
+</script>
+=> 자바스크립트로 하는 방법 -> get으로 넘김
+
+=> 폼태그를 다시 써서 보내는 방법 -> post로 넘김
+
+
+
+<%@ include file="18_top.jsp" %>
+18.jsp
+<%@ include file="18_bottom.jsp" %>   -> include 지시자
+include한 파일을 합쳐서 컴파일한다.
+상속? 보다는 수평적이다. 18.jsp에 선언한 변수를 18_top.jsp에서 사용할 수 있다.
+18_top에서는 <%=name %> 이렇게 사용
+table안에 table 넣는 식으로 활용할 수 있다.
+include 지시자로 합칠때는 !doctype지운다.
+
+
+<jsp:include page="18_top.jsp" flush="false" />   -> jsp 액션태그
+18_top을 먼저 컴파일하고 18에 집어넣기 때문에 18에 선언한 변수를 인식하지 못한다.
+<jsp:include page="18_top.jsp" flush="false">
+	<jsp:param value="<%=name %>" name="name"/>
+</jsp:include> -> 이런 식으로 보내고
+18_top에서 받을 때는
+<%
+	String name = request.getParameter("name");
+%> -> 이런식으로 받음. 폼태그로 넘긴 것 처럼.
+액션태그로 인클루드 시킬때는 !doctype지우지 않는다.
+
+
+
+* <jsp:useBean> 액션태그
+<jsp:useBean id="dto" class="test.Test19DTO" scope="page"> 
+ => 클래스를 이용해서 dto(클래스변수, 임의로 만드는 것)라는 객체를 생성해라
+
+
+//데이터베이스 저장방법
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+
+//데이타베이스 저장
+Connection conn = null;
+PreparedStatement pstmt = null;
+ResultSet rs = null;
+
+int result = 0;
+
+try {
+	String driver = "oracle.jdbc.driver.OracleDriver";
+	String dbUrl = "jdbc:oracle:thin:@localhost:1521/xe";
+	String dbId = "jspTest";
+	String dbPasswd = "1234";
+	
+	Class.forName(driver);
+	conn = DriverManager.getConnection(dbUrl, dbId, dbPasswd);
+	System.out.println("-- 오라클 접속 성공 --");
+	
+	String sql = "insert into boss values (seq_boss.nextval, ?, ?, ?)";
+	pstmt = conn.prepareStatement(sql);
+	pstmt.setString(1, boss_1);
+	pstmt.setString(2, boss_2);
+	pstmt.setString(3, boss_3);
+	result = pstmt.executeUpdate();
+	
+	if (result > 0) { // 성공
+		// response.sendRedirect("list.jsp");
+	
+		out.println("<script>");
+		out.println("alert('정상 처리 되었습니다.');");
+		out.println("location.href='list.jsp';");
+		out.println("</script>");
+	} else { // 실패
+		out.println("<script>");
+		out.println("alert('처리중 오류가 발생했습니다.');");
+		out.println("location.href='boss.jsp';");
+		out.println("</script>");
+	}
+	
+	System.out.println(result);
+} catch(Exception e) {
+	System.out.println("-- 오라클 접속 실패 --");
+	e.printStackTrace();
+}
+
+WebContent > WEB-INF > lib 안에 ojdbc6.jar 넣기
+
+스크립트릿 안에서 자바스크립트 코드 실행하는 것과
+스크립트릿 밖에서 실행할 때 주의해야할 점이 있다.
+out.println안에 (..."\n"...)이 있으면 그 안에 있는 html 문서 자체의
+줄바꿈이 일어난다. 그래서 오류 발생.
+
+
+* 세션(session) -> 도메인, 모든 페이지에서 인식시키기 위해서 사용. 서버에 저장
+* 쿠키(cookies) -> 클라이언트에 저장
+
+loginProc.jsp에서 로그인 성공 했을 때 아래 줄 추가 후
+session.setAttribute("cookId", id); // 세션 등록
+
+로그인 없이 접근 불가 페이지에 아래 줄 추가
+String cookId = null;
+if (session.getAttribute("cookId") == null) {
+	out.println("<script>");
+	out.println("alert('로그인 후 이용하세요');");
+	out.println("location.href='login.jsp';");
+	out.println("</script>");
+} else {
+	cookId = (String) session.getAttribute("cookId");
+}

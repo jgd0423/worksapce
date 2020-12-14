@@ -1,0 +1,158 @@
+﻿* 회원제 쇼핑몰 설계
+- 회원만 구매 가능
+- 테이블
+member -- 회원, 
+product -- 상품, 
+buy -- 구매, 
+stock -- 재고
+-----------------------------
+- 테이블 모델링
+member TABLE:
+- member_id (PK) NN varchar2(50)
+- member_name NN varchar2(50)
+- member_pwd NN varchar2(50)
+- member_phone_number NN varchar2(50)
+- member_address NN varchar2(50)
+- member_date NN DEFAULT SYSDATE date
+
+product TABLE:
+- product_id (PK) NN varchar2(50)
+- product_name NN varchar2(50)
+- product_price NN number
+- product_company NN varchar2(50) -- 제조사
+- product_madeby NN varchar2(50) -- 원산지
+
+buy TABLE:
+- buy_code varchar2(50) (PK) NN
+- member_id varchar2(50) NN (FK) -- 구매자 아이디
+- product_id varchar2(50) NN (FK) -- 상품 아이디
+- buy_price NN number -- 구매 당시 단가
+- product_count NN number -- 구매개수
+- buy_total NN number -- 총구매액
+- buy_date NN date DEFAULT SYSDATE
+
+stock TABLE:
+- stock_code (PK) NN varchar2(50) -- 일련번호 
+- product_id (FK) NN varchar2(50)
+- product_total NN number -- 입고수
+- product_cycle NN date -- 유통기한
+- product_indate NN date DEFAULT SYSDATE -- 입고날짜
+- product_location NN varchar2(50) -- 재고 위치
+------------------------------------------------------------
+
+-- 테이블 생성
+
+CREATE TABLE member (
+    member_id VARCHAR2(50) NOT NULL,
+    member_name VARCHAR2(50) NOT NULL,
+    member_pwd VARCHAR2(50) NOT NULL,
+    member_phone_number VARCHAR2(50) NOT NULL,
+    member_address VARCHAR2(50) NOT NULL,
+    member_date DATE DEFAULT SYSDATE NOT NULL,
+    PRIMARY KEY(member_id)
+);
+
+CREATE TABLE product (
+    product_id VARCHAR2(50) NOT NULL,
+    product_name VARCHAR2(50) NOT NULL,
+    product_price NUMBER NOT NULL,
+    product_company VARCHAR2(50) NOT NULL,
+    product_madeby VARCHAR2(50) NOT NULL,
+    PRIMARY KEY(product_id)
+);
+
+CREATE TABLE buy (
+    buy_code VARCHAR2(50) NOT NULL,
+    member_id VARCHAR2(50) NOT NULL,
+    product_id VARCHAR2(50) NOT NULL,
+    buy_price NUMBER NOT NULL,
+    product_count NUMBER NOT NULL,
+    buy_total NUMBER NOT NULL,
+    buy_date DATE DEFAULT SYSDATE NOT NULL,
+    PRIMARY KEY(buy_code),
+    FOREIGN KEY(member_id) REFERENCES member(member_id),
+    FOREIGN KEY(product_id) REFERENCES product(product_id)
+);
+
+CREATE TABLE stock (
+    stock_code VARCHAR2(50) NOT NULL,
+    product_id VARCHAR2(50) NOT NULL,
+    product_total NUMBER NOT NULL,
+    product_cycle DATE NOT NULL,
+    product_indate DATE DEFAULT SYSDATE NOT NULL,
+    product_location VARCHAR2(50) NOT NULL,
+    PRIMARY KEY(stock_code),
+    FOREIGN KEY(product_id) REFERENCES product(product_id)
+);
+
+SELECT * FROM tab;
+
+
+-- member_date DATE DEFAULT SYSDATE NOT NULL 
+위의 부분에서 티폴트값을 설정했지만 not null을 설정했기 때문에
+기본적인 방법으로 자료를 입력하지 못함. 그래서 프로시저 이용
+
+CREATE OR REPLACE PROCEDURE member_input
+(
+    m_id IN member.member_id%type,
+    m_name IN member.member_name%type,
+    m_pwd IN member.member_pwd%type, 
+    m_phone_number IN member.member_phone_number%type,
+    m_address IN member.member_address%type
+)
+AS
+BEGIN
+    INSERT INTO member VALUES (m_id, m_name, m_pwd, m_phone_number, m_address, SYSDATE);
+    COMMIT;
+END;
+
+EXECUTE member_input('hong', '홍길동', '1234', '010-1111-1111', '대구');
+
+
+CREATE OR REPLACE PROCEDURE product_input
+(
+    p_id IN product.product_id%type,
+    p_name IN product.product_name%type,
+    p_price IN product.product_price%type, 
+    p_company IN product.product_company%type,
+    p_madeby IN product.product_madeby%type
+)
+AS
+BEGIN
+    INSERT INTO product VALUES (p_id, p_name, p_price, p_company, p_madeby);
+    COMMIT;
+END;
+
+EXECUTE product_input('P005', '와인', '50000', '와인회사', 'UK');
+
+
+CREATE OR REPLACE PROCEDURE buy_input
+(
+    b_code IN buy.buy_code%type,
+    b_m_id IN buy.member_id%type,
+    b_p_id IN buy.product_id%type,
+    b_price IN buy.buy_price%type,
+    b_p_count IN buy.product_count%type
+)
+AS
+    b_total buy.buy_total%type;
+BEGIN
+    b_total := b_price * b_p_count;
+    INSERT INTO buy VALUES (b_code, b_m_id, b_p_id, b_price, b_p_count, b_total, DEFAULT);
+    COMMIT;
+END;
+
+-- NOT NULL인 컬럼 추가 하는 방법
+ALTER TABLE product ADD product_total NUMBER DEFAULT 100 NOT NULL;
+
+
+-- BUY테이블에 자료가 추가되면 PRODUCT테이블의 재고가 감소되어야 한다
+
+CREATE OR REPLACE TRIGGER substract_product_total
+    AFTER INSERT     -- 원본테이블에 INSERT 작업이 일어난 후에 실행문 동작
+    ON buy  -- 테이블에 트리거를 부착해라
+    FOR EACH ROW
+BEGIN
+    UPDATE product SET product_total = product_total - :NEW.product_count
+    WHERE product_id = :NEW.product_id;
+END;

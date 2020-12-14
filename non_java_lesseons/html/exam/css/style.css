@@ -1,0 +1,317 @@
+.content-box {
+  width: 80%;
+  height: inherit;
+  background-color: #ff000040;
+  margin: 0 auto;
+}
+
+.hidden {
+  display: none;
+}
+
+/*-----------------------------------*/
+
+#header {
+  height: 100px;
+  background-color: aqua;
+}
+
+#header > .content-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#logo {
+  position: relative;
+  left: 0px;
+  top: 0px;
+  margin: 0px 20px 0px 0px;
+}
+
+.logo_img {
+  width: 100px;
+  height: 100px;
+  display: block;
+}
+
+#main-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#main-menu > nav > ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  --background-color: gray;
+}
+
+#main-menu > nav > ul > li {
+  margin: 0px 20px;
+}
+
+#search-form {
+  padding: 0px 20px;
+  --background-color: gray;
+}
+
+#member-menu {
+  height: inherit;
+  --background-color: blue;
+}
+
+#member-menu > nav:nth-child(1) > ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  --background-color: gray;
+}
+
+#member-menu > nav:nth-child(1) > ul > li {
+  margin: 0px 15px;
+}
+
+#member-menu > nav:nth-child(2) > ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  --background-color: aquamarine;
+}
+
+#member-menu > nav:nth-child(2) > ul > li {
+  margin: 0px 15px;
+}
+
+#body {
+  height: 700px;
+  background-color: aquamarine;
+}
+
+#body > .content-box {
+  display: flex;
+}
+
+#aside {
+  width: 20%;
+  height: inherit;
+  background-color: blanchedalmond;
+}
+
+#body_nav {
+  width: 70%;
+  margin: 0 auto;
+  --background-color: gray;
+}
+
+#body_nav h1 {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 30px 0px 10px 0px;
+}
+
+#body_nav > nav > ul > li {
+  margin: 0px 20px;
+}
+
+#main {
+  width: 80%;
+  height: inherit;
+  background-color: burlywood;
+}
+
+#main > #body-main {
+  width: 90%;
+  height: inherit;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+#main > #body-main > h1 {
+  font-size: 30px;
+}
+
+#main > #body-main > .service-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 80%;
+  border: 1px solid black;
+  background-color: #ffffff;
+}
+
+#main > #body-main > .service-form h1 {
+  font-size: 25px;
+}
+
+#service-table {
+  width: 800px;
+}
+
+#service-table td {
+  padding-left: 10px;
+}
+
+#service-table .info-title {
+  height: 40px;
+  font-weight: bold;
+  border-bottom: 2px solid;
+}
+
+#service-table .info-type {
+  width: 200px;
+  background-color: lightgray;
+}
+
+#service-table textarea {
+  width: 90%;
+  border: 0;
+  padding: 10px;
+  resize: none;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.button-container button {
+  height: 40px;
+  width: 80px;
+  margin-right: 10px;
+  background-color: #ffffff;
+}
+
+.button-container button:nth-child(1) {
+  color: red;
+  border: red 1px solid;
+}
+
+.button-container button:nth-child(2) {
+  color: #000000;
+  border: #000000 1px solid;
+}
+
+#main > #body-main > .login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 80%;
+  border: 1px solid black;
+}
+
+#login-table {
+  width: 400px;
+  height: 200px;
+}
+
+#login-table td {
+  height: 70px;
+}
+
+#login-table td input {
+  height: inherit;
+  width: 100%;
+  border: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#login-table select {
+  border: 0;
+  height: inherit;
+  width: 100%;
+}
+
+#login-table button {
+  border: 0;
+  height: inherit;
+  width: 100%;
+  background-color: rgb(219, 226, 151);
+}
+
+#main > #body-main > .join-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 90%;
+  border: 1px solid black;
+}
+
+#join-table td {
+  height: 25px;
+}
+
+#join-table .three-cols {
+  width: 33.33%;
+}
+
+#join-table td input {
+  height: inherit;
+  width: 100%;
+  border: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#join-table select {
+  border: 0;
+  height: inherit;
+  width: 100%;
+}
+
+#join-table button {
+  border: 0;
+  height: inherit;
+  width: 100%;
+  background-color: rgb(219, 226, 151);
+}
+
+#join-table textarea {
+  width: 100%;
+  height: 100px;
+  border: 0;
+  padding: 10px;
+  resize: none;
+}
+
+#footer {
+  height: 100px;
+  background-color: bisque;
+}
+
+#footer > .content-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  --background-color: blueviolet;
+}
+
+#footer > .content-box div {
+  margin-left: 10px;
+}
+
+#owner_info > dl {
+  display: flex;
+}
+
+#owner_info > dl > dt {
+  display: flex;
+  padding: 0px 20px 0px 0px;
+}
+
+#owner_info > dl > dd {
+  display: flex;
+  padding: 0px 50px 0px 0px;
+}
+
+#copyright_info {
+  margin: 5px 0px 0px 0px;
+}
