@@ -4,6 +4,7 @@
 
 ### Eclipse ###
 .metadata
+Servers/
 bin/
 tmp/
 *.tmp
@@ -71,6 +72,8 @@ local.properties
 ### Java ###
 # Compiled class file
 *.class
+.classpath
+*.xml
 
 # Log file
 *.log
