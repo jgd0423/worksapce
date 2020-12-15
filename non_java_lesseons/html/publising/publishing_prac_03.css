@@ -1,0 +1,66 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.content-box {
+  width: 80%;
+  height: inherit;
+  background-color: #ff000040;
+  margin: 0 auto;
+}
+
+/*---------------------------------------*/
+#header {
+  height: 100px;
+  background-color: pink;
+}
+
+#body {
+  height: 700px;
+  background-color: turquoise;
+}
+.join-form {
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1;
+}
+
+table td {
+  height: 30px;
+}
+
+table td input {
+  height: inherit;
+  width: 100%;
+  border: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+table select {
+  border: 0;
+  height: inherit;
+  width: 100%;
+}
+
+table button {
+  border: 0;
+  height: inherit;
+  width: 100%;
+  background-color: rgb(219, 226, 151);
+}
+
+#footer {
+  height: 100px;
+  background-color: salmon;
+}

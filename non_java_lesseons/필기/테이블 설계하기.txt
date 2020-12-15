@@ -1,0 +1,54 @@
+﻿* 상품테이블 product
+num / 순번 / number, PK, NN
+pname / 상품이름, varchar2(50), NN
+pprice / 상품가격, number, NN
+pjaego / 재고, number, NN
+pcompany 제조사, varchar2(50), NN
+
+CREATE TABLE product (
+    num number NOT NULL,
+    pname varchar2(50) NOT NULL,
+    pprice number NOT NULL,
+    pjaego number NOT NULL,
+    pcompany varchar(50) NOT NULL,
+    PRIMARY KEY(num)
+);
+
+-- 테이블 조회
+SELECT * FROM tab;
+
+* 구매테이블 buy
+orderNum / 주문번호 / number, PK, NN
+num 상품번호 / number NN -- 상품번호
+id 구매자 / varchar2(50) NN  -- 회원아이디
+buyNum 구매개수 / number NN
+
+CREATE TABLE buy (
+orderNum number NOT NULL,
+num number NOT NULL,
+id varchar2(50) NOT NULL,
+buyNum varchar2(50) NOT NULL,
+PRIMARY KEY(orderNum),
+FOREIGN KEY (pnum) REFERENCES product(num),
+FOREIGN KEY (id) PREFERENCES test01(id)
+);
+
+-- 테이블에 자료 넣기 커밋 해야함!!!
+INSERT INTO test01 VALUES
+('hong', '1234', '홍길동', '010-1111-1111', '19');
+COMMIT;
+ROLLBACK; -- 원래대로 복구
+
+
+-- 테이블 자료 수정
+
+UPDATE test01 SET mobile = '01011111111' WHERE id = 'hong'; WHERE 안쓰면 다 바뀜!!!!
+COMMIT;
+
+-- 테이블 자료 삭제
+DELETE FROM buy 
+WHERE orderNum = '4'; 	WHERE 안쓰면 다 지워짐!!!
+
+-- 테이블 내용 모두 삭제
+TRUNCATE TABLE aaaNew;
+DELETE FROM aaaNew;
