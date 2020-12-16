@@ -1,0 +1,17 @@
+db생성 방법
+* 오라클
+--스키마 생성
+CREATE USER exam01 IDENTIFIED BY 1234
+DEFAULT TABLESPACE USERS
+TEMPORARY TABLESPACE TEMP;
+
+--사용자 권한 부여
+GRANT connect, resource, dba TO exam01;
+
+
+* mySql
+CREATE DATABASE 데이터베이스 이름;
+GRANT ALL PRIVILEGES ON 사용자id.* TO 사용자id@localhost IDENTIFIED BY '비밀번호';
+FLUSH PRIVILEGES;
+
+cmd에서 mysql -u 계정 -p

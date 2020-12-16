@@ -1,4 +1,4 @@
-package literatePrimes;
+package chapter10.literatePrimes;
 
 public class PrimePrinter {
 	public static void main(String[] args) {

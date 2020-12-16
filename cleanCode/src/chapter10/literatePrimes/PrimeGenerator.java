@@ -1,4 +1,4 @@
-package literatePrimes;
+package chapter10.literatePrimes;
 
 import java.util.ArrayList;
 

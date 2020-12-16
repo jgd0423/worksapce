@@ -1,0 +1,14 @@
+CREATE TABLE member(
+    no INT NOT NULL AUTO_INCREMENT,
+    id VARCHAR(50) NOT NULL,
+    passwd VARCHAR(50) NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    sid VARCHAR(50) NOT NULL,
+    phone VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    gender ENUM('M', 'F') NOT NULL ,
+    age INT NOT NULL,
+    wdate DATE DEFAULT NOW() NOT NULL,
+    PRIMARY KEY(id),
+    UNIQUE(no)
+);
