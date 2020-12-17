@@ -1,0 +1,23 @@
+CREATE TABLE member(
+    no INT NOT NULL AUTO_INCREMENT,  -> 오라클은 시퀀스 만들어야함. 아니면 데이터 입력할 때 NVL(MAX(no), 0) 사용(공통 방법).
+    id VARCHAR(50) NOT NULL,
+    passwd VARCHAR(50) NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    sid VARCHAR(50) NOT NULL,
+    phone VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    gender ENUM('M', 'F') NOT NULL ,   -> VARCHAR2(1) NOT NULL CHECK(gender IN ('M', 'F')),
+    age INT NOT NULL,
+    wdate TIMESTAMP NOT NULL,   (-> wdate DATE DEFAULT SYSDATE,)
+    PRIMARY KEY(id),
+    UNIQUE(no)
+);
+
+--> mysql과 오라클 차이점
+
+
+* MYSQL에서는 서브쿼리의 테이블에 별칭을 주어야 동작한다.
+ex)
+INSERT INTO member VALUES (
+    (SELECT (NVL(MAX(no), 0) + 1) FROM member ALIAS_FOR_SUBQUERY), 
+    'hhhhh', '33', '김김김', '7779701723232', '554', '434', 'F', '22', default);

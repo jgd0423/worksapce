@@ -4,7 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+
+import db.Db;
+import db.DbMysqlImpl;
 
 public class Member02DAO {
 	// Field
@@ -17,19 +21,21 @@ public class Member02DAO {
 	
 	// Method
 	public void getConn() {
-		try {
-			String driver = "com.mysql.jdbc.Driver";
-			String dbUrl = "jdbc:mysql://localhost:3306/jspInterface";
-			String dbId = "jspInterface";
-			String dbPasswd = "1234";
-			
-			Class.forName(driver);
-			conn = DriverManager.getConnection(dbUrl, dbId, dbPasswd);
-			System.out.println("-- MySQL 접속 성공 --");					
-		} catch(Exception e) {
-			e.printStackTrace();
-			System.out.println("-- MySQL 접속 실패 --");
-		}
+//		try {
+//			String driver = "com.mysql.jdbc.Driver";
+//			String dbUrl = "jdbc:mysql://localhost:3306/jspInterface";
+//			String dbId = "jspInterface";
+//			String dbPasswd = "1234";
+//			
+//			Class.forName(driver);
+//			conn = DriverManager.getConnection(dbUrl, dbId, dbPasswd);
+//			System.out.println("-- MySQL 접속 성공 --");					
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			System.out.println("-- MySQL 접속 실패 --");
+//		}
+		Db d2 = new DbMysqlImpl();
+		conn = d2.dbConn();
 	}
 	
 	public void getConnClose() {
@@ -45,12 +51,14 @@ public class Member02DAO {
 	public int setInsert(Member02DTO dto) {
 		getConn();
 		int result = 0;
+		int maxNo = getMaxValue("no") + 1;
+		Timestamp wdate = new Timestamp(System.currentTimeMillis());
 		try {
 			String sql = "insert into member values ("
-					+ "?, ?, ?, ?, ?,"
-					+ "?, ?, ?, ?, now())";
+						+ "?, ?, ?, ?, ?,"
+						+ "?, ?, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setNull(1, java.sql.Types.NULL);
+			pstmt.setInt(1, maxNo);
 			pstmt.setString(2, dto.getId());
 			pstmt.setString(3, dto.getPasswd());
 			pstmt.setString(4, dto.getName());
@@ -59,12 +67,28 @@ public class Member02DAO {
 			pstmt.setString(7, dto.getEmail());
 			pstmt.setString(8, dto.getGender());
 			pstmt.setInt(9, dto.getAge());
+			pstmt.setTimestamp(10, wdate);
 			
 			result = pstmt.executeUpdate();
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
 			getConnClose();
+		}
+		return result;
+	}
+	
+	public int getMaxValue(String columnName) {
+		int result = 0;
+		try {
+			String sql = "select nvl(max(" + columnName + "), 0) from member";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = rs.getInt(1); // 컬럼의 순서 입력해도 된다.
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 		return result;
 	}
@@ -87,7 +111,7 @@ public class Member02DAO {
 				dto.setEmail(rs.getString("email"));
 				dto.setGender(rs.getString("gender"));
 				dto.setAge(rs.getInt("age"));
-				dto.setwDate(rs.getDate("wdate"));
+				dto.setwDate(rs.getTimestamp("wdate"));
 				memberList.add(dto);
 			}
 		} catch(Exception e) {
@@ -116,7 +140,7 @@ public class Member02DAO {
 				dto.setEmail(rs.getString("email"));
 				dto.setGender(rs.getString("gender"));
 				dto.setAge(rs.getInt("age"));
-				dto.setwDate(rs.getDate("wdate"));
+				dto.setwDate(rs.getTimestamp("wdate"));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();

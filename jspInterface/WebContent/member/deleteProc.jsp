@@ -15,7 +15,6 @@ int no = dto.getNo();
 String passwd = dto.getPasswd();
 String dbPasswd = dbDto.getPasswd();
 
-int result = dao.setDelete(dto);
 
 if (!passwd.equals(dbPasswd)) {
 	out.println("<script>");
@@ -23,6 +22,7 @@ if (!passwd.equals(dbPasswd)) {
 	out.println("history.back();");
 	out.println("</script>");
 }  else {
+	int result = dao.setDelete(dto);
 	if (result > 0) {
 		out.println("<script>");
 		out.println("alert('정상적으로 삭제되었습니다.')");

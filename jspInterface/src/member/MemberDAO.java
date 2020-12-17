@@ -4,7 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+
+import db.Db;
+import db.DbOracleImpl;
 
 public class MemberDAO {
 	// Field
@@ -17,19 +21,21 @@ public class MemberDAO {
 	
 	// Method
 	public void getConn() {
-		try {
-			String driver = "oracle.jdbc.driver.OracleDriver";
-			String dbUrl = "jdbc:oracle:thin:@localhost:1521/xe";
-			String dbId = "jspInterface";
-			String dbPasswd = "1234";
-			
-			Class.forName(driver);
-			conn = DriverManager.getConnection(dbUrl, dbId, dbPasswd);
-			System.out.println("-- 오라클 접속 성공 --");					
-		} catch(Exception e) {
-			System.out.println("-- 오라클 접속 실패 --");
-			e.printStackTrace();
-		}
+//		try {
+//			String driver = "oracle.jdbc.driver.OracleDriver";
+//			String dbUrl = "jdbc:oracle:thin:@localhost:1521/xe";
+//			String dbId = "jspInterface";
+//			String dbPasswd = "1234";
+//			
+//			Class.forName(driver);
+//			conn = DriverManager.getConnection(dbUrl, dbId, dbPasswd);
+//			System.out.println("-- 오라클 접속 성공 --");					
+//		} catch(Exception e) {
+//			System.out.println("-- 오라클 접속 실패 --");
+//			e.printStackTrace();
+//		}
+		Db d1 = new DbOracleImpl();
+		conn = d1.dbConn();
 	}
 	
 	public void getConnClose() {
@@ -45,19 +51,23 @@ public class MemberDAO {
 	public int setInsert(MemberDTO dto) {
 		getConn();
 		int result = 0;
+		int maxNo = getMaxValue("no") + 1;
+		Timestamp wdate = new Timestamp(System.currentTimeMillis());
 		try {
 			String sql = "insert into member values ("
-					+ "seq_member.nextval, ?, ?, ?, ?,"
-					+ "?, ?, ?, ?, sysdate)";
+						+ "?, ?, ?, ?, ?,"
+						+ "?, ?, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, dto.getId());
-			pstmt.setString(2, dto.getPasswd());
-			pstmt.setString(3, dto.getName());
-			pstmt.setString(4, dto.getSid());
-			pstmt.setString(5, dto.getPhone());
-			pstmt.setString(6, dto.getEmail());
-			pstmt.setString(7, dto.getGender());
-			pstmt.setInt(8, dto.getAge());
+			pstmt.setInt(1, maxNo);
+			pstmt.setString(2, dto.getId());
+			pstmt.setString(3, dto.getPasswd());
+			pstmt.setString(4, dto.getName());
+			pstmt.setString(5, dto.getSid());
+			pstmt.setString(6, dto.getPhone());
+			pstmt.setString(7, dto.getEmail());
+			pstmt.setString(8, dto.getGender());
+			pstmt.setInt(9, dto.getAge());
+			pstmt.setTimestamp(10, wdate);
 			
 			result = pstmt.executeUpdate();
 		} catch(Exception e) {
@@ -67,6 +77,22 @@ public class MemberDAO {
 		}
 		return result;
 	}
+	
+	public int getMaxValue(String columnName) {
+		int result = 0;
+		try {
+			String sql = "select nvl(max(" + columnName + "), 0) from member";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = rs.getInt(1); // 컬럼의 순서 입력해도 된다.
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	
 	public ArrayList<MemberDTO> getListAll() {
 		getConn();
@@ -86,7 +112,7 @@ public class MemberDAO {
 				dto.setEmail(rs.getString("email"));
 				dto.setGender(rs.getString("gender"));
 				dto.setAge(rs.getInt("age"));
-				dto.setwDate(rs.getDate("wdate"));
+				dto.setwDate(rs.getTimestamp("wdate"));
 				memberList.add(dto);
 			}
 		} catch(Exception e) {
@@ -115,7 +141,7 @@ public class MemberDAO {
 				dto.setEmail(rs.getString("email"));
 				dto.setGender(rs.getString("gender"));
 				dto.setAge(rs.getInt("age"));
-				dto.setwDate(rs.getDate("wdate"));
+				dto.setwDate(rs.getTimestamp("wdate"));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();

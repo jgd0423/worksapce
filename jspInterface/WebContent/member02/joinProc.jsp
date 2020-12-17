@@ -39,7 +39,6 @@ dto.setGender(gender);
 dto.setAge(age);
 
 Member02DAO dao = new Member02DAO();
-int result = dao.setInsert(dto);
 
 if (passwd == null || passwdCheck == null) {
 	out.println("<script>");
@@ -53,6 +52,7 @@ if (passwd == null || passwdCheck == null) {
 		out.println("location.href='join.jsp';");
 		out.println("</script>");
 	} else {
+		int result = dao.setInsert(dto);
 		if (result > 0) {
 			out.println("<script>");
 			out.println("alert('정상적으로 등록되었습니다.')");

@@ -12,7 +12,6 @@ MemberDAO dao = new MemberDAO();
 MemberDTO dbDto = dao.getSelectOne(dto.getNo());
 String passwd = dto.getPasswd();
 String dbPasswd = dbDto.getPasswd();
-int result = dao.setUpdate(dto);
 
 if (!passwd.equals(dbPasswd)) {
 	out.println("<script>");
@@ -20,6 +19,7 @@ if (!passwd.equals(dbPasswd)) {
 	out.println("history.back();");
 	out.println("</script>");
 }  else {
+	int result = dao.setUpdate(dto);
 	if (result > 0) {
 		out.println("<script>");
 		out.println("alert('정상적으로 수정되었습니다.')");
