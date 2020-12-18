@@ -17,7 +17,7 @@ FLUSH PRIVILEGES;
 cmd에서 mysql -u 계정 -p
 
 CREATE DATABASE jspInterfaceImpl02;
-GRANT ALL PRIVILEGES ON jspInterfaceImpl02.* TO jspInterfaceimpl02@localhost IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON jspInterfaceImpl02.* TO jspInterfaceImpl02@localhost IDENTIFIED BY '1234';
 FLUSH PRIVILEGES;
 
 
