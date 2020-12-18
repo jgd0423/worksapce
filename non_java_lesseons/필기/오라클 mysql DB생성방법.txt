@@ -15,3 +15,19 @@ GRANT ALL PRIVILEGES ON 사용자id.* TO 사용자id@localhost IDENTIFIED BY '�
 FLUSH PRIVILEGES;
 
 cmd에서 mysql -u 계정 -p
+
+CREATE DATABASE jspInterfaceImpl02;
+GRANT ALL PRIVILEGES ON jspInterfaceImpl02.* TO jspInterfaceimpl02@localhost IDENTIFIED BY '1234';
+FLUSH PRIVILEGES;
+
+
+CREATE TABLE member (
+no INT NOT NULL AUTO_INCREMENT,
+id VARCHAR(50) NOT NULL,
+pwd VARCHAR(50) NOT NULL,
+name VARCHAR(50) NOT NULL,
+phone VARCHAR(50) NOT NULL,
+job VARCHAR(50) NOT NULL,
+PRIMARY KEY(id),
+UNIQUE(no)
+);

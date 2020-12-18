@@ -1,32 +1,33 @@
-<%@page import="member.MemberDTO"%>
-<%@page import="member.MemberDAO"%>
+<%@page import="model.member.MemberDAOImplMySQL"%>
+<%@page import="model.member.MemberDTO"%>
+<%@page import="model.member.MemberDAOImplOracle"%>
+<%@page import="model.member.MemberDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 <% request.setCharacterEncoding("UTF-8"); %>
 <%
 
-String no_ = request.getParameter("no");
-int no = Integer.parseInt(no_);
-MemberDAO dao = new MemberDAO();
-MemberDTO dto = dao.getSelectOne(no);
+String id = request.getParameter("id");
+//MemberDAO dao = new MemberDAOImplOracle();
+MemberDAO dao = new MemberDAOImplMySQL();
+MemberDTO dto = dao.getSelectOne(id);
 
 %>
-
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>삭제하기(오라클)</title>
+<title>삭제하기</title>
 </head>
 <body>
 
-<h2>삭제하기(오라클)</h2>
+<h2>삭제하기</h2>
 
 <form name="deleteForm">
-	<input type="hidden" name="no" value="<%=dto.getNo()%>">
+	<input type="hidden" name="id" value="<%=dto.getId()%>">
 	<table border="1">
 		<tr>
-			<td>일련번호</td>
+			<td>번호</td>
 			<td><%=dto.getNo() %></td>
 		</tr>
 		<tr>
@@ -35,35 +36,19 @@ MemberDTO dto = dao.getSelectOne(no);
 		</tr>
 		<tr>
 			<td>비밀번호</td>
-			<td><input type="text" name="passwd" /></td>
+			<td><input type="text" name="pwd" /></td>
 		</tr>
 		<tr>
 			<td>이름</td>
 			<td><%=dto.getName() %></td>
 		</tr>
 		<tr>
-			<td>주민번호</td>
-			<td><%=dto.getSid() %></td>
-		</tr>
-		<tr>
 			<td>전화번호</td>
 			<td><%=dto.getPhone() %></td>
 		</tr>
 		<tr>
-			<td>이메일</td>
-			<td><%=dto.getEmail() %></td>
-		</tr>
-		<tr>
-			<td>성별</td>
-			<td><%=dto.getGender() %></td>
-		</tr>
-		<tr>
-			<td>나이</td>
-			<td><%=dto.getAge() %></td>
-		</tr>
-		<tr>
-			<td>가입일시</td>
-			<td><%=dto.getwDate() %></td>
+			<td>직업</td>
+			<td><%=dto.getJob() %></td>
 		</tr>
 	</table>
 	<button type="button" onclick="deleteInfo();">삭제하기</button>
@@ -72,9 +57,9 @@ MemberDTO dto = dao.getSelectOne(no);
 <script>
 
 function deleteInfo() {
-	if (document.deleteForm.passwd.value === "") {
+	if (document.deleteForm.pwd.value === "") {
 		alert("비밀번호를 입력하세요.");
-		document.deleteForm.passwd.focus();
+		document.deleteForm.pwd.focus();
 		return false;
 	}
 	if (confirm("삭제하시겠습니까?")) {

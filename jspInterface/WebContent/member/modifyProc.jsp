@@ -2,7 +2,7 @@
 <%@page import="member.MemberDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% request.setCharacterEncoding("UTF-8"); %>
+<%request.setCharacterEncoding("UTF-8");%>
 <jsp:useBean id="dto" class="member.MemberDTO" scope="page"></jsp:useBean>
 <jsp:setProperty property="*" name="dto"/>
 
