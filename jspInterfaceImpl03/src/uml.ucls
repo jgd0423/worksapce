@@ -12,7 +12,7 @@
   </interface>  
   <class id="2" language="java" name="model.member.MemberDAOImplMySQL" project="jspInterfaceImpl03" 
     file="/jspInterfaceImpl03/src/model/member/MemberDAOImplMySQL.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="261" width="197" x="550" y="169"/>    
+    <position height="-1" width="-1" x="625" y="537"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,7 +30,7 @@
   </class>  
   <class id="4" language="java" name="model.member.MemberExample" project="jspInterfaceImpl03" 
     file="/jspInterfaceImpl03/src/model/member/MemberExample.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="189" width="197" x="511" y="485"/>    
+    <position height="-1" width="-1" x="730" y="242"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -39,8 +39,12 @@
   </class>  
   <association id="5">    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="6" name="dao"/>      
-      <multiplicity id="7" minimum="0" maximum="1"/>    
+      <attribute id="6" name="dao">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="7" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  

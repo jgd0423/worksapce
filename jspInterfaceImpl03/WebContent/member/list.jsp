@@ -32,8 +32,7 @@ ArrayList<MemberDTO> memberList = dao.getListAll();
 		<td>전화번호</td>
 		<td>직업</td>
 	</tr>
-	<% for (int i = 0; i < memberList.size(); i++) { %>
-		<% MemberDTO dto = memberList.get(i); %>
+	<% for (MemberDTO dto : memberList) { %>
 		<tr>
 			<td><%=dto.getNo() %></td>
 			<td>

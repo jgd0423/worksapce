@@ -3,7 +3,6 @@
 <%@page import="model.member.MemberDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 <% request.setCharacterEncoding("UTF-8"); %>
 
 <%
@@ -14,6 +13,7 @@ MemberDTO dto = dao.getSelectOne(id);
 
 %>
 
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
