@@ -29,13 +29,13 @@
 function save() {
 	if (document.product.name.value === "") {
 		alert("상품이름을 입력하세요.");
-		document.product.name.value();
+		document.product.name.focus();
 		return false;
 	}
 	
 	if (document.product.price.value === "") {
 		alert("상품가격을 입력하세요.");
-		document.product.price.value();
+		document.product.price.focus();
 		return false;
 	}
 

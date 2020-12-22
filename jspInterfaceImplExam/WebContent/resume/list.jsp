@@ -32,23 +32,23 @@ final int ONE_LINE_SIZE = 3;
 			} else { %>
 			<% ResumeDTO dto = resumeList.get(j); %>
 			<td>
-			<table>
-				<tr>
-					<td>
-						<a href="view.jsp?no=<%=dto.getNo()%>">
-							<img src="../image/<%=dto.getPic() %>" alt="<%=dto.getPic() %>" style="width:100px; height:100px;"/>
-						</a>
-					</td>
-				</tr>
-				<tr>
-					<td><%=dto.getName() %></td>
-				</tr>
-				<tr>
-					<td><%=dto.getPhone() %></td>
-				</tr>
-			</table>
+				<table>
+					<tr>
+						<td>
+							<a href="view.jsp?no=<%=dto.getNo()%>">
+								<img src="../image/<%=dto.getPic() %>" alt="<%=dto.getPic() %>" style="width:100px; height:100px;"/>
+							</a>
+						</td>
+					</tr>
+					<tr>
+						<td><%=dto.getName() %></td>
+					</tr>
+					<tr>
+						<td><%=dto.getPhone() %></td>
+					</tr>
+				</table>
 			</td>
-		<% } %>
+			<% } %>
 		<% } %>
 		</tr>
 	<% } %>
