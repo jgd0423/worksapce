@@ -14,13 +14,13 @@ public class Aircondition implements RemoteControl {
 	// Method
 	@Override
 	public boolean on() {
-		System.out.println("아파트ID: " + aptId + ", Aircon ON (설정온도: " + desiredTemperature + ")");
+		System.out.println("아파트ID: " + aptId + ", Aircondition ON (설정온도: " + desiredTemperature + ")");
 		return true;
 	}
 	
 	@Override
 	public boolean off() {
-		System.out.println("아파트ID: " + aptId + ", Aircon OFF");
+		System.out.println("아파트ID: " + aptId + ", Aircondition OFF");
 		return true;
 	}
 	

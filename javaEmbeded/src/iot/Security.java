@@ -1,29 +1,28 @@
 package iot;
 
-public class Aircondition implements RemoteControl {
+public class Security implements RemoteControl {
 	// Field
 	private String aptId;
-	double desiredTemperature = 25.0;
 	private boolean status = false;
 	
 	// Constructor
-	public Aircondition(String aptId) {
+	public Security(String aptId) {
 		this.aptId = aptId;
 	}
-	
+
 	// Method
 	@Override
 	public boolean on() {
-		System.out.println("아파트ID: " + aptId + ", Aircon ON (설정온도: " + desiredTemperature + ")");
+		System.out.println("아파트ID: " + aptId + ", Security ON");
 		return true;
 	}
 	
 	@Override
 	public boolean off() {
-		System.out.println("아파트ID: " + aptId + ", Aircon OFF");
+		System.out.println("아파트ID: " + aptId + ", Security OFF");
 		return true;
 	}
-	
+		
 	public String getAptId() {
 		return aptId;
 	}
