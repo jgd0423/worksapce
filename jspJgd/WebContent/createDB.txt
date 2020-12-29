@@ -1,0 +1,17 @@
+create table member(
+no NUMBER not null,
+id varchar2(50) not null,
+passwd varchar2(50) not null,
+name varchar2(50) not null,
+email varchar2(50) not null,
+phone varchar2(50) not null,
+address varchar2(50) not null,
+zipcode varchar2(50) not null,
+gender varchar2(1) not null check (gender in ('M', 'F')),
+grade varchar2(50) not null, -- 1:전체관리자, 2:로그인관리자, 3:일반회원
+regi_date date default sysdate,
+primary key(id),
+unique(no)
+);
+
+create sequence seq_member start with 1 increment by 1 minvalue 1; 
