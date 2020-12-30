@@ -9,12 +9,10 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		String text = getText();
-		Optional<String> maybeText = Optional.ofNullable(text);
-		int length;
-		if (maybeText.isPresent()) {
-			length = maybeText
-		}
+		int length = Optional.ofNullable(getText()).map(String::length).orElse(0);
+		
+		
+		System.out.println(length);
 	}
 
 }

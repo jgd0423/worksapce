@@ -1,25 +1,19 @@
-<%@page import="member.MemberDTO"%>
-<%@page import="member.MemberDAO"%>
+<%@page import="member.model.MemberDTO"%>
+<%@page import="member.model.MemberDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-	request.setCharacterEncoding("UTF-8");
-%>
-<jsp:useBean id="dto" class="member.MemberDTO" scope="page"></jsp:useBean>
+<%request.setCharacterEncoding("UTF-8");%>
+<jsp:useBean id="dto" class="member.model.MemberDTO" scope="page"></jsp:useBean>
 <jsp:setProperty property="*" name="dto"/>
-<%@ include file="../include/ip_check.jsp" %>
-<%@ include file="../include/session_check.jsp" %>
-<%@ include file="../include/need_login.jsp" %>
-<%@ include file="../include/menu.jsp" %>
 <%
 
-dao = new MemberDAO();
-MemberDTO dbDto = dao.getSelectOne(dto.getId());
+MemberDAO dao = new MemberDAO();
+MemberDTO dbDto = dao.getSelectOne(dto.getNo());
 
 if (!dto.getPasswd().equals(dbDto.getPasswd())) {
 	out.println("<script>");
 	out.println("alert('비밀번호가 틀렸습니다.')");
-	out.println("location.href='delete.jsp?id=" + dto.getId() +"';");
+	out.println("location.href='delete.jsp';");
 	out.println("</script>");
 	return;
 }
