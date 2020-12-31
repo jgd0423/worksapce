@@ -43,7 +43,7 @@ ArrayList<MemberDTO> memberList = dao.getListAll();
 						<% if (cookNo == dto.getNo()) { %>
 							<td><a href="view.jsp?no=<%=dto.getNo() %>"><%=dto.getId() %></a></td>
 						<% } else { %>
-							<td><%=dto.getId() %></a></td>
+							<td><%=dto.getId() %></td>
 						<% } %>
 						<td><%=dto.getPasswd() %></td>
 						<td><%=dto.getName() %></td>

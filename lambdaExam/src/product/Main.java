@@ -1,6 +1,9 @@
 package product;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.function.Predicate;
 
 public class Main {
 	public static void main(String[] args) {
@@ -15,18 +18,72 @@ public class Main {
 		products.add(new Product("양주", 30000, true, "진로", "코스트코"));
 		products.add(new Product("곰젤리", 4000, false, "Bear", "코스트코"));
 		
+		for (Product product : products) {
+			System.out.println(product.getName());
+		}
+		
+		
+//		Collections.sort(products, new Comparator<Product>() {
+//			@Override
+//			public int compare(Product proc1, Product proc2) {
+//				return proc1.getPrice() - proc2.getPrice();
+//			}
+//		});
+		
+		products.sort((Product proc1, Product proc2) -> proc1.getPrice() - proc2.getPrice());
+		
+		System.out.println("-------------------------");
+		
+		for (Product product : products) {
+			System.out.println(product.getName());
+		}
+		
+		// 클래스에 spread를 이용하면 인자를 여러개 받을 수 있지만 같은 타입밖에 못받음
 		ArrayList<Product> filteredByName = filter(products, new NameFilter("새우깡"));
 		
 		ArrayList<Product> filteredByNameUsingLambda = filter(products, (Product product) -> product.getName().equals("고구마칩"));
+//		for (Product product : filteredByNameUsingLambda) {
+//			System.out.println(product.getName());
+//		}
 		
-		System.out.println(filteredByNameUsingLambda.get(0).getName());
-
+		ArrayList<Product> filteredByMadebyUsingLambda = filter(products, (Product product) -> product.getMadeBy().equals("농심"));
+//		for (Product product : filteredByMadebyUsingLambda) {
+//			System.out.println(product.getName());
+//		}
+		
+		// 람다식을 사용하면 다른타입의 값들도 동시에 검색 가능함
+		ArrayList<Product> filteredByNameAndPriceUsingLambda = filter(products, (Product product) -> product.getPrice() == 4000 && product.getName().equals("가위"));
+//		for (Product product : filteredByNameAndPriceUsingLambda) {
+//			System.out.println(product.getName());
+//		}
 		
 		ArrayList<Product> filteredByNameAndStore = filter(products, new NameAndStoreFilter("새우깡", "owner"));
-
+		
+		ArrayList<Product> filteredByName2 = filterPredicate(products, (Product product) -> product.getName().equals("새우깡"));
+//		for (Product product : filteredByName2) {
+//			System.out.println(product.getName());
+//		}
+		
+		Predicate<Product> predicate = (Product product) -> product.getName().equals("새우깡") && product.getStore().equals("이마트");
+		ArrayList<Product> filteredByNameAndStore2 = filterPredicate(products, predicate);
+//		for (Product product : filteredByNameAndStore2) {
+//			System.out.println(product.getName());
+//		}
 		
 		
 //		System.out.println(filteredByName.get(0).getName());	
+	}
+	
+	public static ArrayList<Product> filterPredicate(ArrayList<Product> products, Predicate<Product> filter) {
+		ArrayList<Product> filteredProducts = new ArrayList<>();
+		
+		for (Product product : products) {
+			if (filter.test(product)) {
+				filteredProducts.add(product);
+			}
+		}
+		
+		return filteredProducts;
 	}
 	
 	// 아래처럼 filter를 구성하면 뭐가 장점임? filter메소드가 변하지 않는다는게 왜 장점이 되는거임?
