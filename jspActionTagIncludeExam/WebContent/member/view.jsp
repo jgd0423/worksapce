@@ -73,8 +73,8 @@ MemberDTO dto = dao.getSelectOne(no);
 			</tr>
 		</table>
 		<br>
-		<a href="#" onclick="move('M')">[수정하기]</a>
-		<a href="#" onclick="move('D')">[삭제하기]</a>
+		<a href="modify.jsp">[수정하기]</a>
+		<a href="delete.jsp">[삭제하기]</a>
 		<!-- 중단 메뉴 -->
 		</td>
 	</tr>
@@ -86,18 +86,6 @@ MemberDTO dto = dao.getSelectOne(no);
 		</td>
 	</tr>
 </table>
-
-<script>
-
-function move(whereToGo) {
-	 if (whereToGo === 'M') {	
-		location.href='modify.jsp';
-	} else if (whereToGo === 'D') {
-		location.href='delete.jsp';
-	}
-}
-
-</script>
 
 </body>
 </html>

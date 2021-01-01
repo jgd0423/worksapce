@@ -72,7 +72,7 @@ MemberDTO dto = dao.getSelectOne(cookNo);
 				</tr>
 			</table>
 			<br>
-			<a href="#" onclick="deleteInfo();">[삭제하기]</a>
+			<a href="#" id="btn">[삭제하기]</a>
 		</form>
 		<!-- 중단 메뉴 -->
 		</td>
@@ -87,6 +87,8 @@ MemberDTO dto = dao.getSelectOne(cookNo);
 </table>
 
 <script>
+const btn = document.querySelector('#btn');
+
 function deleteInfo() {
 	if (document.deleteForm.passwd.value === "") {
 		alert("비밀번호를 입력하세요.");
@@ -100,6 +102,8 @@ function deleteInfo() {
 		document.deleteForm.submit();		
 	}
 }
+
+btn.addEventListener('click', deleteInfo);
 </script>
 
 </body>

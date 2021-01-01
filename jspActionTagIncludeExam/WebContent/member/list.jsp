@@ -13,7 +13,7 @@
 MemberDAO dao = new MemberDAO();
 String pageNum_ = request.getParameter("page");
 
-final int ONE_PAGE_ROWS = 5;
+final int ONE_PAGE_ROWS = 8;
 int allRowsCount = dao.getAllRowsCount();
 double allPagesCount = Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);
 int pageNum = 1;
@@ -21,8 +21,8 @@ if (pageNum_ != null) {
 	pageNum = Integer.parseInt(pageNum_);
 }
 
-
-ArrayList<MemberDTO> memberList = dao.getPagingList(pageNum);
+int[] pageRowsAndPageNum = { ONE_PAGE_ROWS, pageNum };
+ArrayList<MemberDTO> memberList = dao.getPagingList(pageRowsAndPageNum);
 
 %>
 

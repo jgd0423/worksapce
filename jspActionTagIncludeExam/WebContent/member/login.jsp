@@ -43,7 +43,7 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-							<a href="#" onclick="goToLoginProc();">로그인</a>
+							<a href="#" id="btn">로그인</a>
 						</td>
 					</tr>
 				</table>
@@ -61,14 +61,17 @@
 </table>
 
 <script>
+const btn = document.querySelector('#btn');
 
 function goToLoginProc() {
-	if (confirm("로그인하시겠습니까?")) {
-		document.loginForm.method = "post";
-		document.loginForm.action = "loginProc.jsp";
+	if (confirm('로그인하시겠습니까?')) {
+		document.loginForm.method = 'post';
+		document.loginForm.action = 'loginProc.jsp';
 		document.loginForm.submit();
 	}
 }
+
+btn.addEventListener('click', goToLoginProc);
 
 </script>
 

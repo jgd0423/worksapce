@@ -109,10 +109,11 @@ public class MemberDAO {
 		return memberList;
 	}
 	
-	public ArrayList<MemberDTO> getPagingList(int pageNum) {
+	public ArrayList<MemberDTO> getPagingList(int[] pageRowsAndPageNum) {
 		getConn();
 		
-		final int ONE_PAGE_ROWS = 5;
+		final int ONE_PAGE_ROWS = pageRowsAndPageNum[0];
+		int pageNum = pageRowsAndPageNum[1];
 		int endNum = pageNum * ONE_PAGE_ROWS;
 		int startNum = endNum - ONE_PAGE_ROWS + 1;
 		

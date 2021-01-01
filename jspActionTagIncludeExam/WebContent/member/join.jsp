@@ -61,7 +61,7 @@
 				</tr>
 				<tr>
 					<td colspan="2">
-						<a href="#" onclick="save();">회원가입</a>
+						<a href="#" id="btn">회원가입</a>
 					</td>
 				</tr>
 			</table>
@@ -79,6 +79,8 @@
 </table>
 
 <script>
+const btn = document.querySelector('#btn');
+
 function save() {
 	if (document.joinForm.passwd.value === "") {
 		alert("비밀번호를 입력하세요.");
@@ -110,6 +112,8 @@ function save() {
 		document.joinForm.submit();
 	}
 }
+
+btn.addEventListener('click', save);
 </script>
 
 </body>
