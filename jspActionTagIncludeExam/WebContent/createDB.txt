@@ -11,3 +11,12 @@ CREATE TABLE member (
 );
 
 create sequence seq_member start with 1 increment by 1 minvalue 1; 
+
+
+-- 테이블에 조회 순번 매기는 방법
+SELECT ROW_NUMBER() OVER (ORDER BY no), member.* FROM member;
+
+-- 조회 순번 매기고 원하는 부분 가져오기. 서브쿼리 무조건 써야됨.
+SELECT * FROM
+    (SELECT ROW_NUMBER() OVER (ORDER BY no) ORDER_NUM, member.* FROM member)
+WHERE ORDER_NUM BETWEEN 1 AND 4;

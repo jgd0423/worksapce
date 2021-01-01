@@ -11,7 +11,18 @@
 <%
 
 MemberDAO dao = new MemberDAO();
-ArrayList<MemberDTO> memberList = dao.getListAll();
+String pageNum_ = request.getParameter("page");
+
+final int ONE_PAGE_ROWS = 5;
+int allRowsCount = dao.getAllRowsCount();
+double allPagesCount = Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);
+int pageNum = 1;
+if (pageNum_ != null) {
+	pageNum = Integer.parseInt(pageNum_);
+}
+
+
+ArrayList<MemberDTO> memberList = dao.getPagingList(pageNum);
 
 %>
 
@@ -39,7 +50,7 @@ ArrayList<MemberDTO> memberList = dao.getListAll();
 		<td style="padding: 50px 20px;">
 		<!-- 중단 메뉴 -->
 		<h2>회원목록</h2>
-		<table border="1" width="1500">
+		<table border="1" width="1500" align="center">
 			<tr>
 				<td>번호</td>
 				<td>아이디</td>
@@ -65,6 +76,16 @@ ArrayList<MemberDTO> memberList = dao.getListAll();
 				</tr>
 			<% } %>
 		</table>
+		<br>
+		<div align="center">
+			<% for (int i = 1; i <= allPagesCount; i++) { %>
+				<% if (pageNum == i) { %>
+					<%=i %>
+				<% } else { %>
+					<a href="list.jsp?page=<%=i %>"><%=i %></a>
+				<% } %>
+			<% } %>
+		</div>
 		<!-- 중단 메뉴 -->
 		</td>
 	</tr>
