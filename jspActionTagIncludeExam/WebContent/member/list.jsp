@@ -1,3 +1,4 @@
+<%@page import="java.util.Optional"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.net.Inet4Address"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -11,14 +12,18 @@
 <%
 
 MemberDAO dao = new MemberDAO();
-String pageNum_ = request.getParameter("page");
+String pageNum_ = Optional.ofNullable(request.getParameter("page")).orElse("1");
 
-final int ONE_PAGE_ROWS = 8;
+final int ONE_PAGE_ROWS = 3;
+final int MAX_PAGING_WIDTH = 5;
 int allRowsCount = dao.getAllRowsCount();
-double allPagesCount = Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);
-int pageNum = 1;
-if (pageNum_ != null) {
-	pageNum = Integer.parseInt(pageNum_);
+int maxPagesCount = (int) Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);
+int pageNum = Integer.parseInt(pageNum_);
+int pagingLoopNum = (int) Math.ceil((double)pageNum / MAX_PAGING_WIDTH) - 1;
+int pagingStartNum = pagingLoopNum * MAX_PAGING_WIDTH + 1;
+int pagingEndNum = pagingStartNum + MAX_PAGING_WIDTH - 1;
+if (pagingEndNum > maxPagesCount) {
+	pagingEndNum = maxPagesCount;
 }
 
 int[] pageRowsAndPageNum = { ONE_PAGE_ROWS, pageNum };
@@ -78,13 +83,25 @@ ArrayList<MemberDTO> memberList = dao.getPagingList(pageRowsAndPageNum);
 		</table>
 		<br>
 		<div align="center">
-			<% for (int i = 1; i <= allPagesCount; i++) { %>
+			<a href="list.jsp?page=1"><<</a>
+			<% if (pageNum - 1 <= 0) { %>
+				<a href="list.jsp?page=<%=pageNum%>"><</a>
+			<% } else { %>
+				<a href="list.jsp?page=<%=pageNum - 1%>"><</a>
+			<% } %>
+			<% for (int i = pagingStartNum ; i <= pagingEndNum; i++) { %>
 				<% if (pageNum == i) { %>
 					<%=i %>
 				<% } else { %>
 					<a href="list.jsp?page=<%=i %>"><%=i %></a>
 				<% } %>
 			<% } %>
+			<% if (pageNum + 1 >= maxPagesCount) { %>
+				<a href="list.jsp?page=<%=maxPagesCount%>">></a>
+			<% } else { %>
+				<a href="list.jsp?page=<%=pageNum + 1%>">></a>
+			<% } %>
+			<a href="list.jsp?page=<%=maxPagesCount%>">>></a>
 		</div>
 		<!-- 중단 메뉴 -->
 		</td>
