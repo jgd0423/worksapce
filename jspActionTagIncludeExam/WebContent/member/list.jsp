@@ -14,7 +14,7 @@
 MemberDAO dao = new MemberDAO();
 String pageNum_ = Optional.ofNullable(request.getParameter("page")).orElse("1");
 
-final int ONE_PAGE_ROWS = 3;
+final int ONE_PAGE_ROWS = 5;
 final int MAX_PAGING_WIDTH = 5;
 int allRowsCount = dao.getAllRowsCount();
 int maxPagesCount = (int) Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);

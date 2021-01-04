@@ -1,0 +1,38 @@
+CREATE TABLE board (
+    no NUMBER NOT NULL, -- 일련번호
+    num NUMBER NOT NULL, -- 순번 = ref
+    writer VARCHAR2(50) NOT NULL,
+    subject VARCHAR2(50) NOT NULL,
+    content CLOB NOT NULL,
+    email VARCHAR2(50) NOT NULL,
+    passwd VARCHAR2(50) NOT NULL,
+    ref NUMBER NOT NULL, -- 가족의 그룹화
+    re_step NUMBER NOT NULL, -- 가족의 계층
+    re_level NUMBER NOT NULL, -- 전체글의 순서
+    hit NUMBER NOT NULL, -- 조회수
+    regi_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    primary key(no)
+);
+
+create sequence seq_board start with 1 increment by 1 minvalue 1;
+
+        ref    re_step    re_level
+1       1      1          1
+2       2      1          1
+3       3      1          1
+4       4      1          1
+5       5      1          1
+1-1     1      2          2
+2-1     2      2          2
+1-1-1   1      3          5
+1-1-2   1      3          4
+1-1-3   1      3          3
+
+
+자식글 번호 법칙
+ref : 부모글
+re_step : 부모글 re_step + 1
+re_level : ref가 같은 것들 중(같은 그룹 중)(?) 부모글 re_level보다 큰 숫자들은 1씩 증가시키고, 부모글 re_level + 1을 저장
+
+글 정렬할 때는
+ref desc, re_level asc
