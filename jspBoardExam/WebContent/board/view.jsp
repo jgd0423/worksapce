@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.net.Inet4Address"%>
 <%@page import="board.model.dto.BoardDTO"%>
 <%@page import="board.model.dao.BoardDAO"%>

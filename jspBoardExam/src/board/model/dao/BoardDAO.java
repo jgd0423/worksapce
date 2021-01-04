@@ -283,26 +283,42 @@ public class BoardDAO {
 		return result;
 	}
 	
+	public ArrayList<Integer> getLevelMinusStep() {
+		ArrayList<Integer> levelMinusStepList = new ArrayList<>();
+		try {
+			String sql = "SELECT DISTINCT re_level - re_step a FROM board ORDER BY a";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				levelMinusStepList.add(rs.getInt("a"));
+			}			
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return levelMinusStepList;
+	}
+	
 	public boolean isLastChild(BoardDTO dto) {
 		conn = db.dbConn();
 		boolean result = false;
-		int ref = dto.getRef();
-		int maxRe_step = findSameRefMaxRe_step(dto);
-		ArrayList<Integer> lastChildlist = new ArrayList<>();
+		ArrayList<Integer> levelMinusStepList = getLevelMinusStep();
+		ArrayList<Integer> lastChildNoList = new ArrayList<>();
 		try {
-			String sql = "select * from board where ref = ? and ((re_level != re_step) or (re_step = ?))";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, ref);
-			pstmt.setInt(2, maxRe_step);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				lastChildlist.add(rs.getInt("no"));
+			for (int i = 0; i < levelMinusStepList.size(); i++) {
+				String sql = "SELECT no from board where re_level = (SELECT MAX(re_level) FROM board WHERE re_level - re_step = ?)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, levelMinusStepList.get(i));
+				rs = pstmt.executeQuery();
+				if (rs.next()) {
+					lastChildNoList.add(rs.getInt(1));
+				}
 			}
 			
-			if (lastChildlist.contains(dto.getNo())) {
+			if (lastChildNoList.contains(dto.getNo()))  {
 				result = true;
-			}			
-			
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
