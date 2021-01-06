@@ -36,3 +36,11 @@ re_level : ref가 같은 것들 중(같은 그룹 중)(?) 부모글 re_level보�
 
 글 정렬할 때는
 ref desc, re_level asc
+
+
+db에서 원하는 만큼 가져오는 페이징 방법
+SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY ref desc, re_level asc) ORDER_NUM, board.* FROM board) WHERE ORDER_NUM BETWEEN 10 AND 20;
+SELECT * FROM (SELECT a.*, ROWNUM Rnum FROM (SELECT * FROM board ORDER BY ref desc, re_level asc) a) WHERE Rnum BETWEEN 10 AND 20;
+
+
+

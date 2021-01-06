@@ -93,7 +93,7 @@ dto.setHit(hit);
 
 <script>
 setTimeout(function() {
-	location.href = 'test.jsp?num=<%=num%>';
+	location.href = 'autoInput.jsp?num=<%=num%>';
 }, 100);
 
 </script>

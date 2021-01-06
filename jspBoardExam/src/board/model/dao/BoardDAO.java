@@ -93,6 +93,44 @@ public class BoardDAO {
 		return arrayList;
 	}
 	
+	public ArrayList<BoardDTO> getList(int startRow, int endRow) {
+		conn = db.dbConn();
+		ArrayList<BoardDTO> arrayList = new ArrayList<>();
+		try {
+			String basic_sql = "SELECT * FROM board ORDER BY ref desc, re_level asc)";
+			String sql = "";
+			sql += "SELECT * FROM ";
+			sql += "(SELECT ROWNUM Rnum, a.* FROM ";
+			sql += "(" + basic_sql + " a) ";
+			sql += "WHERE Rnum >= ? AND Rnum <= ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, startRow);
+			pstmt.setInt(2, endRow);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setNo(rs.getInt("no"));
+				dto.setNum(rs.getInt("num"));
+				dto.setWriter(rs.getString("writer"));
+				dto.setSubject(rs.getString("subject"));
+				dto.setContent(rs.getString("content"));
+				dto.setEmail(rs.getString("email"));
+				dto.setPasswd(rs.getString("passwd"));
+				dto.setRef(rs.getInt("ref"));
+				dto.setRe_step(rs.getInt("re_step"));
+				dto.setRe_level(rs.getInt("re_level"));
+				dto.setHit(rs.getInt("hit"));
+				dto.setRegi_date(rs.getString("regi_date"));
+				arrayList.add(dto);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.dbConnClose();
+		}
+		return arrayList;
+	}
+	
 	public BoardDTO getSelectOne(int no) {
 		conn = db.dbConn();
 		BoardDTO dto = new BoardDTO();
@@ -170,6 +208,7 @@ public class BoardDAO {
 		}
 	}
 	
+	// 만들어본거
 	public ArrayList<BoardDTO> getPagingList(int ONE_PAGE_ROWS, int pageNum) {
 		conn = db.dbConn();
 		
@@ -228,6 +267,77 @@ public class BoardDAO {
 		return allRowsCount;
 	}
 	
+	public int getTotalRecordCount(String searchField, String searchData) {
+		conn = db.dbConn();
+		int allRowsCount = 0;
+		try {
+			String sql = "";
+			sql += "SELECT COUNT(*) FROM board WHERE no > 0";
+			
+			if (searchField.length() > 0 && searchData.length() > 0) {
+				sql += " AND " + searchField + " LIKE ?";
+			}
+			
+			pstmt = conn.prepareStatement(sql);
+
+			if (searchField.length() > 0 && searchData.length() > 0) {
+				pstmt.setString(1, "%" + searchData + "%");
+			}
+
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				allRowsCount = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.dbConnClose();
+		}
+		
+		return allRowsCount;
+	}
+	
+	// 검색 메소드
+//	public int getTotalRecordCount(String searchField, String searchData) {
+//		conn = db.dbConn();
+//		int allRowsCount = 0;
+//		try {
+//			String sql = "";
+//			if ((searchField == null || searchField.length() <= 0) || (searchData == null || searchData.length() <= 0)) {
+//				sql = "SELECT COUNT(*) FROM board";
+//				pstmt = conn.prepareStatement(sql);
+//			} else if (searchField.equals("writer")) {
+//				sql = "SELECT COUNT(*) FROM board WHERE writer LIKE ?";
+//				pstmt = conn.prepareStatement(sql);
+//				pstmt.setString(1, "%" + searchData + "%");
+//			} else if (searchField.equals("subject")) {
+//				sql = "SELECT COUNT(*) FROM board WHERE subject LIKE ?";
+//				pstmt = conn.prepareStatement(sql);
+//				pstmt.setString(1, "%" + searchData + "%");
+//			} else if (searchField.equals("content")) {
+//				sql = "SELECT COUNT(*) FROM board WHERE content LIKE ?";
+//				pstmt = conn.prepareStatement(sql);
+//				pstmt.setString(1, "%" + searchData + "%");
+//			} else if (searchField.equals("all")) {
+//				sql = "SELECT COUNT(*) FROM board WHERE subject LIKE ? OR content LIKE ?";
+//				pstmt = conn.prepareStatement(sql);
+//				pstmt.setString(1, "%" + searchData + "%");
+//				pstmt.setString(2, "%" + searchData + "%");
+//			}
+//
+//			rs = pstmt.executeQuery();
+//			if (rs.next()) {
+//				allRowsCount = rs.getInt(1);
+//			}
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			db.dbConnClose();
+//		}
+//		
+//		return allRowsCount;
+//	}
+	
 	public int setUpdate(BoardDTO dto) {
 		conn = db.dbConn();
 		int result = 0;
@@ -283,11 +393,12 @@ public class BoardDAO {
 		return result;
 	}
 	
-	public ArrayList<Integer> getLevelMinusStep() {
+	public ArrayList<Integer> getLevelMinusStep(int ref) {
 		ArrayList<Integer> levelMinusStepList = new ArrayList<>();
 		try {
-			String sql = "SELECT DISTINCT re_level - re_step a FROM board ORDER BY a";
+			String sql = "SELECT DISTINCT re_level - re_step a FROM board WHERE ref = ? ORDER BY a";
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, ref);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				levelMinusStepList.add(rs.getInt("a"));
@@ -303,13 +414,19 @@ public class BoardDAO {
 	public boolean isLastChild(BoardDTO dto) {
 		conn = db.dbConn();
 		boolean result = false;
-		ArrayList<Integer> levelMinusStepList = getLevelMinusStep();
+		int ref = dto.getRef();
+		ArrayList<Integer> levelMinusStepList = getLevelMinusStep(ref);
 		ArrayList<Integer> lastChildNoList = new ArrayList<>();
 		try {
 			for (int i = 0; i < levelMinusStepList.size(); i++) {
-				String sql = "SELECT no from board where re_level = (SELECT MAX(re_level) FROM board WHERE re_level - re_step = ?)";
+				String sql = "SELECT no FROM board "
+						+ "WHERE ref = ? AND re_level = "
+						+ "(SELECT MAX(re_level) FROM board "
+						+ "WHERE ref = ? AND re_level - re_step = ?)";
 				pstmt = conn.prepareStatement(sql);
-				pstmt.setInt(1, levelMinusStepList.get(i));
+				pstmt.setInt(1, ref);
+				pstmt.setInt(2, ref);
+				pstmt.setInt(3, levelMinusStepList.get(i));
 				rs = pstmt.executeQuery();
 				if (rs.next()) {
 					lastChildNoList.add(rs.getInt(1));
@@ -324,6 +441,32 @@ public class BoardDAO {
 		} finally {
 			db.dbConnClose();
 		}
+		
+		return result;
+	}
+	
+	public boolean isSoloContent(BoardDTO dto) {
+		conn = db.dbConn();
+		boolean result = false;
+		int totalRefCount = 0;
+		try {
+			String sql = "SELECT COUNT(*) from board where ref = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getRef());
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				totalRefCount = rs.getInt(1);
+			}
+			
+			if (totalRefCount == 1) {
+				result = true;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.dbConnClose();
+		}
+
 		return result;
 	}
 }

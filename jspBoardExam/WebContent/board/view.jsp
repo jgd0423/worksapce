@@ -68,7 +68,9 @@ requested Info: <%=request.getRequestURI() %><br>
 &nbsp;&nbsp;
 <a href="#" onclick="move('M', '<%=no%>');">[수정하기]</a>
 &nbsp;&nbsp;
-<% if (dao.isLastChild(dto)) { %>
+<%out.println("<br>isLastChild : " + dao.isLastChild(dto) + "<br>"); %>
+<%out.println("isSoloContent : " + dao.isSoloContent(dto) + "<br>"); %>
+<% if (dao.isLastChild(dto) || dao.isSoloContent(dto)) { %>
 	<a href="#" onclick="move('D', '<%=no%>');">[삭제하기]</a>
 <% } %>
 
