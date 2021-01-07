@@ -26,7 +26,7 @@ if ((searchField == null || searchField.length() <= 0) || (searchData == null ||
 int count = dao.getTotalRecordCount(searchField, searchData);
 
 // 화면에 보여질 개수
-int pageSize = 15;
+int pageSize = 20;
 
 // 페이징 바 길이
 int pageBlock = 15;
@@ -60,7 +60,7 @@ if (count > 0) {
 	}
 }
 
-ArrayList<BoardDTO> boardList = dao.getList(startRow, endRow);
+ArrayList<BoardDTO> boardList = dao.getList(startRow, endRow, searchField, searchData);
 
 
 out.println("count : " + count + "<br>");
@@ -121,6 +121,7 @@ requested Info: <%=request.getRequestURI() %><br>
 		</tr>
 		<% for (int i = 0; i < boardList.size(); i++) { %>
 			<% BoardDTO dto = boardList.get(i); %>
+			
 			<tr>
 				<td><%=number-- %></td>
 				<% if (dto.getRe_step() > 1) { %>
@@ -152,20 +153,20 @@ requested Info: <%=request.getRequestURI() %><br>
 		<tr>
 			<td colspan="5" align="center">
 				<% if (startPage > 10) { %>
-					<a href="list.jsp?pageNum=<%=startPage - pageBlock%>">이전</a>
+					<a href="list.jsp?pageNum=<%=startPage - pageBlock%>&searchField=<%=searchField%>&searchData=<%=searchData%>">이전</a>
 				<% } %>
 				&nbsp;&nbsp;&nbsp;
 				<% for (int n = startPage; n <= endPage; n++) { %>
 					<% if (n == currentPage) { %>
 						<span style="color:red; font-weight: bold;">[<%=n %>]</span>
 					<% } else { %>
-						<a href="list.jsp?pageNum=<%=n%>"><%=n %></a>
+						<a href="list.jsp?pageNum=<%=n%>&searchField=<%=searchField%>&searchData=<%=searchData%>"><%=n %></a>
 					<% } %>
 					&nbsp;&nbsp;
 				<% } %>
 				&nbsp;
 				<% if (endPage < pageCount) { %>
-					<a href="list.jsp?pageNum=<%=startPage + pageBlock%>">다음</a>
+					<a href="list.jsp?pageNum=<%=startPage + pageBlock%>&searchField=<%=searchField%>&searchData=<%=searchData%>">다음</a>
 				<% } %>
 			</td>
 		</tr>
@@ -182,6 +183,7 @@ requested Info: <%=request.getRequestURI() %><br>
 function view(no) {
 	location.href='view.jsp?no=' + no;
 }
+
 function goToWrite() {
 	location.href='write.jsp';
 }

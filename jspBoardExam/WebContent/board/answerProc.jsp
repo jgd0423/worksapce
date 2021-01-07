@@ -20,6 +20,7 @@ int num;
 int ref;
 int re_step;
 int re_level;
+int re_parent;
 int hit = 0;
 
 
@@ -28,6 +29,7 @@ num = dao.getMaxValue("num") + 1;
 ref = dbDto.getRef();
 re_step = dbDto.getRe_step() + 1;
 re_level = dbDto.getRe_level() + 1;
+re_parent = no;
 dao.setUpdateReLevel(dbDto);
 
 dto.setNo(no);
@@ -40,6 +42,7 @@ dto.setPasswd(passwd);
 dto.setRef(ref);
 dto.setRe_step(re_step);
 dto.setRe_level(re_level);
+dto.setRe_parent(re_parent);
 dto.setHit(hit);
 
 

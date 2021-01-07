@@ -18,12 +18,14 @@ int num;
 int ref;
 int re_step;
 int re_level;
+int re_parent;
 int hit = 0;
 
 ref = dao.getMaxValue("ref") + 1;
 num = dao.getMaxValue("num") + 1;
 re_step = 1;
 re_level = 1;
+re_parent = 0;
 
 
 dto.setNum(num);
@@ -35,6 +37,7 @@ dto.setPasswd(passwd);
 dto.setRef(ref);
 dto.setRe_step(re_step);
 dto.setRe_level(re_level);
+dto.setRe_parent(re_parent);
 dto.setHit(hit);
 
 

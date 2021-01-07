@@ -9,6 +9,7 @@ import board.model.dto.BoardDTO;
 import db.Db;
 import db.DbImplOracle;
 
+
 public class BoardDAO {
 	// Field
 	Connection conn = null;
@@ -22,7 +23,7 @@ public class BoardDAO {
 		try {
 			String sql = "insert into board values (seq_board.nextval, "
 					+ "?, ?, ?, ?, ?, "
-					+ "?, ?, ?, ?, ?, "
+					+ "?, ?, ?, ?, ?, ?, "
 					+ "sysdate)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getNum());
@@ -34,7 +35,8 @@ public class BoardDAO {
 			pstmt.setInt(7, dto.getRef());
 			pstmt.setInt(8, dto.getRe_step());
 			pstmt.setInt(9, dto.getRe_level());
-			pstmt.setInt(10, dto.getHit());
+			pstmt.setInt(10, dto.getRe_parent());
+			pstmt.setInt(11, dto.getHit());
 			result = pstmt.executeUpdate();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -81,6 +83,7 @@ public class BoardDAO {
 				dto.setRef(rs.getInt("ref"));
 				dto.setRe_step(rs.getInt("re_step"));
 				dto.setRe_level(rs.getInt("re_level"));
+				dto.setRe_parent(rs.getInt("re_parent"));
 				dto.setHit(rs.getInt("hit"));
 				dto.setRegi_date(rs.getString("regi_date"));
 				arrayList.add(dto);
@@ -93,19 +96,41 @@ public class BoardDAO {
 		return arrayList;
 	}
 	
-	public ArrayList<BoardDTO> getList(int startRow, int endRow) {
+	public ArrayList<BoardDTO> getList(int startRow, int endRow, String searchField, String searchData) {
 		conn = db.dbConn();
 		ArrayList<BoardDTO> arrayList = new ArrayList<>();
 		try {
-			String basic_sql = "SELECT * FROM board ORDER BY ref desc, re_level asc)";
 			String sql = "";
+			String basic_sql = "SELECT * FROM board WHERE no > 0";
+					
+			if (searchField.equals("all") && searchData.length() > 0) {
+				basic_sql += " AND subject LIKE ? OR content LIKE ?";
+			} else if (searchField.length() > 0 && searchData.length() > 0) {
+				basic_sql += " AND " + searchField + " LIKE ?";
+			}
+			
+			basic_sql += " ORDER BY ref DESC, re_level ASC";
 			sql += "SELECT * FROM ";
 			sql += "(SELECT ROWNUM Rnum, a.* FROM ";
-			sql += "(" + basic_sql + " a) ";
+			sql += "(" + basic_sql + ") a) ";
 			sql += "WHERE Rnum >= ? AND Rnum <= ?";
+
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, startRow);
-			pstmt.setInt(2, endRow);
+
+			if (searchField.equals("all") && searchData.length() > 0) {
+				pstmt.setString(1, "%" + searchData + "%");
+				pstmt.setString(2, "%" + searchData + "%");
+				pstmt.setInt(3, startRow);
+				pstmt.setInt(4, endRow);
+			} else if (searchField.length() > 0 && searchData.length() > 0) {
+				pstmt.setString(1, "%" + searchData + "%");
+				pstmt.setInt(2, startRow);
+				pstmt.setInt(3, endRow);
+			} else if (searchField.length() == 0 && searchData.length() == 0) {
+				pstmt.setInt(1, startRow);
+				pstmt.setInt(2, endRow);
+			}
+			
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				BoardDTO dto = new BoardDTO();
@@ -131,6 +156,45 @@ public class BoardDAO {
 		return arrayList;
 	}
 	
+//	public ArrayList<BoardDTO> getList(int startRow, int endRow) {
+//		conn = db.dbConn();
+//		ArrayList<BoardDTO> arrayList = new ArrayList<>();
+//		try {
+//			String basic_sql = "SELECT * FROM board ORDER BY ref desc, re_level asc";
+//			String sql = "";
+//			sql += "SELECT * FROM ";
+//			sql += "(SELECT ROWNUM Rnum, a.* FROM ";
+//			sql += "(" + basic_sql + ") a) ";
+//			sql += "WHERE Rnum >= ? AND Rnum <= ?";
+//			pstmt = conn.prepareStatement(sql);
+//			pstmt.setInt(1, startRow);
+//			pstmt.setInt(2, endRow);
+//			rs = pstmt.executeQuery();
+//			while (rs.next()) {
+//				BoardDTO dto = new BoardDTO();
+//				dto.setNo(rs.getInt("no"));
+//				dto.setNum(rs.getInt("num"));
+//				dto.setWriter(rs.getString("writer"));
+//				dto.setSubject(rs.getString("subject"));
+//				dto.setContent(rs.getString("content"));
+//				dto.setEmail(rs.getString("email"));
+//				dto.setPasswd(rs.getString("passwd"));
+//				dto.setRef(rs.getInt("ref"));
+//				dto.setRe_step(rs.getInt("re_step"));
+//				dto.setRe_level(rs.getInt("re_level"));
+//				dto.setRe_parent(rs.getInt("re_parent"));
+//				dto.setHit(rs.getInt("hit"));
+//				dto.setRegi_date(rs.getString("regi_date"));
+//				arrayList.add(dto);
+//			}
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			db.dbConnClose();
+//		}
+//		return arrayList;
+//	}
+	
 	public BoardDTO getSelectOne(int no) {
 		conn = db.dbConn();
 		BoardDTO dto = new BoardDTO();
@@ -150,6 +214,7 @@ public class BoardDAO {
 				dto.setRef(rs.getInt("ref"));
 				dto.setRe_step(rs.getInt("re_step"));
 				dto.setRe_level(rs.getInt("re_level"));
+				dto.setRe_parent(rs.getInt("re_parent"));
 				dto.setHit(rs.getInt("hit"));
 				dto.setRegi_date(rs.getString("regi_date"));
 			}
@@ -218,7 +283,7 @@ public class BoardDAO {
 		ArrayList<BoardDTO> boardList = new ArrayList<>();
 		try {
 			String sql = "SELECT * FROM "
-					+ "(SELECT ROW_NUMBER() OVER (ORDER BY ref desc, re_level asc) ORDER_NUM, board.* FROM board) "
+					+ "(SELECT ROW_NUMBER() OVER (ORDER BY ref DESC, re_level ASC) ORDER_NUM, board.* FROM board) "
 					+ "WHERE ORDER_NUM BETWEEN ? AND ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, startNum);
@@ -236,6 +301,7 @@ public class BoardDAO {
 				dto.setRef(rs.getInt("ref"));
 				dto.setRe_step(rs.getInt("re_step"));
 				dto.setRe_level(rs.getInt("re_level"));
+				dto.setRe_parent(rs.getInt("re_parent"));
 				dto.setHit(rs.getInt("hit"));
 				dto.setRegi_date(rs.getString("regi_date"));
 				boardList.add(dto);
@@ -274,13 +340,18 @@ public class BoardDAO {
 			String sql = "";
 			sql += "SELECT COUNT(*) FROM board WHERE no > 0";
 			
-			if (searchField.length() > 0 && searchData.length() > 0) {
+			if (searchField.equals("all") && searchData.length() > 0) {
+				sql += " AND subject LIKE ? OR content LIKE ?";
+			} else if (searchField.length() > 0 && searchData.length() > 0) {
 				sql += " AND " + searchField + " LIKE ?";
 			}
 			
 			pstmt = conn.prepareStatement(sql);
 
-			if (searchField.length() > 0 && searchData.length() > 0) {
+			if (searchField.equals("all") && searchData.length() > 0) {
+				pstmt.setString(1, "%" + searchData + "%");
+				pstmt.setString(2, "%" + searchData + "%");
+			} else if (searchField.length() > 0 && searchData.length() > 0) {
 				pstmt.setString(1, "%" + searchData + "%");
 			}
 
@@ -411,37 +482,25 @@ public class BoardDAO {
 		return levelMinusStepList;
 	}
 	
-	public boolean isLastChild(BoardDTO dto) {
+	public boolean isHaveChild(BoardDTO dto) {
 		conn = db.dbConn();
 		boolean result = false;
-		int ref = dto.getRef();
-		ArrayList<Integer> levelMinusStepList = getLevelMinusStep(ref);
-		ArrayList<Integer> lastChildNoList = new ArrayList<>();
 		try {
-			for (int i = 0; i < levelMinusStepList.size(); i++) {
-				String sql = "SELECT no FROM board "
-						+ "WHERE ref = ? AND re_level = "
-						+ "(SELECT MAX(re_level) FROM board "
-						+ "WHERE ref = ? AND re_level - re_step = ?)";
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setInt(1, ref);
-				pstmt.setInt(2, ref);
-				pstmt.setInt(3, levelMinusStepList.get(i));
-				rs = pstmt.executeQuery();
-				if (rs.next()) {
-					lastChildNoList.add(rs.getInt(1));
+			String sql = "select (select count(*) from board where re_parent = b.no) pcounter from board b where no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getNo());
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				if (rs.getInt(1) > 0) {
+					result = true;			
 				}
-			}
-			
-			if (lastChildNoList.contains(dto.getNo()))  {
-				result = true;
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
 			db.dbConnClose();
 		}
-		
+
 		return result;
 	}
 	

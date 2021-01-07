@@ -9,12 +9,23 @@ CREATE TABLE board (
     ref NUMBER NOT NULL, -- 가족의 그룹화
     re_step NUMBER NOT NULL, -- 가족의 계층
     re_level NUMBER NOT NULL, -- 전체글의 순서
+    re_parent NUMBER NOT NULL,
     hit NUMBER NOT NULL, -- 조회수
     regi_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     primary key(no)
 );
 
 create sequence seq_board start with 1 increment by 1 minvalue 1;
+
+쿼리문을 이용해서 원하는 만큼 데이터 넣기
+begin
+for i in 1 .. 1000 loop
+insert into board values
+(seq_board.nextval, i, 'w' || i, 's' || i, 'c' || i, 'e' || i, 'p' || i, i, 1, 1, 0, current_Timestamp);
+end loop;
+commit;
+end;
+/
 
         ref    re_step    re_level
 1       1      1          1

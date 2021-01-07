@@ -12,6 +12,7 @@ public class BoardDTO {
     private int ref;
     private int re_step;
     private int re_level;
+    private int re_parent;
     private int hit;
     private String regi_date;
     
@@ -87,5 +88,11 @@ public class BoardDTO {
 	}
 	public void setRegi_date(String regi_date) {
 		this.regi_date = regi_date;
+	}
+	public int getRe_parent() {
+		return re_parent;
+	}
+	public void setRe_parent(int re_parent) {
+		this.re_parent = re_parent;
 	}
 }
