@@ -198,7 +198,12 @@ public class BoardDAO {
 		conn = db.dbConn();
 		BoardDTO dto = new BoardDTO();
 		try {
-			String sql = "select * from board where no = ?";
+			String sql = "select * "
+					+ "from (select b.*, lag(no) over(order by ref desc, re_level asc) preNo, "
+					+ "lag(subject) over (order by ref desc, re_level asc) preSubject, "
+					+ "lead(no) over (order by ref desc, re_level asc) nxtNo, "
+					+ "lead(subject) over (order by ref desc, re_level asc) nxtSubject "
+					+ "from board b order by ref desc, re_level asc) where no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, no);
 			rs = pstmt.executeQuery();
@@ -216,6 +221,10 @@ public class BoardDAO {
 				dto.setRe_parent(rs.getInt("re_parent"));
 				dto.setHit(rs.getInt("hit"));
 				dto.setRegi_date(rs.getString("regi_date"));
+				dto.setPreNo(rs.getInt("preNo"));
+				dto.setPreSubject(rs.getString("preSubject"));
+				dto.setNxtNo(rs.getInt("nxtNo"));
+				dto.setNxtSubject(rs.getString("nxtSubject"));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();

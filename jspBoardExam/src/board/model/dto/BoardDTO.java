@@ -15,6 +15,10 @@ public class BoardDTO {
     private int re_parent;
     private int hit;
     private String regi_date;
+    private int preNo;
+    private String preSubject;
+    private int nxtNo;
+    private String nxtSubject;
     
     // Getters and Setters
 	public int getNo() {
@@ -94,5 +98,29 @@ public class BoardDTO {
 	}
 	public void setRe_parent(int re_parent) {
 		this.re_parent = re_parent;
+	}
+	public int getPreNo() {
+		return preNo;
+	}
+	public void setPreNo(int preNo) {
+		this.preNo = preNo;
+	}
+	public String getPreSubject() {
+		return preSubject;
+	}
+	public void setPreSubject(String preSubject) {
+		this.preSubject = preSubject;
+	}
+	public int getNxtNo() {
+		return nxtNo;
+	}
+	public void setNxtNo(int nxtNo) {
+		this.nxtNo = nxtNo;
+	}
+	public String getNxtSubject() {
+		return nxtSubject;
+	}
+	public void setNxtSubject(String nxtSubject) {
+		this.nxtSubject = nxtSubject;
 	}
 }

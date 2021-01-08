@@ -16,17 +16,11 @@ BoardDAO dao = new BoardDAO();
 dao.setUpdateHit(no);
 BoardDTO dto = dao.getSelectOne(no);
 
-int[] backAndForthNoAndRnum = dao.getNearByCurrentPostAndRnum(dto);
-BoardDTO preDto = dao.getSelectOne(backAndForthNoAndRnum[0]);
-BoardDTO nextDto = dao.getSelectOne(backAndForthNoAndRnum[1]);
+int preNo = dto.getPreNo();
+String preSubject = dto.getPreSubject();
 
-int currentPostRnum = dao.getCurrentPostRnum(dto);
-int maxRnum = backAndForthNoAndRnum[2];
-
-System.out.println("currentPostRnum : " + currentPostRnum);
-System.out.println("preDtoRnum : " + dao.getCurrentPostRnum(preDto));
-System.out.println("nextDtoRnum : " + dao.getCurrentPostRnum(nextDto));
-System.out.println("maxRnum  : " + maxRnum);
+int nxtNo = dto.getNxtNo();
+String nxtSubject = dto.getNxtSubject();
 
 
 
@@ -83,20 +77,15 @@ requested Info: <%=request.getRequestURI() %><br>
 <a href="#" onclick="move('M', '<%=no%>');">[수정하기]</a>
 &nbsp;&nbsp;<br>
 
-<% if (currentPostRnum == 1) { %>
-	<a href="view.jsp?no=<%=preDto.getNo()%>">다음글: <%=preDto.getSubject() %></a><br>
+<% if (preNo == 0) { %>
 <% } else { %>
-	<a href="view.jsp?no=<%=preDto.getNo()%>">이전글: <%=preDto.getSubject() %></a><br>
+	<a href="view.jsp?no=<%=preNo%>">이전글: <%=preSubject %></a><br>
 <% } %>
 
-<% if (currentPostRnum == maxRnum) { %>
+<% if (nxtNo == 0) { %>
 <% } else { %>
-	<% if (currentPostRnum == 1) { %>
-	<% } else { %>
-	<a href="view.jsp?no=<%=nextDto.getNo()%>">다음글: <%=nextDto.getSubject() %></a><br>
-	<% } %>
+	<a href="view.jsp?no=<%=nxtNo%>">다음글: <%=nxtSubject %></a><br>
 <% } %>
-
 
 <%out.println("<br>isHaveChild : " + dao.isHaveChild(dto) + "<br>"); %>
 

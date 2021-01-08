@@ -12,7 +12,6 @@ String referer = request.getHeader("REFERER");
 String ip = Inet4Address.getLocalHost().getHostAddress();
 
 BoardDAO dao = new BoardDAO();
-
 String searchField = request.getParameter("searchField");
 String searchData = request.getParameter("searchData");
 
@@ -20,7 +19,6 @@ if ((searchField == null || searchField.length() <= 0) || (searchData == null ||
 	searchField = "";
 	searchData = "";
 }
-
 
 // 전체 게시글의 개수
 int count = dao.getTotalRecordCount(searchField, searchData);
