@@ -42,6 +42,10 @@ int endRow = currentPage * pageSize;
 // 테이블에 표시할 번호
 int number = count - (currentPage - 1) * pageSize;
 
+// 전체 페이지 수
+double totalPageDou = Math.ceil(count / (double)pageSize);
+int totalPage = (int)totalPageDou;
+
 int pageCount = 0;
 int startPage = 1;
 int endPage = 1;
@@ -60,6 +64,8 @@ if (count > 0) {
 	}
 }
 
+
+
 ArrayList<BoardDTO> boardList = dao.getList(startRow, endRow, searchField, searchData);
 
 
@@ -71,6 +77,7 @@ out.println("number : " + number + "<br>");
 out.println("pageCount : " + pageCount + "<br>");
 out.println("startPage : " + startPage + "<br>");
 out.println("endPage : " + endPage + "<br>");
+out.println("totalPage : " + totalPage + "<br>");
 
 %>
 
@@ -82,12 +89,12 @@ out.println("endPage : " + endPage + "<br>");
 </head>
 <body>
 
-<%=referer %><br>
-클라이언트ip <%=request.getRemoteAddr() %><br>
-요청URI <%=request.getRequestURI() %><br>
-컨텍스트경로 <%=request.getContextPath() %><br>
-서버이름 <%=request.getServerName() %><br>
-서버포트 <%=request.getServerPort() %><br><br>
+referer: <%=referer %><br>
+클라이언트ip: <%=request.getRemoteAddr() %><br>
+요청URI: <%=request.getRequestURI() %><br>
+컨텍스트경로: <%=request.getContextPath() %><br>
+서버이름: <%=request.getServerName() %><br>
+서버포트: <%=request.getServerPort() %><br><br>
 requested URL: <%=request.getRequestURL() %><br>
 requested Info: <%=request.getRequestURI() %><br>
 
@@ -152,8 +159,12 @@ requested Info: <%=request.getRequestURI() %><br>
 		<% } %>
 		<tr>
 			<td colspan="5" align="center">
-				<% if (startPage > 10) { %>
-					<a href="list.jsp?pageNum=<%=startPage - pageBlock%>&searchField=<%=searchField%>&searchData=<%=searchData%>">이전</a>
+				<% if (currentPage <= pageBlock) { %>
+					[첫페이지]
+					[이전10개]
+				<% } else { %>
+					<a href="list.jsp?pageNum=1&searchField=<%=searchField%>&searchData=<%=searchData%>">[첫페이지]</a>
+					<a href="list.jsp?pageNum=<%=startPage - pageBlock%>&searchField=<%=searchField%>&searchData=<%=searchData%>">[이전10개]</a>
 				<% } %>
 				&nbsp;&nbsp;&nbsp;
 				<% for (int n = startPage; n <= endPage; n++) { %>
@@ -165,9 +176,13 @@ requested Info: <%=request.getRequestURI() %><br>
 					&nbsp;&nbsp;
 				<% } %>
 				&nbsp;
-				<% if (endPage < pageCount) { %>
-					<a href="list.jsp?pageNum=<%=startPage + pageBlock%>&searchField=<%=searchField%>&searchData=<%=searchData%>">다음</a>
-				<% } %>
+				<% if (currentPage >= totalPage - pageBlock) { %>
+					[다음10개]
+					[끝페이지]
+				<% } else { %>
+					<a href="list.jsp?pageNum=<%=startPage + pageBlock%>&searchField=<%=searchField%>&searchData=<%=searchData%>">[다음10개]</a>
+					<a href="list.jsp?pageNum=<%=totalPage %>&searchField=<%=searchField%>&searchData=<%=searchData%>">[끝페이지]</a>
+				<% } %>				
 			</td>
 		</tr>
 	</table>

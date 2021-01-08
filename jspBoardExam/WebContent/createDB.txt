@@ -53,5 +53,16 @@ db에서 원하는 만큼 가져오는 페이징 방법
 SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY ref desc, re_level asc) ORDER_NUM, board.* FROM board) WHERE ORDER_NUM BETWEEN 10 AND 20;
 SELECT * FROM (SELECT a.*, ROWNUM Rnum FROM (SELECT * FROM board ORDER BY ref desc, re_level asc) a) WHERE Rnum BETWEEN 10 AND 20;
 
+-- 앞 뒤의 글 정보를 찾는 쿼리문
+select * 
+from
+    (select 
+        b.*, 
+        lag(no) over(order by ref desc, re_level asc) preNo, 
+        lag(subject) over (order by ref desc, re_level asc) preSubject, 
+        lead(no) over (order by ref desc, re_level asc) nxtNo, 
+        lead(subject) over (order by ref desc, re_level asc) nxtSubject 
+    from board b order by ref desc, re_level asc) 
+where no = 3027;
 
 

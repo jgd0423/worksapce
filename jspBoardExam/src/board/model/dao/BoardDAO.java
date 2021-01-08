@@ -9,7 +9,6 @@ import board.model.dto.BoardDTO;
 import db.Db;
 import db.DbImplOracle;
 
-
 public class BoardDAO {
 	// Field
 	Connection conn = null;
@@ -527,5 +526,157 @@ public class BoardDAO {
 		}
 
 		return result;
+	}
+	
+	public int[] getNearByCurrentPost(BoardDTO dto) {
+		conn = db.dbConn();
+		int[] backAndForthNo = new int[2];
+		try {
+			String sql = "SELECT rnum, no "
+					+ "FROM (SELECT ROWNUM Rnum, a.* FROM (SELECT * FROM board ORDER BY ref DESC, re_level ASC) a) "
+					+ "WHERE rnum = ((SELECT rnum FROM (SELECT ROWNUM Rnum, a.* FROM (SELECT * FROM board ORDER BY ref DESC, re_level ASC) a) WHERE no = ?) - 1) "
+					+ "OR rnum = ((SELECT rnum FROM (SELECT ROWNUM Rnum, a.* FROM (SELECT * FROM board ORDER BY ref DESC, re_level ASC) a) WHERE no = ?) + 1)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getNo());
+			pstmt.setInt(2, dto.getNo());
+			rs = pstmt.executeQuery();
+			int i = 0;
+			while (rs.next()) {
+				backAndForthNo[i] = rs.getInt("no");
+				i += 1;
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.dbConnClose();
+		}
+		
+		return backAndForthNo;
+	}
+	
+	public int[] getNearByCurrentPostAndRnum(BoardDTO dto) {
+		conn = db.dbConn();
+		int[] backAndForthNoAndRnum = new int[3];
+		int rNum = 0;
+		try {
+			String sql = "SELECT rnum, no, (SELECT MAX(ROWNUM) FROM board) MAXRnum "
+					+ "FROM (SELECT ROWNUM Rnum, a.* FROM (SELECT * FROM board ORDER BY ref DESC, re_level ASC) a) "
+					+ "WHERE rnum = ((SELECT rnum FROM (SELECT ROWNUM Rnum, a.* FROM (SELECT * FROM board ORDER BY ref DESC, re_level ASC) a) WHERE no = ?) - 1) "
+					+ "OR rnum = ((SELECT rnum FROM (SELECT ROWNUM Rnum, a.* FROM (SELECT * FROM board ORDER BY ref DESC, re_level ASC) a) WHERE no = ?) + 1)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getNo());
+			pstmt.setInt(2, dto.getNo());
+			rs = pstmt.executeQuery();
+			int i = 0;
+			while (rs.next()) {
+				backAndForthNoAndRnum[i] = rs.getInt("no");
+				rNum = rs.getInt("maxrnum");
+				i += 1;
+			}
+			backAndForthNoAndRnum[2] = rNum;
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.dbConnClose();
+		}
+		
+		return backAndForthNoAndRnum;
+	}
+	
+	public int getCurrentPostRnum(BoardDTO dto) {
+		conn = db.dbConn();
+		int currentPostRnum = 0;
+		try {
+			String sql = "SELECT rnum, no FROM (SELECT ROWNUM Rnum, a.* FROM (SELECT * FROM board ORDER BY ref DESC, re_level ASC) a) WHERE rnum = ((SELECT rnum FROM (SELECT ROWNUM Rnum, a.* FROM (SELECT * FROM board ORDER BY ref DESC, re_level ASC) a) WHERE no = ?))";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getNo());
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				currentPostRnum = rs.getInt("rnum");
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.dbConnClose();
+		}
+		
+		return currentPostRnum;
+	}
+	
+	public int getMaxRnum() {
+		conn = db.dbConn();
+		int maxRnum = 0;
+		try {
+			String sql = "SELECT MAX(rnum) FROM (SELECT ROWNUM Rnum, a.* FROM (SELECT * FROM board ORDER BY ref DESC, re_level ASC) a)";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				maxRnum = rs.getInt(1);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.dbConnClose();
+		}
+		
+		return maxRnum;
+	}
+	
+	public BoardDTO getViewPreNxt001(int no, String gubun) {
+		BoardDTO dto = new BoardDTO();
+		conn = db.dbConn();
+		try {
+			String sql_1 = "select Rnum from (select A.*, Rownum Rnum from (select no from board order by ref desc, re_level asc) A) where no = ?";
+			String sql_2;
+			if (gubun.equals("pre")) {
+				sql_2 = "select max(Rnum) from (select A.*, Rownum Rnum from (select no from board order by ref desc, re_level asc) A) where Rnum < (" + sql_1 + ")";			
+			} else {
+				sql_2 = "select min(Rnum) from (select A.*, Rownum Rnum from (select no from board order by ref desc, re_level asc) A) where Rnum > (" + sql_1 + ")";
+			}
+			
+			String sql = "select * from (select A.*, Rownum Rnum from (select * from board order by ref desc, re_level asc) A) where Rnum = (" + sql_2 + ")";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				dto.setNo(rs.getInt("no"));
+				dto.setSubject(rs.getString("subject"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.dbConnClose();
+		}
+		return dto;
+	}
+	
+	public BoardDTO getViewPreNxt002(int no, String gubun) {
+		BoardDTO dto = new BoardDTO();
+		conn = db.dbConn();
+		try {
+			String sql;
+			if (gubun.equals("pre")) {
+				sql = "select * from (select no, subject, LAG(no) OVER (ORDER BY ref desc, re_level asc) newNo, LAG(subject) OVER (ORDER BY ref desc, re_level asc) newSubject from board order by ref desc, re_level asc) where no = ?";
+			} else {
+				sql = "select * from (select no, subject, LEAD(no) OVER (ORDER BY ref desc, re_level asc) newNo, LEAD(subject) OVER (ORDER BY ref desc, re_level asc) newSubject from board order by ref desc, re_level asc) where no = ?";
+			}
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				dto.setNo(rs.getInt("no"));
+				dto.setSubject(rs.getString("subject"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.dbConnClose();
+		}
+		return dto;
 	}
 }
