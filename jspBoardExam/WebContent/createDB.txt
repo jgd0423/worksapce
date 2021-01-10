@@ -21,7 +21,7 @@ create sequence seq_board start with 1 increment by 1 minvalue 1;
 begin
 for i in 1 .. 1000 loop
 insert into board values
-(seq_board.nextval, i, 'w' || i, 's' || i, 'c' || i, 'e' || i, 'p' || i, i, 1, 1, 0, current_Timestamp);
+(seq_board.nextval, i, 'w' || i, 's' || i, 'c' || i, 'e' || i, 'p' || i, i, 1, 1, 0, 0, current_Timestamp);
 end loop;
 commit;
 end;

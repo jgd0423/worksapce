@@ -20,10 +20,10 @@ public class BoardDAO {
 		conn = db.dbConn();
 		int result = 0;
 		try {
-			String sql = "insert into board values (seq_board.nextval, "
+			String sql = "INSERT INTO BOARD VALUES (seq_board.NEXTVAL, "
 					+ "?, ?, ?, ?, ?, "
 					+ "?, ?, ?, ?, ?, ?, "
-					+ "sysdate)";
+					+ "SYSDATE)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getNum());
 			pstmt.setString(2, dto.getWriter());
@@ -49,7 +49,7 @@ public class BoardDAO {
 		conn = db.dbConn();
 		int result = 0;
 		try {
-			String sql = "select nvl(max(" + columnName + "), 0) from board";
+			String sql = "SELECT NVL(MAX(" + columnName + "), 0) FROM board";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -67,7 +67,7 @@ public class BoardDAO {
 		conn = db.dbConn();
 		ArrayList<BoardDTO> arrayList = new ArrayList<>();
 		try {
-			String sql = "select * from board order by ref desc, re_level asc";
+			String sql = "SELECT * FROM board ORDER BY ref DESC, re_level ASC";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
@@ -198,12 +198,12 @@ public class BoardDAO {
 		conn = db.dbConn();
 		BoardDTO dto = new BoardDTO();
 		try {
-			String sql = "select * "
-					+ "from (select b.*, lag(no) over(order by ref desc, re_level asc) preNo, "
-					+ "lag(subject) over (order by ref desc, re_level asc) preSubject, "
-					+ "lead(no) over (order by ref desc, re_level asc) nxtNo, "
-					+ "lead(subject) over (order by ref desc, re_level asc) nxtSubject "
-					+ "from board b order by ref desc, re_level asc) where no = ?";
+			String sql = "SELECT * "
+					+ "FROM (SELECT b.*, LAG(no) OVER(ORDER BY ref DESC, re_level ASC) preNo, "
+					+ "LAG(subject) OVER (ORDER BY ref DESC, re_level ASC) preSubject, "
+					+ "LEAD(no) OVER (ORDER BY ref DESC, re_level ASC) nxtNo, "
+					+ "LEAD(subject) OVER (ORDER BY ref DESC, re_level ASC) nxtSubject "
+					+ "FROM board b ORDER BY ref DESC, re_level ASC) WHERE no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, no);
 			rs = pstmt.executeQuery();
@@ -238,7 +238,7 @@ public class BoardDAO {
 		conn = db.dbConn();
 		int count = 0;
 		try {
-			String sql = "select count(*) from board";
+			String sql = "SELECT COUNT(*) FROM board";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -255,7 +255,7 @@ public class BoardDAO {
 	public void setUpdateHit(int no) {
 		conn = db.dbConn();
 		try {
-			String sql = "update board set hit = (hit + 1) where no = ?";
+			String sql = "UPDATE board SET hit = (hit + 1) WHERE no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, no);
 			pstmt.executeUpdate();
@@ -269,7 +269,7 @@ public class BoardDAO {
 	public void setUpdateReLevel(BoardDTO dto) {
 		conn = db.dbConn();
 		try {
-			String sql = "update board set re_level = (re_level + 1) where ref = ? and re_level > ?";
+			String sql = "UPDATE board SET re_level = (re_level + 1) WHERE ref = ? AND re_level > ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getRef());
 			pstmt.setInt(2, dto.getRe_level());
@@ -421,7 +421,7 @@ public class BoardDAO {
 		conn = db.dbConn();
 		int result = 0;
 		try {
-			String sql = "update board set subject = ?, email = ?, content = ? where no = ?";
+			String sql = "UPDATE board SET subject = ?, email = ?, content = ? WHERE no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getSubject());
 			pstmt.setString(2, dto.getEmail());
@@ -441,7 +441,7 @@ public class BoardDAO {
 		conn = db.dbConn();
 		int result = 0;
 		try {
-			String sql = "delete from board where no = ? ";
+			String sql = "DELETE FROM board WHERE no = ? ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getNo());
 			result = pstmt.executeUpdate();
@@ -494,7 +494,8 @@ public class BoardDAO {
 		conn = db.dbConn();
 		boolean result = false;
 		try {
-			String sql = "select (select count(*) from board where re_parent = b.no) pcounter from board b where no = ?";
+			String sql = "SELECT (SELECT COUNT(*) FROM board WHERE re_parent = b.no) pcounter "
+					+ "FROM board b WHERE no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getNo());
 			rs = pstmt.executeQuery();
@@ -517,7 +518,7 @@ public class BoardDAO {
 		boolean result = false;
 		int totalRefCount = 0;
 		try {
-			String sql = "SELECT COUNT(*) from board where ref = ?";
+			String sql = "SELECT COUNT(*) FROM board WHERE ref = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getRef());
 			rs = pstmt.executeQuery();
