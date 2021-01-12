@@ -26,8 +26,8 @@ function insert() {
 			$("#writer").val("");
 			$("#memo").val("");
 		}
-	})
-}
+	});
+};
 </script>
 
 </head>
