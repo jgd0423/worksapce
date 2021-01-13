@@ -18,7 +18,7 @@ DTO dto = dao.getSelectOne(no);
 
 <h1>삭제</h1>
 <!-- 물음표에 원하는 줄 수 넣고 emmet -->
-form[name="deleteForm"]>input[type="hidden" name="no" value="<%=dto.getNo() %>"]+table[border="1" width="600"]>(tr>td+td{<%=dto. %>})*6^a[href="#" onclick="deleteInfo();"]{[삭제하기]}
+form[name="deleteForm"]>input[type="hidden" name="no" value="<%=dto.getNo() %>"]+table[border="1" width="600"]>(tr>td+td{<%=dto. %>})*?^a[href="#" onclick="deleteInfo();"]{[삭제하기]}
 
 <script>
 function deleteInfo() {
