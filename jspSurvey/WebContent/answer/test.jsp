@@ -34,15 +34,15 @@ function test03() {
 <br><br>
 
 <div id="d1" style="display: none;">
-	<textarea id="t1" style="width:100%; height:50px">01</textarea>
+	<textarea id="t1" style="width:90%; height:50px">01</textarea>
 </div>
 
 <div id="d2" style="display: none;">
-	<textarea id="t2" style="width:100%; height:50px">02</textarea>
+	<textarea id="t2" style="width:90%; height:50px">02</textarea>
 </div>
 
 <div id="d3" style="display: none;">
-	<textarea id="t3" style="width:100%; height:50px">03</textarea>
+	<textarea id="t3" style="width:90%; height:50px">03</textarea>
 </div>
 
 </body>

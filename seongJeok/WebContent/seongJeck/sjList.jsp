@@ -1,5 +1,5 @@
-<%@page import="sj.SjDTO"%>
-<%@page import="sj.SjDAO"%>
+<%@page import="seongJeok.dto.SeongJeokDTO"%>
+<%@page import="seongJeok.dao.SeongJeckDAO"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -7,8 +7,8 @@
 
 <%
 
-SjDAO dao = new SjDAO();
-ArrayList<SjDTO> sjList = dao.getListAll();
+SeongJeckDAO dao = new SeongJeckDAO();
+ArrayList<SeongJeokDTO> sjList = dao.getListAll();
 String[] jungdab = { "1", "2", "3", "4", "3" };
 
 %>
@@ -22,12 +22,6 @@ String[] jungdab = { "1", "2", "3", "4", "3" };
 <body>
 
 <h2>성적목록</h2>
-<p>문제 1번 정답 : <%=jungdab[0] %></p>
-<p>문제 2번 정답 : <%=jungdab[1] %></p>
-<p>문제 3번 정답 : <%=jungdab[2] %></p>
-<p>문제 4번 정답 : <%=jungdab[3] %></p>
-<p>문제 5번 정답 : <%=jungdab[4] %></p>
-<br>
 
 <table border="1" width="600">
 	<tr>
@@ -41,7 +35,7 @@ String[] jungdab = { "1", "2", "3", "4", "3" };
 		<td>점수</td>
 	</tr>
 	<% for (int i = 0; i < sjList.size(); i++) { %>
-		<% SjDTO dto = sjList.get(i); %>
+		<% SeongJeokDTO dto = sjList.get(i); %>
 		<tr>
 			<td><%=dto.getName() %></td>
 			<td><%=dto.getSname() %></td>

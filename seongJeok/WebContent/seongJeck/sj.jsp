@@ -76,10 +76,10 @@
 <script>
 
 function save() {
-	if (confirm("등록하시겠습니까?")) {
+	if (confirm("저장하시겠습니까?")) {
 		document.sj.method = "post";
 		document.sj.action = "sjProc.jsp";
-		document.sj.submit();		
+		document.sj.submit();				
 	}
 }
 

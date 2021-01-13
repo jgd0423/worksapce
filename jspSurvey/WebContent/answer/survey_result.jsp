@@ -8,12 +8,6 @@
 SurveyDAO dao = new SurveyDAO();
 ArrayList<Integer> surveyNoList = dao.getSurveyNos();
 
-// ArrayList<Integer> surveyNoAnswersArrayList = dao.getSurveyNoAnswersArrayList(3);
-// int totalAnswerCount = 0;
-// for (int i = 0; i < surveyNoAnswersArrayList.size(); i++) {
-// 	totalAnswerCount += surveyNoAnswersArrayList.get(i);
-// }
-
 %>
 
 <!DOCTYPE html>
@@ -21,6 +15,14 @@ ArrayList<Integer> surveyNoList = dao.getSurveyNos();
 <head>
 <meta charset="UTF-8">
 <title>설문조사 결과</title>
+<style type="text/css">
+#table-container {
+	display: flex;
+	justify-content: space-evenly;
+	width: 50%;
+}
+
+</style>
 </head>
 <body>
 <h1>설문조사 결과</h1>
@@ -34,29 +36,42 @@ ArrayList<Integer> surveyNoList = dao.getSurveyNos();
 		totalAnswerCount += surveyNoAnswersArrayList.get(i);
 	}
 	%>
-	<table border="1">
-		<tr>
-			<td colspan="4">설문번호 : <%=survey_no %></td>
-		</tr>
-		<tr>
-			<td>문항</td>
-			<td>응답수</td>
-			<td>응답률</td>
-			<td></td>
-		</tr>
-		<% for (int i = 0; i < surveyNoAnswersArrayList.size(); i++) { %>
-			<% String responseRate = String.format("%.2f", (double)surveyNoAnswersArrayList.get(i) / totalAnswerCount * 100); %>
+	<div id="table-container">
+		<table border="1">
 			<tr>
-				<td><%=i + 1 %></td>
-				<td><%=surveyNoAnswersArrayList.get(i) %></td>
-				<td><%=responseRate%></td>
-				<td width="300px">
-					<div style="background-color:blue; width:<%=responseRate %>%; height:30px"></div>
-				</td>
+				<td colspan="3">설문번호 : <%=survey_no %></td>
 			</tr>
-		<% } %>
-	</table>
-	<br>
+			<tr>
+				<td>문항</td>
+				<td>응답수</td>
+				<td>응답률</td>
+			</tr>
+			<% for (int i = 0; i < surveyNoAnswersArrayList.size(); i++) { %>
+				<% String responseRate = String.format("%.2f", (double)surveyNoAnswersArrayList.get(i) / totalAnswerCount * 100); %>
+				<tr>
+					<td><%=i + 1 %></td>
+					<td><%=surveyNoAnswersArrayList.get(i) %></td>
+					<td><%=responseRate%></td>
+				</tr>
+			<% } %>
+		</table>
+		
+		<table border="1" height="500px" width="500px">
+			<tr>
+				<% for (int i = 0; i < surveyNoAnswersArrayList.size(); i++) { %>
+					<% String responseRate = String.format("%.2f", (double)surveyNoAnswersArrayList.get(i) / totalAnswerCount * 100); %>
+						<td align="center" style="vertical-align:bottom;"><div style="background-color:blue; width:80%; height:<%=responseRate%>%"></div></td>
+					<% } %>
+			</tr>
+			<tr height="30px">
+				<% for (int i = 0; i < surveyNoAnswersArrayList.size(); i++) { %>
+					<% String responseRate = String.format("%.2f", (double)surveyNoAnswersArrayList.get(i) / totalAnswerCount * 100); %>
+						<td><%=i+1%> (<%=responseRate %>%)</td>
+					<% } %>
+			</tr>
+		</table>
+	</div>
+	<br><br><br><br>
 <% } %>
 
 </body>
