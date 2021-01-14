@@ -12,7 +12,7 @@
 <h1>입력</h1>
 
 <!-- 물음표에 원하는 줄 수 넣고 emmet -->
-form[name="writeForm"]>table[border="1"]>(tr>td+td[type="text" name=""])*?^a[href="#" onclick="inputInfo();"]{[등록하기]}
+form[name="writeForm"]>table[border="1"]>(tr>td+td>input[type="text" name=""])*?^a[href="#" onclick="inputInfo();"]{[등록하기]}
 
 
 <script>

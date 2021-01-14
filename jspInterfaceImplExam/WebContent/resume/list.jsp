@@ -7,6 +7,8 @@
 
 <%
 
+String path = request.getContextPath();
+
 ResumeExample dao = new ResumeExample();
 ArrayList<ResumeDTO> resumeList = dao.getListAll();
 final int ONE_LINE_SIZE = 3;
@@ -36,7 +38,7 @@ final int ONE_LINE_SIZE = 3;
 					<tr>
 						<td>
 							<a href="view.jsp?no=<%=dto.getNo()%>">
-								<img src="../image/<%=dto.getPic() %>" alt="<%=dto.getPic() %>" style="width:100px; height:100px;"/>
+								<img src="<%=path %>/upload/img/<%=dto.getPic() %>" alt="<%=dto.getPic() %>" style="width:100px; height:100px;"/>
 							</a>
 						</td>
 					</tr>

@@ -11,6 +11,8 @@ int no = Integer.parseInt(no_);
 ResumeExample dao = new ResumeExample();
 ResumeDTO dto = dao.getSelectOne(no);
 
+String path = request.getContextPath();
+
 %>
 <!DOCTYPE html>
 <html>
@@ -30,7 +32,7 @@ ResumeDTO dto = dao.getSelectOne(no);
 		</tr>
 		<tr>
 			<td rowspan="4" width="150" align="center">
-				<img src="../image/<%=dto.getPic() %>" alt="<%=dto.getPic() %>" style="width:100px; height:100px;"/>
+				<img src="<%=path %>/upload/img/<%=dto.getPic() %>" alt="<%=dto.getPic() %>" style="width:100px; height:100px;"/>
 			</td>
 			<td colspan="2">성명</td>
 			<td colspan="2">
