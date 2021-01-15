@@ -2,17 +2,20 @@ package chapter10;
 
 import java.util.Optional;
 
+
 public class Main {
 	
-	public static String getText() {
-		return "AAA";
+	public static int sumRecursion(int num) {
+		if (num == 1) {
+			return 1;
+		}
+		
+		return num + sumRecursion(num - 1);
 	}
 	
 	public static void main(String[] args) {
-		int length = Optional.ofNullable(getText()).map(String::length).orElse(0);
+		System.out.println(sumRecursion(5));
 		
-		
-		System.out.println(length);
 	}
 
 }

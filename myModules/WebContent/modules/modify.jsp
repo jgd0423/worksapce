@@ -21,6 +21,8 @@ DTO dto = dao.getSelectOne(no);
 <!-- 물음표에 원하는 줄 수 넣고 emmet -->
 form[name="modifyForm"]>input[type="hidden" name="no" value="<%=dto.getNo() %>"]+table[border="1" width="600"]>(tr>td+td>input[type="text" name="" value="<%=dto. %>"])*?^a[href="#" onclick="modifyInfo();"]{[수정하기]}
 
+
+
 <script>
 function modifyInfo() {
 	if (confirm("수정하시겠습니까?")) {

@@ -20,7 +20,7 @@ function inputInfo() {
 	if (confirm("등록하시겠습니까?")) {
 		document.writeForm.method = 'post';
 		document.writeForm.action = 'inputProc.jsp';
-		document.writeForm.submit();		
+		document.writeForm.submit();
 	}
 }
 </script>
