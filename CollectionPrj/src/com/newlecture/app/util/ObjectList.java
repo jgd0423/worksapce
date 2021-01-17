@@ -1,17 +1,17 @@
 package com.newlecture.app.util;
 
-public class IntList {
+public class ObjectList {
 	// Field
-	private int[] nums;
+	private Object[] nums;
 	private int current;
 	
 	// Constructor
-	public IntList() {
-		nums = new int[3];
+	public ObjectList() {
+		nums = new Object[3];
 		current = 0;
 	}
 
-	public void add(int num) {
+	public void add(Object num) {
 		nums[current] = num;
 		current++;
 		
@@ -26,7 +26,7 @@ public class IntList {
 		return current;
 	}
 
-	public int get(int index) {
+	public Object get(int index) {
 		if (current <= index) {
 			throw new IndexOutOfBoundsException();
 		}
