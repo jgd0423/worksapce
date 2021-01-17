@@ -1,5 +1,3 @@
-<%@page import="memo.model.dto.MemoDTO"%>
-<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% request.setCharacterEncoding("UTF-8"); %>
@@ -17,17 +15,12 @@
 
 <table border="1">
 	<tr>
-		<td>NO</td>
-		<td>이름</td>
-		<td>메모</td>
-		<td>날짜</td>
+		<!-- column 숫자만큼 td 복사 -->
+		<td></td>
 	</tr>
 	<c:forEach var="row" items="${list }">
 		<tr>
-			<td>${row.no }</td>
-			<td>${row.writer }</td>
-			<td>${row.content }</td>
-			<td>${row.regi_date }</td>
+			<td>${row. }</td>
 		</tr>
 	</c:forEach>
 </table>

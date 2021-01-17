@@ -42,11 +42,7 @@ public class MemoController extends HttpServlet {
 			String page = "/memo/list.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
-			
 		}
-		
-		
-		
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
