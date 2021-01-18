@@ -1,4 +1,3 @@
-<%@page import="java.net.Inet4Address"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
@@ -21,7 +20,7 @@
 					<th><a href="#">게시판(S)</a></th>
 					<th><a href="#">게시판(M)</a></th>
 					<th><a href="#">상품관리</a></th>
-					<th><a href="#">로그인</a></th>
+					<th><a href="login.jsp">로그인</a></th>
 					<th>192.168.56.1</th>
 				</tr>
 			</table>
@@ -124,7 +123,7 @@ function save() {
 		return;
 	}
 	
-	if (document.joinForm.address.value === "") {
+	if (document.joinForm.zipcode.value === "") {
 		alert("우편번호를 입력하세요.");
 		document.joinForm.address.focus();
 		return;
