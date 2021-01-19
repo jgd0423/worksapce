@@ -38,6 +38,7 @@ public class MemberController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
+			
 		} else if (url.indexOf("chugaProc.do") != -1) {
 			String id = request.getParameter("id");
 			String passwd = request.getParameter("passwd");
@@ -65,10 +66,12 @@ public class MemberController extends HttpServlet {
 			}
 			response.sendRedirect(temp);
 			
+			
 		} else if (url.indexOf("login.do") != -1) {
 			request.setAttribute("menu_gubun", "member_login");
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
+			
 			
 		} else if (url.indexOf("loginProc.do") != -1) {
 			String id = request.getParameter("id");
@@ -94,6 +97,7 @@ public class MemberController extends HttpServlet {
 			}
 			response.sendRedirect(temp);
 			
+			
 		} else if (url.indexOf("logout.do") != -1) {
 			// 세션 해제
 			HttpSession session = request.getSession();
@@ -109,6 +113,7 @@ public class MemberController extends HttpServlet {
 //			String temp = path;
 //			response.sendRedirect(temp);
 			
+			
 		} else if (url.indexOf("list.do") != -1) {
 			MemberDAO dao = new MemberDAO();
 			ArrayList<MemberDTO> list = dao.getSelectAll();
@@ -118,6 +123,7 @@ public class MemberController extends HttpServlet {
 			
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
+			
 			
 		} else if (url.indexOf("view.do") != -1) {
 			String no_ = request.getParameter("no");
@@ -132,10 +138,18 @@ public class MemberController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
+			
 		} else if (url.indexOf("modify.do") != -1) {
+			// 세션 없으면 로그인 페이지로
+			HttpSession session = request.getSession();
+			if (session.getAttribute("cookNo") == null) {
+				response.sendRedirect(path + "/member_servlet/login.do");
+				return;
+			}
+			
 			String no_ = request.getParameter("no");
 			
-			// 주소줄에서 no값 없으면 돌려보내야됨
+			// no값 없으면 돌려보내기
 			if (no_ == "") {
 				response.setContentType("text/html; charset=utf-8");
 				PrintWriter out = response.getWriter();
@@ -148,7 +162,6 @@ public class MemberController extends HttpServlet {
 			
 			int no = Integer.parseInt(no_);
 			
-			
 			MemberDAO dao = new MemberDAO();
 			MemberDTO dto = dao.getSelectOne(no);
 			
@@ -157,6 +170,7 @@ public class MemberController extends HttpServlet {
 			
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
+			
 			
 		} else if (url.indexOf("modifyProc.do") != -1) {
 			String no_ = request.getParameter("no");
@@ -167,10 +181,16 @@ public class MemberController extends HttpServlet {
 			MemberDAO dao = new MemberDAO();
 
 			// 비밀번호 체크
-//			MemberDTO dbDto = dao.getSelectOne(no);
-//			if (passwd != dbDto.getPasswd()) {
-//				
-//			}
+			MemberDTO dbDto = dao.getSelectOne(no);
+			if (!passwd.equals(dbDto.getPasswd())) {
+				response.setContentType("text/html; charset=utf-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('비밀번호가 틀렸습니다.');");
+				out.println("history.back();");
+				out.println("</script>");
+				return;
+			}
 			
 			MemberDTO dto = new MemberDTO();
 			dto.setNo(no);
@@ -185,8 +205,29 @@ public class MemberController extends HttpServlet {
 				temp = path + "/member_servlet/modify.do?pageNumber=&no=" + no;
 			}
 			response.sendRedirect(temp);
+			
+			
 		} else if (url.indexOf("delete.do") != -1) {
+			// 세션 없으면 로그인 페이지로
+			HttpSession session = request.getSession();
+			if (session.getAttribute("cookNo") == null) {
+				response.sendRedirect(path + "/member_servlet/login.do");
+				return;
+			}
+			
 			String no_ = request.getParameter("no");
+			
+			// no값 없으면 돌려보내기
+			if (no_ == "") {
+				response.setContentType("text/html; charset=utf-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('잘못된 접근입니다.');");
+				out.println("history.back();");
+				out.println("</script>");
+				return;
+			}
+			
 			int no = Integer.parseInt(no_);
 			
 			MemberDAO dao = new MemberDAO();
@@ -198,15 +239,28 @@ public class MemberController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
+			
 		} else if (url.indexOf("deleteProc.do") != -1) {
 			String no_ = request.getParameter("no");
 			int no = Integer.parseInt(no_);
 			String passwd = request.getParameter("passwd");
+			MemberDAO dao = new MemberDAO();
+			
+			// 비밀번호 체크
+			MemberDTO dbDto = dao.getSelectOne(no);
+			if (!passwd.equals(dbDto.getPasswd())) {
+				response.setContentType("text/html; charset=utf-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('비밀번호가 틀렸습니다.');");
+				out.println("history.back();");
+				out.println("</script>");
+				return;
+			}
 			
 			MemberDTO dto = new MemberDTO();
 			dto.setNo(no);
 			
-			MemberDAO dao = new MemberDAO();
 			int result = dao.setDelete(dto);
 			
 			String temp;
