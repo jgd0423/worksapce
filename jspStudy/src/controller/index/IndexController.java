@@ -24,8 +24,8 @@ public class IndexController extends HttpServlet {
 	
 	protected void doProc(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		String path = request.getContextPath();            // /jspStudy
-		String url = request.getRequestURL().toString();   // http://localhost:8090/jspStudy/index.do
+		String path = request.getContextPath();
+		String url = request.getRequestURL().toString();
 		
 		// 컨트롤러에서 jsp로 값을 보내줌 1번 파라미터는 변수명, 2번 파라미터는 담을 값
 		request.setAttribute("menu_gubun", "index");
