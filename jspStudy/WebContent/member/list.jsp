@@ -27,7 +27,6 @@ ${list.size() }개의 레코드가 있습니다.
 	</c:if>
 	<c:if test="${list.size() > 0 }">
 		<c:forEach var="dto" items="${list }">
-			<!-- dto.getNo()로 안써도 됨 -->
 			<tr>
 				<td>${dto.no }</td>
 				<td><a href="#" onclick="goPage('member_view', '', '${dto.no }')">${dto.id }</a></td>

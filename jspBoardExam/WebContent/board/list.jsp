@@ -24,39 +24,39 @@ if ((searchField == null || searchField.length() <= 0) || (searchData == null ||
 int count = dao.getTotalRecordCount(searchField, searchData);
 
 // 화면에 보여질 개수
-int pageSize = 20;
+final int PAGE_SIZE = 20;
 
 // 페이징 바 길이
-int pageBlock = 15;
+final int PAGE_BLOCK = 15;
 
 // 현재 페이지 번호
 String pageNum = Optional.ofNullable(request.getParameter("pageNum")).orElse("1"); 
 int currentPage = Integer.parseInt(pageNum);
 
 // 현재 페이지에 보여질 시작번호, 끝번호
-int startRow = (currentPage - 1) * pageSize + 1;
-int endRow = currentPage * pageSize;
+int startRow = (currentPage - 1) * PAGE_SIZE + 1;
+int endRow = currentPage * PAGE_SIZE;
 
 // 테이블에 표시할 번호
-int number = count - (currentPage - 1) * pageSize;
+int number = count - (currentPage - 1) * PAGE_SIZE;
 
 // 전체 페이지 수
-double totalPageDou = Math.ceil(count / (double)pageSize);
+double totalPageDou = Math.ceil(count / (double)PAGE_SIZE);
 int totalPage = (int)totalPageDou;
 
 int pageCount = 0;
 int startPage = 1;
 int endPage = 1;
 if (count > 0) {
-	pageCount = count / pageSize + (count % pageSize == 0 ? 0 : 1);
-	if (currentPage % pageBlock != 0) {
-		startPage = (int)(currentPage / pageBlock) * pageBlock + 1;
+	pageCount = count / PAGE_SIZE + (count % PAGE_SIZE == 0 ? 0 : 1);
+	if (currentPage % PAGE_BLOCK != 0) {
+		startPage = (int)(currentPage / PAGE_BLOCK) * PAGE_BLOCK + 1;
 	} else {
-		startPage = ((int)(currentPage / pageBlock) - 1) * pageBlock + 1;
+		startPage = ((int)(currentPage / PAGE_BLOCK) - 1) * PAGE_BLOCK + 1;
 	}
 	
 // 	int pageBlock = 10;
-	endPage = startPage + pageBlock - 1;
+	endPage = startPage + PAGE_BLOCK - 1;
 	if (endPage > pageCount) {
 		endPage = pageCount;
 	}
@@ -157,12 +157,12 @@ requested Info: <%=request.getRequestURI() %><br>
 		<% } %>
 		<tr>
 			<td colspan="5" align="center">
-				<% if (currentPage <= pageBlock) { %>
+				<% if (currentPage <= PAGE_BLOCK) { %>
 					[첫페이지]
 					[이전10개]
 				<% } else { %>
 					<a href="list.jsp?pageNum=1&searchField=<%=searchField%>&searchData=<%=searchData%>">[첫페이지]</a>
-					<a href="list.jsp?pageNum=<%=startPage - pageBlock%>&searchField=<%=searchField%>&searchData=<%=searchData%>">[이전10개]</a>
+					<a href="list.jsp?pageNum=<%=startPage - PAGE_BLOCK%>&searchField=<%=searchField%>&searchData=<%=searchData%>">[이전10개]</a>
 				<% } %>
 				&nbsp;&nbsp;&nbsp;
 				<% for (int n = startPage; n <= endPage; n++) { %>
@@ -174,11 +174,11 @@ requested Info: <%=request.getRequestURI() %><br>
 					&nbsp;&nbsp;
 				<% } %>
 				&nbsp;
-				<% if (currentPage >= totalPage - pageBlock) { %>
+				<% if (currentPage >= totalPage - PAGE_BLOCK) { %>
 					[다음10개]
 					[끝페이지]
 				<% } else { %>
-					<a href="list.jsp?pageNum=<%=startPage + pageBlock%>&searchField=<%=searchField%>&searchData=<%=searchData%>">[다음10개]</a>
+					<a href="list.jsp?pageNum=<%=startPage + PAGE_BLOCK%>&searchField=<%=searchField%>&searchData=<%=searchData%>">[다음10개]</a>
 					<a href="list.jsp?pageNum=<%=totalPage %>&searchField=<%=searchField%>&searchData=<%=searchData%>">[끝페이지]</a>
 				<% } %>				
 			</td>

@@ -37,6 +37,29 @@
 		<td>${dto.regiDate }</td>
 	</tr>
 	<tr>
+		<td>주소</td>
+		<td>
+			<table border="1">
+				<tr>
+					<td>우편번호</td>
+					<td>${dto.postcode }</td>
+				</tr>
+				<tr>
+					<td>주소</td>
+					<td>${dto.address }</td>
+				</tr>
+				<tr>
+					<td>상세주소</td>
+					<td>${dto.detailAddress }</td>
+				</tr>
+				<tr>
+					<td>참고항목</td>
+					<td>${dto.extraAddress }</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
 		<td colspan="2" height="50" align="center">
 			<button type="button" onclick="goPage('member_list', '', '')">목록으로</button>
 			&nbsp;&nbsp;&nbsp;

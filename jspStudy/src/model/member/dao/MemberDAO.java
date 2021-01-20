@@ -31,13 +31,18 @@ public class MemberDAO {
 		int result = 0;
 		try {
 			String sql = "INSERT INTO member VALUES (seq_member.NEXTVAL, "
-					+ "?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+					+ "?, ?, ?, ?, ?, "
+					+ "?, ?, ?, ?, CURRENT_TIMESTAMP)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getId());
 			pstmt.setString(2, dto.getPasswd());
 			pstmt.setString(3, dto.getName());
 			pstmt.setString(4, dto.getGender());
 			pstmt.setInt(5, dto.getBornYear());
+			pstmt.setString(6, dto.getPostcode());
+			pstmt.setString(7, dto.getAddress());
+			pstmt.setString(8, dto.getDetailAddress());
+			pstmt.setString(9, dto.getExtraAddress());
 			result = pstmt.executeUpdate();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -89,6 +94,10 @@ public class MemberDAO {
 				dto.setGender(rs.getString("gender"));
 				dto.setBornYear(rs.getInt("bornYear"));
 				dto.setRegiDate(rs.getTimestamp("regiDate"));
+				dto.setPostcode(rs.getString("postcode"));
+				dto.setAddress(rs.getString("address"));
+				dto.setDetailAddress(rs.getString("detailAddress"));
+				dto.setExtraAddress(rs.getString("extraAddress"));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -103,11 +112,19 @@ public class MemberDAO {
 		int result = 0;
 		try {
 			String sql = "UPDATE member SET "
-					+ "bornYear = ? "
+					+ "bornYear = ?, "
+					+ "postcode = ?, "
+					+ "address = ?, "
+					+ "detailAddress = ?,"
+					+ "extraAddress = ? "
 					+ "WHERE no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getBornYear());
-			pstmt.setInt(2, dto.getNo());
+			pstmt.setString(2, dto.getPostcode());
+			pstmt.setString(3, dto.getAddress());
+			pstmt.setString(4, dto.getDetailAddress());
+			pstmt.setString(5, dto.getExtraAddress());
+			pstmt.setInt(6, dto.getNo());
 
 			result = pstmt.executeUpdate();
 		} catch(Exception e) {

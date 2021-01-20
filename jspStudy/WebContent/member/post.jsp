@@ -1,68 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="../include/inc_header.jsp" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>우편번호 찾기</title>
+</head>
+<body>
 
-<form name="joinForm">
-	<table border="1" align="center" width="80%">
-		<tr>
-			<td colspan="2"><h2>회원가입</h2></td>
-		</tr>
-		<tr>
-			<td width="150">아이디</td>
-			<td><input type="text" name="id" /></td>
-		</tr>
-		<tr>
-			<td>비밀번호</td>
-			<td><input type="password" name="passwd" /></td>
-		</tr>
-		<tr>
-			<td>비밀번호확인</td>
-			<td><input type="password" name="passwdChk" /></td>
-		</tr>
-		<tr>
-			<td>이름</td>
-			<td><input type="text" name="name" /></td>
-		</tr>
-		<tr>
-			<td>성별</td>
-			<td>
-				<input type="radio" name="gender" value="M" checked /> 남자
-				&nbsp;&nbsp;&nbsp;
-				<input type="radio" name="gender" value="F" /> 여자
-			</td>
-		</tr>
-		<tr>
-			<td>출생년도</td>
-			<td><input type="text" name="bornYear" value="1990" /></td>
-		</tr>
-		<tr>
-			<td>주소</td>
-			<td>
-				<input type="text" name="postcode" id="sample6_postcode" placeholder="우편번호">
-				<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-				<input type="text" name="address" id="sample6_address" placeholder="주소"><br>
-				<input type="text" name="detailAddress" id="sample6_detailAddress" placeholder="상세주소">
-				<input type="text" name="extraAddress" id="sample6_extraAddress" placeholder="참고항목">
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2" align="center" style="height: 50px;">
-				<button type="button" onclick="join();">JOIN</button>
-			</td>
-		</tr>
-	</table>
-</form>
+<input type="text" id="sample6_postcode" placeholder="우편번호">
+<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+<input type="text" id="sample6_address" placeholder="주소"><br>
+<input type="text" id="sample6_detailAddress" placeholder="상세주소">
+<input type="text" id="sample6_extraAddress" placeholder="참고항목">
 
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
-
-function join() {
-	if (confirm("등록하시겠습니까?")) {
-		document.joinForm.method = 'post';
-		document.joinForm.action = '${path}/member_servlet/chugaProc.do';
-		document.joinForm.submit();
-	}
-}
 
 function sample6_execDaumPostcode() {
 	new daum.Postcode({
@@ -113,3 +66,6 @@ function sample6_execDaumPostcode() {
 }
 
 </script>
+
+</body>
+</html>

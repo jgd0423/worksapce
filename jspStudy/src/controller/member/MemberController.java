@@ -47,6 +47,10 @@ public class MemberController extends HttpServlet {
 			String gender = request.getParameter("gender");
 			String bornYear_ = request.getParameter("bornYear");
 			int bornYear = Integer.parseInt(bornYear_);
+			String postcode = request.getParameter("postcode");
+			String address = request.getParameter("address");
+			String detailAddress = request.getParameter("detailAddress");
+			String extraAddress = request.getParameter("extraAddress");
 			
 			MemberDTO dto = new MemberDTO();
 			dto.setId(id);
@@ -55,6 +59,10 @@ public class MemberController extends HttpServlet {
 			dto.setName(name);
 			dto.setGender(gender);
 			dto.setBornYear(bornYear);
+			dto.setPostcode(postcode);
+			dto.setAddress(address);
+			dto.setDetailAddress(detailAddress);
+			dto.setExtraAddress(extraAddress);
 			
 			MemberDAO dao = new MemberDAO();
 			String temp;
@@ -129,6 +137,19 @@ public class MemberController extends HttpServlet {
 			String no_ = request.getParameter("no");
 			int no = Integer.parseInt(no_);
 			
+			// 세션과 no가 같은 사람만 들어가게 하기
+			HttpSession session = request.getSession();
+			int cookNo = (Integer)session.getAttribute("cookNo");
+			if (cookNo != no) {
+				response.setContentType("text/html; charset=utf-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('잘못된 접근입니다.');");
+				out.println("history.back();");
+				out.println("</script>");
+				return;
+			}
+			
 			MemberDAO dao = new MemberDAO();
 			MemberDTO dto = dao.getSelectOne(no);
 			
@@ -149,8 +170,8 @@ public class MemberController extends HttpServlet {
 			
 			String no_ = request.getParameter("no");
 			
-			// no값 없으면 돌려보내기
-			if (no_ == "") {
+			// no값 없거나 0이면 돌려보내기
+			if (no_ == "" || no_.equals("0")) {
 				response.setContentType("text/html; charset=utf-8");
 				PrintWriter out = response.getWriter();
 				out.println("<script>");
@@ -178,6 +199,10 @@ public class MemberController extends HttpServlet {
 			String passwd = request.getParameter("passwd");
 			String bornYear_ = request.getParameter("bornYear");
 			int bornYear = Integer.parseInt(bornYear_);
+			String postcode = request.getParameter("postcode");
+			String address = request.getParameter("address");
+			String detailAddress = request.getParameter("detailAddress");
+			String extraAddress = request.getParameter("extraAddress");
 			MemberDAO dao = new MemberDAO();
 
 			// 비밀번호 체크
@@ -195,6 +220,10 @@ public class MemberController extends HttpServlet {
 			MemberDTO dto = new MemberDTO();
 			dto.setNo(no);
 			dto.setBornYear(bornYear);
+			dto.setPostcode(postcode);
+			dto.setAddress(address);
+			dto.setDetailAddress(detailAddress);
+			dto.setExtraAddress(extraAddress);
 			
 			int result = dao.setUpdate(dto);
 			
@@ -217,8 +246,8 @@ public class MemberController extends HttpServlet {
 			
 			String no_ = request.getParameter("no");
 			
-			// no값 없으면 돌려보내기
-			if (no_ == "") {
+			// no값 없거나 0이면 돌려보내기
+			if (no_ == "" || no_.equals("0")) {
 				response.setContentType("text/html; charset=utf-8");
 				PrintWriter out = response.getWriter();
 				out.println("<script>");
