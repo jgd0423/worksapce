@@ -42,6 +42,8 @@ public class MemoController extends HttpServlet {
 			String page = "/memo/list.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
+			
+			
 		}
 	}
 	

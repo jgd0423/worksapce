@@ -50,24 +50,29 @@ public class MemoController extends HttpServlet {
 			
 			MemoDAO dao = new MemoDAO();
 			String temp;
-			int result = dao.setInsert(dto);
-			if (result > 0) {
-				temp = path + "/memo_servlet/list.do";
-			} else {
-				temp = path + "/memo_servlet/write.do";
-			}
-			response.sendRedirect(temp);
+			dao.setInsert(dto);
 			
 			
 		} else if (url.indexOf("list.do") != -1) {
 			MemoDAO dao = new MemoDAO();
 			ArrayList<MemoDTO> list = dao.getSelectAll();
 			
-			request.setAttribute("menu_gubun", "memo_list");
 			request.setAttribute("list", list);
+			
+			page = "/memo/list.jsp";
 			
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("deleteInfo.do") != -1) {
+			String no_ = request.getParameter("no");
+			int no = Integer.parseInt(no_);
+			
+			MemoDAO dao = new MemoDAO();
+			MemoDTO dto = new MemoDTO();
+			dto.setNo(no);
+			dao.setDelete(dto);
 		}
 	}
 

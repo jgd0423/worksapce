@@ -3,6 +3,7 @@ package controller.member;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -52,27 +53,31 @@ public class MemberController extends HttpServlet {
 			String detailAddress = request.getParameter("detailAddress");
 			String extraAddress = request.getParameter("extraAddress");
 			
-			MemberDTO dto = new MemberDTO();
-			dto.setId(id);
-			dto.setPasswd(passwd);
-			dto.setPasswdChk(passwdChk);
-			dto.setName(name);
-			dto.setGender(gender);
-			dto.setBornYear(bornYear);
-			dto.setPostcode(postcode);
-			dto.setAddress(address);
-			dto.setDetailAddress(detailAddress);
-			dto.setExtraAddress(extraAddress);
+			System.out.println("id : " + !id.contains(" "));
+			System.out.println("passwd : " + !passwd.contains(" "));
+			System.out.println("gender : " + Pattern.matches("M|F", "H"));
 			
-			MemberDAO dao = new MemberDAO();
-			String temp;
-			int result = dao.setInsert(dto);
-			if (result > 0) {
-				temp = path + "/member_servlet/login.do";
-			} else {
-				temp = path + "member_servlet/chuga.do";
-			}
-			response.sendRedirect(temp);
+//			MemberDTO dto = new MemberDTO();
+//			dto.setId(id);
+//			dto.setPasswd(passwd);
+//			dto.setPasswdChk(passwdChk);
+//			dto.setName(name);
+//			dto.setGender(gender);
+//			dto.setBornYear(bornYear);
+//			dto.setPostcode(postcode);
+//			dto.setAddress(address);
+//			dto.setDetailAddress(detailAddress);
+//			dto.setExtraAddress(extraAddress);
+//			
+//			MemberDAO dao = new MemberDAO();
+//			String temp;
+//			int result = dao.setInsert(dto);
+//			if (result > 0) {
+//				temp = path + "/member_servlet/login.do";
+//			} else {
+//				temp = path + "member_servlet/chuga.do";
+//			}
+//			response.sendRedirect(temp);
 			
 			
 		} else if (url.indexOf("login.do") != -1) {
@@ -301,6 +306,43 @@ public class MemberController extends HttpServlet {
 				temp = path + "/member_servlet/delete.do?pageNumber=&no=" + no;
 			}
 			response.sendRedirect(temp);
+			
+			
+		} else if (url.indexOf("id_check.do") != -1) {
+			String id = request.getParameter("id");
+			
+			MemberDAO dao = new MemberDAO();
+			int result = dao.getIdCheck(id);
+			
+//			PrintWriter out = response.getWriter();
+			
+			// ajax success로 보내줌
+			response.getWriter().println(result);
+			
+			
+		} else if (url.indexOf("id_check_win.do") != -1) {
+			response.sendRedirect(path + "/member/id_check.jsp");
+			
+			
+		} else if (url.indexOf("id_check_win_open_Proc.do") != -1) {
+			String id = request.getParameter("id");
+			
+			MemberDAO dao = new MemberDAO();
+			int result = dao.getIdCheck(id);
+			String resultStr = null;
+			if (result == 1) {
+				resultStr = "중복임";
+			} else {
+				resultStr = "중복아님";
+				request.setAttribute("resultId", id);
+			}
+			
+			request.setAttribute("result", resultStr);
+			
+			page = "/member/id_check.jsp";
+			
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
 		}
 		
 		

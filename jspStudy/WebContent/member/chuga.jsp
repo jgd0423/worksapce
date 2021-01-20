@@ -9,7 +9,13 @@
 		</tr>
 		<tr>
 			<td width="150">아이디</td>
-			<td><input type="text" name="id" /></td>
+			<td>
+				<input type="text" name="id" id="id" />
+				<button type="button" onclick="id_check()">아이디중복체크</button>
+				<button type="button" onclick="id_check_win_open()">아이디중복체크(새창)</button>
+				<br>
+				<label id="label_id"></label>
+			</td>
 		</tr>
 		<tr>
 			<td>비밀번호</td>
@@ -55,6 +61,41 @@
 
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
+
+function id_check_win_open() {
+	window.open("${path}/member_servlet/id_check_win.do", 
+			"id_check", 
+			"width=640, height=320, toolbar=no, menubar=no, scrollbars=no, resizeable=yes");
+}
+
+function id_check() {
+	let id = $("#id").val();
+	if (id === '') {
+		$("#label_id").html('아이디를 입력하세요.');
+		$("#label_id").css('color', 'green');
+		$("#label_id").css('font-size', '8px');
+		return;
+	} 
+	
+	let param = "id=" + id;
+	$.ajax({
+		type: "post",
+		data: param,
+		url: "${path}/member_servlet/id_check.do",
+		success: (result) => {
+			if (result > 0) {
+				$("#id").val('');
+				$("#label_id").html("사용할 수 없는 아이디입니다.");
+				$("#label_id").css('color', 'red');
+				$("#label_id").css('font-size', '8px');
+			} else {
+				$("#label_id").html("사용할 수 있는 아이디입니다.");
+				$("#label_id").css('color', 'blue');
+				$("#label_id").css('font-size', '8px');
+			}
+		}
+	});
+}
 
 function join() {
 	if (confirm("등록하시겠습니까?")) {

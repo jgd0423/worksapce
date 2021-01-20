@@ -156,7 +156,7 @@ public class MemberDAO {
 		conn = getConn();
 		MemberDTO resultDto = new MemberDTO();
 		try {
-			String sql = "select * from member where id = ? and passwd = ?";
+			String sql = "SELECT * FROM MEMBER WHERE id = ? AND passwd = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getId());
 			pstmt.setString(2, dto.getPasswd());
@@ -177,5 +177,26 @@ public class MemberDAO {
 			getConnClose(rs, pstmt, conn);
 		}
 		return resultDto;
+	}
+
+	public int getIdCheck(String id) {
+		conn = getConn();
+		int result = 0;
+		try {
+			String sql = "SELECT COUNT(*) FROM member WHERE id = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			System.out.println("-- 오라클 접속 실패 --");
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return result;
 	}
 }

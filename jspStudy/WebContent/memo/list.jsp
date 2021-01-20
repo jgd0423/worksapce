@@ -19,7 +19,7 @@ ${list.size() }개의 레코드가 있습니다.
 	</tr>
 	<c:if test="${list.size() == 0 }">
 		<tr>
-			<td colspan="4" height="200" align="center">등록된 내용이 없습니다.</td>
+			<td colspan="4" height="200" align="center">등록된 메모가 없습니다.</td>
 		</tr>
 	</c:if>
 	<c:if test="${list.size() > 0 }">
@@ -27,27 +27,38 @@ ${list.size() }개의 레코드가 있습니다.
 			<tr>
 				<td>${dto.no }</td>
 				<td>${dto.writer }</td>
-				<td><a href="#" onclick="goPage('memo_view', '${dto.no }')">${dto.content }</a></td>
-				<td>${dto.regiDate }</td>
+				<td>${dto.content }</td>
+				<td>${dto.regiDate }<button type="button" onclick="deleteInfo('${dto.no}')" >삭제</button></td>
 			</tr>
 		</c:forEach>
-		<tr>
-			<td colspan="7" height="50" align="right">
-				<button type="button" onclick="goPage('memo_write', '')">메모하기</button>
-			</td>
-		</tr>
 	</c:if>
 </table>
 
 <script>
 
-function goPage(value1, value2) {
-	if (value1 === 'memo_write') {
-		location.href = '${path}/memo_servlet/write.do';		
-	} else if (value1 === 'memo_view') {
-		location.href = '${path}/memo_servlet/view.do?no=' + value2;
-	}
-	
+function list() {
+	let param = "search_gubun=&sdata=";
+	$.ajax({
+		type: "post",
+		data: param,
+		url: "${path}/memo_servlet/list.do",
+		success: (result) => {
+			$("#result").html(result);
+		}
+	});
+}
+
+function deleteInfo(no) {
+	let param = "no=" + no;
+	$.ajax({
+		type: "post",
+		data: param,
+		url: "${path}/memo_servlet/deleteInfo.do",
+		success: () => {
+			list();
+		}
+	});
 }
 
 </script>
+
