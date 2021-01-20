@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import org.apache.tomcat.dbcp.dbcp2.PStmtKey;
+
 import db.Db;
 import db.DbExample;
 import db.DbImplOracle;
@@ -56,7 +58,7 @@ public class MemberDAO {
 		conn = getConn();
 		ArrayList<MemberDTO> arrayList = new ArrayList<>();
 		try {
-			String sql = "SELECT * FROM member ORDER BY no ASC";
+			String sql = "SELECT * FROM member ORDER BY no DESC";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
@@ -198,5 +200,61 @@ public class MemberDAO {
 		}
 		
 		return result;
+	}
+
+	public int getAllRowsCount() {
+		conn = getConn();
+		int allRowsCount = 0;
+		try {
+			String sql = "SELECT COUNT(*) FROM member";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				allRowsCount = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return allRowsCount;
+	}
+
+	public ArrayList<MemberDTO> getPagingList(int startNum, int endNum) {
+		conn = getConn();
+		ArrayList<MemberDTO> list = new ArrayList<>();
+		try {
+			String sql = "";
+			String basic_sql = "SELECT * FROM member WHERE no > 0";
+			basic_sql += " ORDER BY no DESC";
+			sql += "SELECT * FROM ";
+			sql += "(SELECT ROWNUM Rnum, a.* FROM ";
+			sql += "(" + basic_sql + ") a) ";
+			sql += "WHERE Rnum >= ? AND Rnum <= ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, startNum);
+			pstmt.setInt(2, endNum);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				MemberDTO dto = new MemberDTO();
+				dto.setNo(rs.getInt("no"));
+				dto.setId(rs.getString("id"));
+				dto.setPasswd(rs.getString("passwd"));
+				dto.setName(rs.getString("name"));
+				dto.setGender(rs.getString("gender"));
+				dto.setBornYear(rs.getInt("bornYear"));
+				dto.setRegiDate(rs.getTimestamp("regiDate"));
+				list.add(dto);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return list;
 	}
 }

@@ -3,6 +3,7 @@ package controller.member;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
@@ -53,31 +54,32 @@ public class MemberController extends HttpServlet {
 			String detailAddress = request.getParameter("detailAddress");
 			String extraAddress = request.getParameter("extraAddress");
 			
+			// validation
 			System.out.println("id : " + !id.contains(" "));
 			System.out.println("passwd : " + !passwd.contains(" "));
 			System.out.println("gender : " + Pattern.matches("M|F", "H"));
 			
-//			MemberDTO dto = new MemberDTO();
-//			dto.setId(id);
-//			dto.setPasswd(passwd);
-//			dto.setPasswdChk(passwdChk);
-//			dto.setName(name);
-//			dto.setGender(gender);
-//			dto.setBornYear(bornYear);
-//			dto.setPostcode(postcode);
-//			dto.setAddress(address);
-//			dto.setDetailAddress(detailAddress);
-//			dto.setExtraAddress(extraAddress);
-//			
-//			MemberDAO dao = new MemberDAO();
-//			String temp;
-//			int result = dao.setInsert(dto);
-//			if (result > 0) {
-//				temp = path + "/member_servlet/login.do";
-//			} else {
-//				temp = path + "member_servlet/chuga.do";
-//			}
-//			response.sendRedirect(temp);
+			MemberDTO dto = new MemberDTO();
+			dto.setId(id);
+			dto.setPasswd(passwd);
+			dto.setPasswdChk(passwdChk);
+			dto.setName(name);
+			dto.setGender(gender);
+			dto.setBornYear(bornYear);
+			dto.setPostcode(postcode);
+			dto.setAddress(address);
+			dto.setDetailAddress(detailAddress);
+			dto.setExtraAddress(extraAddress);
+			
+			MemberDAO dao = new MemberDAO();
+			String temp;
+			int result = dao.setInsert(dto);
+			if (result > 0) {
+				temp = path + "/member_servlet/login.do";
+			} else {
+				temp = path + "member_servlet/chuga.do";
+			}
+			response.sendRedirect(temp);
 			
 			
 		} else if (url.indexOf("login.do") != -1) {
@@ -129,14 +131,41 @@ public class MemberController extends HttpServlet {
 			
 		} else if (url.indexOf("list.do") != -1) {
 			MemberDAO dao = new MemberDAO();
-			ArrayList<MemberDTO> list = dao.getSelectAll();
+
+			// paging
+			String pageNum_ = Optional.ofNullable(request.getParameter("page")).orElse("1");
+			if (pageNum_.equals("0") || pageNum_.substring(0, 1).equals("-")) {
+				pageNum_ = "1";
+			}
+			
+			final int ONE_PAGE_ROWS = 15;
+			final int MAX_PAGING_WIDTH = 15;
+			int allRowsCount = dao.getAllRowsCount();
+			int maxPagesCount = (int) Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);
+			int pageNum = Integer.parseInt(pageNum_);
+			int pagingLoopNum = (int) Math.ceil((double)pageNum / MAX_PAGING_WIDTH) - 1;
+			int pagingStartNum = pagingLoopNum * MAX_PAGING_WIDTH + 1;
+			int pagingEndNum = pagingStartNum + MAX_PAGING_WIDTH - 1;
+			if (pagingEndNum > maxPagesCount) {
+				pagingEndNum = maxPagesCount;
+			}
+			int endNum = pageNum * ONE_PAGE_ROWS;
+			int startNum = endNum - ONE_PAGE_ROWS + 1;
+			
+			ArrayList<MemberDTO> list = dao.getPagingList(startNum, endNum);
 			
 			request.setAttribute("menu_gubun", "member_list");
 			request.setAttribute("list", list);
+			request.setAttribute("allRowsCount", allRowsCount);
+			request.setAttribute("pageNum", pageNum);
+			request.setAttribute("maxPagesCount", maxPagesCount);
+			request.setAttribute("pagingStartNum", pagingStartNum);
+			request.setAttribute("pagingEndNum", pagingEndNum);
+			
 			
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
-			
+		
 			
 		} else if (url.indexOf("view.do") != -1) {
 			String no_ = request.getParameter("no");
@@ -144,7 +173,12 @@ public class MemberController extends HttpServlet {
 			
 			// 세션과 no가 같은 사람만 들어가게 하기
 			HttpSession session = request.getSession();
-			int cookNo = (Integer)session.getAttribute("cookNo");
+			
+			int cookNo = 0;
+			if (session.getAttribute("cookNo") != null) {
+				cookNo = (Integer)session.getAttribute("cookNo");
+			}
+			
 			if (cookNo != no) {
 				response.setContentType("text/html; charset=utf-8");
 				PrintWriter out = response.getWriter();

@@ -3,7 +3,7 @@
 <%@ include file="../include/inc_header.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-${list.size() }개의 레코드가 있습니다.
+${allRowsCount }개의 레코드가 있습니다.
 
 <table border="1" align="center" width="80%">
 	<tr>
@@ -12,7 +12,7 @@ ${list.size() }개의 레코드가 있습니다.
 		</td>
 	</tr>
 	<tr>
-		<td>번호</td>
+		<td>일련번호</td>
 		<td>아이디</td>
 		<td>비밀번호</td>
 		<td>이름</td>
@@ -37,13 +37,42 @@ ${list.size() }개의 레코드가 있습니다.
 				<td>${dto.regiDate }</td>
 			</tr>
 		</c:forEach>
-		<tr>
-			<td colspan="7" height="50" align="right">
-				<button type="button" onclick="goPage('member_chuga', '', '')">가입하기</button>
-			</td>
-		</tr>
 	</c:if>
+	<tr>
+		<td colspan="7" height="50" align="center">
+			<a href="list.do?page=1"><<</a>
+			<c:choose>
+				<c:when test="${pageNum - 1 <= 0 }">
+					<a href="list.do?page=${pageNum }"><</a>
+				</c:when>
+				<c:otherwise>
+					<a href="list.do?page=${pageNum - 1 }"><</a>
+				</c:otherwise>
+			</c:choose>
+			<c:forEach var="i" begin="${pagingStartNum }" end="${pagingEndNum }" step="1" >
+				<c:choose>
+					<c:when test="${pageNum == i }">
+						${i }
+					</c:when>
+					<c:otherwise>
+						<a href="list.do?page=${i }">${i }</a>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+			<c:choose>
+				<c:when test="${pageNum + 1 >= maxPagesCount }">
+					<a href="list.do?page=${maxPagesCount }">></a>
+				</c:when>
+				<c:otherwise>
+					<a href="list.do?page=${pageNum + 1 }">></a>
+				</c:otherwise>
+			</c:choose>
+			<a href="list.do?page=${maxPagesCount }">>></a>
+		</td>
+	</tr>
 </table>
+<br>
+<button type="button" onclick="goPage('member_chuga', '', '')">가입하기</button>
 
 <script>
 
