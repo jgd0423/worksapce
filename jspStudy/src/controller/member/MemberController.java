@@ -131,13 +131,14 @@ public class MemberController extends HttpServlet {
 			
 		} else if (url.indexOf("list.do") != -1) {
 			MemberDAO dao = new MemberDAO();
-
-			// paging
+			
+			// validation
 			String pageNum_ = Optional.ofNullable(request.getParameter("page")).orElse("1");
 			if (pageNum_.equals("0") || pageNum_.substring(0, 1).equals("-")) {
 				pageNum_ = "1";
 			}
 			
+			// paging
 			final int ONE_PAGE_ROWS = 15;
 			final int MAX_PAGING_WIDTH = 15;
 			int allRowsCount = dao.getAllRowsCount();
