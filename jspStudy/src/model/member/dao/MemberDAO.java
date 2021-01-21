@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import org.apache.tomcat.dbcp.dbcp2.PStmtKey;
-
 import db.Db;
 import db.DbExample;
 import db.DbImplOracle;
@@ -158,7 +156,7 @@ public class MemberDAO {
 		conn = getConn();
 		MemberDTO resultDto = new MemberDTO();
 		try {
-			String sql = "SELECT * FROM MEMBER WHERE id = ? AND passwd = ?";
+			String sql = "SELECT * FROM member WHERE id = ? AND passwd = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getId());
 			pstmt.setString(2, dto.getPasswd());

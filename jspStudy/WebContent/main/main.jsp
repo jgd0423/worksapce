@@ -15,7 +15,6 @@
 		<td style="padding: 20px 20px;">
 			<!-- header include action tag -->
 			<jsp:include page="../include/inc_menu.jsp"></jsp:include>
-			==> ${menu_gubun }<br>
 			<!-- header -->
 		</td>
 	</tr>

@@ -162,7 +162,6 @@ public class MemberController extends HttpServlet {
 			request.setAttribute("pagingStartNum", pagingStartNum);
 			request.setAttribute("pagingEndNum", pagingEndNum);
 			
-			
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 		

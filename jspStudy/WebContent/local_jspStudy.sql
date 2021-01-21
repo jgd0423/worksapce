@@ -43,7 +43,7 @@ SELECT * FROM member WHERE no > 0 ORDER BY no DESC
 ) a) WHERE Rnum >= 10 AND Rnum <= 20;
 
 begin
-for i in 1 .. 1000 loop
+for i in 1 .. 545 loop
 insert into member values
 (seq_member.nextval, i, i, i, 'M', 1999, 20202, 'a', 'b', 'c', current_Timestamp);
 end loop;
