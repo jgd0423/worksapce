@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import model.member.dao.MemberDAO;
 import model.member.dto.MemberDTO;
+import oracle.net.aso.l;
 
 @WebServlet("/member_servlet/*")
 public class MemberController extends HttpServlet {
@@ -55,9 +56,21 @@ public class MemberController extends HttpServlet {
 			String extraAddress = request.getParameter("extraAddress");
 			
 			// validation
-			System.out.println("id : " + !id.contains(" "));
-			System.out.println("passwd : " + !passwd.contains(" "));
-			System.out.println("gender : " + Pattern.matches("M|F", "H"));
+			id = id.replace("<", "&lt;");
+			id = id.replace(">", "&gt;");
+			id = id.replace("&", "&amp;");
+			id = id.replace("\"", "&quot;");
+			id = id.replace("'", "&apos;");
+			
+			if (!passwd.equals(passwdChk)) {
+				response.setContentType("text/html; charset=utf-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('비밀번호가 다릅니다.');");
+				out.println("history.back();");
+				out.println("</script>");
+				return;
+			}
 			
 			MemberDTO dto = new MemberDTO();
 			dto.setId(id);
@@ -77,7 +90,7 @@ public class MemberController extends HttpServlet {
 			if (result > 0) {
 				temp = path + "/member_servlet/login.do";
 			} else {
-				temp = path + "member_servlet/chuga.do";
+				temp = path + "/member_servlet/chuga.do";
 			}
 			response.sendRedirect(temp);
 			
@@ -132,9 +145,10 @@ public class MemberController extends HttpServlet {
 		} else if (url.indexOf("list.do") != -1) {
 			MemberDAO dao = new MemberDAO();
 			
-			// validation
-			String pageNum_ = Optional.ofNullable(request.getParameter("page")).orElse("1");
-			if (pageNum_.equals("0") || pageNum_.substring(0, 1).equals("-")) {
+			String pageNum_ = request.getParameter("page");
+
+			// validation. charAt을 이용하거나 정규표현식을 이용해 숫자만 남기고 걸러야함
+			if (pageNum_ == null || pageNum_.trim().equals("") || pageNum_.equals("0")) {
 				pageNum_ = "1";
 			}
 			
@@ -144,6 +158,7 @@ public class MemberController extends HttpServlet {
 			int allRowsCount = dao.getAllRowsCount();
 			int maxPagesCount = (int) Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);
 			int pageNum = Integer.parseInt(pageNum_);
+			int tableRowNum = allRowsCount - (pageNum - 1) * ONE_PAGE_ROWS;
 			int pagingLoopNum = (int) Math.ceil((double)pageNum / MAX_PAGING_WIDTH) - 1;
 			int pagingStartNum = pagingLoopNum * MAX_PAGING_WIDTH + 1;
 			int pagingEndNum = pagingStartNum + MAX_PAGING_WIDTH - 1;
@@ -159,6 +174,7 @@ public class MemberController extends HttpServlet {
 			request.setAttribute("list", list);
 			request.setAttribute("allRowsCount", allRowsCount);
 			request.setAttribute("pageNum", pageNum);
+			request.setAttribute("tableRowNum", tableRowNum + 1);
 			request.setAttribute("maxPagesCount", maxPagesCount);
 			request.setAttribute("pagingStartNum", pagingStartNum);
 			request.setAttribute("pagingEndNum", pagingEndNum);
@@ -381,5 +397,4 @@ public class MemberController extends HttpServlet {
 		
 		
 	}
-
 }

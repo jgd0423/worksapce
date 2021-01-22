@@ -11,7 +11,7 @@ ${allRowsCount }개의 레코드가 있습니다.
 		</td>
 	</tr>
 	<tr>
-		<td>일련번호</td>
+		<td>순번</td>
 		<td>아이디</td>
 		<td>비밀번호</td>
 		<td>이름</td>
@@ -27,7 +27,7 @@ ${allRowsCount }개의 레코드가 있습니다.
 	<c:if test="${list.size() > 0 }">
 		<c:forEach var="dto" items="${list }">
 			<tr>
-				<td>${dto.no }</td>
+				<td>${tableRowNum = tableRowNum - 1 }</td>
 				<td><a href="#" onclick="goPage('member_view', '', '${dto.no }')">${dto.id }</a></td>
 				<td>${dto.passwd }</td>
 				<td>${dto.name }</td>
@@ -39,34 +39,34 @@ ${allRowsCount }개의 레코드가 있습니다.
 	</c:if>
 	<tr>
 		<td colspan="7" height="50" align="center">
-			<a href="list.do?page=1"><<</a>
+			<a href="#" onclick="goPage('member_list', '1', '')"><<</a>
 			<c:choose>
 				<c:when test="${pageNum - 1 <= 0 }">
-					<a href="list.do?page=${pageNum }"><</a>
+					<a href="#" onclick="goPage('member_list', '${pageNum }', '')"><</a>
 				</c:when>
 				<c:otherwise>
-					<a href="list.do?page=${pageNum - 1 }"><</a>
+					<a href="#" onclick="goPage('member_list', '${pageNum - 1 }', '')"><</a>
 				</c:otherwise>
 			</c:choose>
 			<c:forEach var="i" begin="${pagingStartNum }" end="${pagingEndNum }" step="1" >
 				<c:choose>
 					<c:when test="${pageNum == i }">
-						${i }
+						<b>[${i }]</b>
 					</c:when>
 					<c:otherwise>
-						<a href="list.do?page=${i }">${i }</a>
+						<a href="#" onclick="goPage('member_list', '${i }', '')">${i }</a>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
 			<c:choose>
 				<c:when test="${pageNum + 1 >= maxPagesCount }">
-					<a href="list.do?page=${maxPagesCount }">></a>
+					<a href="#" onclick="goPage('member_list', '${maxPagesCount }', '')">></a>
 				</c:when>
 				<c:otherwise>
-					<a href="list.do?page=${pageNum + 1 }">></a>
+					<a href="#" onclick="goPage('member_list', '${pageNum + 1 }', '')">></a>
 				</c:otherwise>
 			</c:choose>
-			<a href="list.do?page=${maxPagesCount }">>></a>
+			<a href="#" onclick="goPage('member_list', '${maxPagesCount }', '')">>></a>
 		</td>
 	</tr>
 </table>
@@ -77,11 +77,11 @@ ${allRowsCount }개의 레코드가 있습니다.
 
 function goPage(value1, value2, value3) {
 	if (value1 === 'member_list') {
-		location.href = '${path}/member_servlet/list.do?pageNumber=' + value2;
+		location.href = '${path}/member_servlet/list.do?page=' + value2;
 	} else if (value1 === 'member_chuga') {
 		location.href = '${path}/member_servlet/chuga.do';
 	} else if (value1 === 'member_view') {
-		location.href = '${path}/member_servlet/view.do?pageNumber=' + value2 + '&no=' + value3;
+		location.href = '${path}/member_servlet/view.do?page=' + value2 + '&no=' + value3;
 	}
 }
 

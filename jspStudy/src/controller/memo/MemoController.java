@@ -55,9 +55,39 @@ public class MemoController extends HttpServlet {
 			
 		} else if (url.indexOf("list.do") != -1) {
 			MemoDAO dao = new MemoDAO();
-			ArrayList<MemoDTO> list = dao.getSelectAll();
+			
+			String pageNum_ = request.getParameter("page");
+
+			// validation. charAt을 이용하거나 정규표현식을 이용해 숫자만 남기고 걸러야함
+			if (pageNum_ == null || pageNum_.trim().equals("") || pageNum_.equals("0")) {
+				pageNum_ = "1";
+			}
+			
+			// paging
+			final int ONE_PAGE_ROWS = 8;
+			final int MAX_PAGING_WIDTH = 10;
+			int allRowsCount = dao.getAllRowsCount();
+			int maxPagesCount = (int) Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);
+			int pageNum = Integer.parseInt(pageNum_);
+			int tableRowNum = allRowsCount - (pageNum - 1) * ONE_PAGE_ROWS;
+			int pagingLoopNum = (int) Math.ceil((double)pageNum / MAX_PAGING_WIDTH) - 1;
+			int pagingStartNum = pagingLoopNum * MAX_PAGING_WIDTH + 1;
+			int pagingEndNum = pagingStartNum + MAX_PAGING_WIDTH - 1;
+			if (pagingEndNum > maxPagesCount) {
+				pagingEndNum = maxPagesCount;
+			}
+			int endNum = pageNum * ONE_PAGE_ROWS;
+			int startNum = endNum - ONE_PAGE_ROWS + 1;
+			
+			ArrayList<MemoDTO> list = dao.getPagingList(startNum, endNum);
 			
 			request.setAttribute("list", list);
+			request.setAttribute("allRowsCount", allRowsCount);
+			request.setAttribute("pageNum", pageNum);
+			request.setAttribute("tableRowNum", tableRowNum + 1);
+			request.setAttribute("maxPagesCount", maxPagesCount);
+			request.setAttribute("pagingStartNum", pagingStartNum);
+			request.setAttribute("pagingEndNum", pagingEndNum);
 			
 			page = "/memo/list.jsp";
 			

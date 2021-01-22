@@ -46,6 +46,12 @@
 				<c:when test="${menu_gubun == 'memo_write' }">
 					<jsp:include page="../memo/write.jsp" />
 				</c:when>
+				<c:when test="${menu_gubun == 'guestbook_write' }">
+					<jsp:include page="../guestbook/write.jsp" />
+				</c:when>
+				<c:when test="${menu_gubun == 'guestbook_list' }">
+					<jsp:include page="../guestbook/list.jsp" />
+				</c:when>
 			</c:choose>
 			<!-- section -->
 		</td>

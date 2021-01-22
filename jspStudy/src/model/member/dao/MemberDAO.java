@@ -204,7 +204,7 @@ public class MemberDAO {
 		conn = getConn();
 		int allRowsCount = 0;
 		try {
-			String sql = "SELECT COUNT(*) FROM member";
+			String sql = "SELECT COUNT(*) FROM member WHERE no > 0";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -223,9 +223,11 @@ public class MemberDAO {
 		conn = getConn();
 		ArrayList<MemberDTO> list = new ArrayList<>();
 		try {
-			String sql = "";
-			String basic_sql = "SELECT * FROM member WHERE no > 0";
+			String basic_sql = ""; 
+			basic_sql += "SELECT * FROM member WHERE no > 0";	
 			basic_sql += " ORDER BY no DESC";
+			
+			String sql = "";
 			sql += "SELECT * FROM ";
 			sql += "(SELECT ROWNUM Rnum, a.* FROM ";
 			sql += "(" + basic_sql + ") a) ";

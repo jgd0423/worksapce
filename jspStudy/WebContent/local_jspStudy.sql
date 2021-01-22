@@ -38,9 +38,13 @@ SELECT * FROM memo ORDER BY no;
 
 SELECT COUNT(*) FROM member WHERE id = 'hong';
 
-SELECT * FROM (SELECT ROWNUM Rnum, a.* FROM (
-SELECT * FROM member WHERE no > 0 ORDER BY no DESC
-) a) WHERE Rnum >= 10 AND Rnum <= 20;
+SELECT * FROM 
+    (SELECT ROWNUM Rnum, a.* FROM (SELECT * FROM member WHERE no > 0 ORDER BY no DESC) a) 
+WHERE Rnum >= 10 AND Rnum <= 20;
+
+
+
+
 
 begin
 for i in 1 .. 545 loop
@@ -50,3 +54,19 @@ end loop;
 commit;
 end;
 /
+
+
+
+CREATE TABLE guestbook(
+    no NUMBER NOT NULL,
+    name VARCHAR2(50) NOT NULL,
+    email VARCHAR2(50) NOT NULL,
+    passwd VARCHAR2(50) NOT NULL,
+    content CLOB NOT NULL,
+    regiDate DATE DEFAULT SYSDATE,
+    PRIMARY KEY(no)
+);
+
+CREATE SEQUENCE seq_guestbook START WITH 1 INCREMENT BY 1 NOMAXVALUE NOCACHE;
+
+SELECT * FROM guestbook;

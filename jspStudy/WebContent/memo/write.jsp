@@ -29,7 +29,7 @@
 <script>
 
 $(document).ready(() => {
-	list();
+	list(1);
 	$("#btnSave").click(() => {
 		insert();
 	});
@@ -44,15 +44,15 @@ function insert() {
 		data: param,
 		url: "${path}/memo_servlet/writeProc.do",
 		success: () => { // 콜백함수
-			list();
+			list(1);
 			$("#writer").val("");
 			$("#content").val("");
 		}
 	});
 }
 
-function list() {
-	let param = "search_gubun=&sdata=";
+function list(pageNum) {
+	let param = "page=" + pageNum;
 	$.ajax({
 		type: "post",
 		data: param,
@@ -70,9 +70,5 @@ function list() {
 // 		document.writeForm.submit();
 // 	}
 // }
-
-function goPage() {
-	location.href = '${path}/memo_servlet/list.do';
-}
 
 </script>

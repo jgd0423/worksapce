@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import db.DbExample;
+import model.member.dto.MemberDTO;
 import model.memo.dto.MemoDTO;
 
 public class MemoDAO {
@@ -46,7 +47,7 @@ public class MemoDAO {
 		conn = getConn();
 		ArrayList<MemoDTO> arrayList = new ArrayList<>();
 		try {
-			String sql = "SELECT * FROM memo ORDER BY no ASC";
+			String sql = "SELECT * FROM memo ORDER BY no DESC";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
@@ -79,5 +80,60 @@ public class MemoDAO {
 			getConnClose(rs, pstmt, conn);
 		}
 		return result;
+	}
+	
+	public int getAllRowsCount() {
+		conn = getConn();
+		int allRowsCount = 0;
+		try {
+			String sql = "SELECT COUNT(*) FROM memo WHERE no > 0";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				allRowsCount = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return allRowsCount;
+	}
+
+	public ArrayList<MemoDTO> getPagingList(int startNum, int endNum) {
+		conn = getConn();
+		ArrayList<MemoDTO> list = new ArrayList<>();
+		try {
+			String basic_sql = ""; 
+			basic_sql += "SELECT * FROM memo WHERE no > 0";	
+			basic_sql += " ORDER BY no DESC";
+			
+			String sql = "";
+			sql += "SELECT * FROM ";
+			sql += "(SELECT ROWNUM Rnum, a.* FROM ";
+			sql += "(" + basic_sql + ") a) ";
+			sql += "WHERE Rnum >= ? AND Rnum <= ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, startNum);
+			pstmt.setInt(2, endNum);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				MemoDTO dto = new MemoDTO();
+				dto.setNo(rs.getInt("no"));
+				dto.setWriter(rs.getString("writer"));
+				dto.setContent(rs.getString("content"));
+				dto.setRegiDate(rs.getTimestamp("regiDate"));
+				list.add(dto);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return list;
 	}
 }

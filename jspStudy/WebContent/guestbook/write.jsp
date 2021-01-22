@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
 
-<form name="writeForm">
+<form action="" name="writeForm">
 	<table border="1">
 		<tr>
 			<td colspan="2"><h2>방명록 작성</h2></td>
@@ -26,8 +26,8 @@
 	<a href="#" onclick="inputInfo();">[등록하기]</a>
 </form>
 
-
 <script>
+
 function inputInfo() {
 	if (confirm("등록하시겠습니까?")) {
 		document.writeForm.method = 'post';
@@ -35,4 +35,5 @@ function inputInfo() {
 		document.writeForm.submit();		
 	}
 }
+
 </script>
