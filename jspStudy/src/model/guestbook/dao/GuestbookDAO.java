@@ -68,4 +68,61 @@ public class GuestbookDAO {
 		}
 		return arrayList;
 	}
+
+	public int getAllRowsCount() {
+		conn = getConn();
+		int allRowsCount = 0;
+		try {
+			String sql = "SELECT COUNT(*) FROM guestbook WHERE no > 0";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				allRowsCount = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return allRowsCount;
+	}
+	
+
+	public ArrayList<GuestbookDTO> getPagingList(int startNum, int endNum) {
+		conn = getConn();
+		ArrayList<GuestbookDTO> list = new ArrayList<>();
+		try {
+			String basic_sql = ""; 
+			basic_sql += "SELECT * FROM guestbook WHERE no > 0";	
+			basic_sql += " ORDER BY no DESC";
+			
+			String sql = "";
+			sql += "SELECT * FROM ";
+			sql += "(SELECT ROWNUM Rnum, a.* FROM ";
+			sql += "(" + basic_sql + ") a) ";
+			sql += "WHERE Rnum >= ? AND Rnum <= ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, startNum);
+			pstmt.setInt(2, endNum);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				GuestbookDTO dto = new GuestbookDTO();
+				dto.setNo(rs.getInt("no"));
+				dto.setName(rs.getString("name"));
+				dto.setPasswd(rs.getString("passwd"));
+				dto.setContent(rs.getString("content"));
+				dto.setRegiDate(rs.getDate("regiDate"));
+				list.add(dto);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return list;
+	}
 }

@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Main</title>
+<title>Not Quite My Tempo</title>
 </head>
 <body>
 

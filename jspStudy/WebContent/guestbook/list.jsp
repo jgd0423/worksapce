@@ -19,7 +19,7 @@
 	<button type="button" onclick="goPage('guestbook_write', '', '')">글쓰기</button>
 </form>
 
-${list.size() }개의 레코드가 있습니다.
+${allRowsCount }개의 레코드가 있습니다.
 
 <c:if test="${list.size() == 0 }">
 	<tr>
@@ -46,12 +46,49 @@ ${list.size() }개의 레코드가 있습니다.
 	</c:forEach>
 </c:if>
 
+<table>
+<tr>
+	<td colspan="7" height="50" align="center">
+		<a href="#" onclick="goPage('guestbook_list', '1', '')"><<</a>
+		<c:choose>
+			<c:when test="${pageNum - 1 <= 0 }">
+				<a href="#" onclick="goPage('guestbook_list', '${pageNum }', '')"><</a>
+			</c:when>
+			<c:otherwise>
+				<a href="#" onclick="goPage('guestbook_list', '${pageNum - 1 }', '')"><</a>
+			</c:otherwise>
+		</c:choose>
+		<c:forEach var="i" begin="${pagingStartNum }" end="${pagingEndNum }" step="1" >
+			<c:choose>
+				<c:when test="${pageNum == i }">
+					<b>[${i }]</b>
+				</c:when>
+				<c:otherwise>
+					<a href="#" onclick="goPage('guestbook_list', '${i }', '')">${i }</a>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
+		<c:choose>
+			<c:when test="${pageNum + 1 >= maxPagesCount }">
+				<a href="#" onclick="goPage('guestbook_list', '${maxPagesCount }', '')">></a>
+			</c:when>
+			<c:otherwise>
+				<a href="#" onclick="goPage('guestbook_list', '${pageNum + 1 }', '')">></a>
+			</c:otherwise>
+		</c:choose>
+		<a href="#" onclick="goPage('guestbook_list', '${maxPagesCount }', '')">>></a>
+	</td>
+</tr>
+</table>
+
 
 <script>
 
 function goPage(value1, value2, value3) {
 	if (value1 === 'guestbook_write') {
 		location.href = '${path}/guestbook_servlet/write.do';
+	} else if (value1 === 'guestbook_list') {
+		location.href = '${path}/guestbook_servlet/list.do?page=' + value2;
 	}
 }
 
