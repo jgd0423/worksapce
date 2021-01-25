@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.guestbook.dao.GuestbookDAO;
 import model.guestbook.dto.GuestbookDTO;
-import model.member.dto.MemberDTO;
 
 @WebServlet("/guestbook_servlet/*")
 public class GuestbookController extends HttpServlet {

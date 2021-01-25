@@ -32,8 +32,8 @@
 		<td id="guestbook" style="padding: 0px 20px; ${menu_name == 'guestbook' ? 'background-color: silver;' : ''}">
 			<a href="${path }/guestbook_servlet/list.do">방명록</a>
 		</td>
-		<td style="padding: 0px 20px;">
-			<a href="#">설문조사</a>
+		<td id="survey" style="padding: 0px 20px; ${menu_name == 'survey' ? 'background-color: silver;' : ''}">
+			<a href="${path }/survey_servlet/index.do">설문조사</a>
 		</td>
 		<td style="padding: 0px 20px;">
 			<a href="#">게시판</a>

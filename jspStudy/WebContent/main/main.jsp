@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Not Quite My Tempo</title>
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <body>
 
@@ -51,6 +52,9 @@
 				</c:when>
 				<c:when test="${menu_gubun == 'guestbook_list' }">
 					<jsp:include page="../guestbook/list.jsp" />
+				</c:when>
+				<c:when test="${menu_gubun == 'survey_index' }">
+					<jsp:include page="../survey/index.jsp" />
 				</c:when>
 			</c:choose>
 			<!-- section -->

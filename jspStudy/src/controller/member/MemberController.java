@@ -3,8 +3,6 @@ package controller.member;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Optional;
-import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,7 +14,6 @@ import javax.servlet.http.HttpSession;
 
 import model.member.dao.MemberDAO;
 import model.member.dto.MemberDTO;
-import oracle.net.aso.l;
 
 @WebServlet("/member_servlet/*")
 public class MemberController extends HttpServlet {
@@ -394,7 +391,5 @@ public class MemberController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 		}
-		
-		
 	}
 }

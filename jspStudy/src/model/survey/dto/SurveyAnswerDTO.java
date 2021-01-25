@@ -1,0 +1,45 @@
+package model.survey.dto;
+
+public class SurveyAnswerDTO {
+	// Fields
+	private int answer_no;
+	private int no;
+	private int answer;
+	private int regi_date;
+	
+	// Constructor
+	public SurveyAnswerDTO() {}
+	
+	// Getters and Setters
+	public int getAnswer_no() {
+		return answer_no;
+	}
+
+	public void setAnswer_no(int answer_no) {
+		this.answer_no = answer_no;
+	}
+
+	public int getNo() {
+		return no;
+	}
+
+	public void setNo(int no) {
+		this.no = no;
+	}
+
+	public int getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(int answer) {
+		this.answer = answer;
+	}
+
+	public int getRegi_date() {
+		return regi_date;
+	}
+
+	public void setRegi_date(int regi_date) {
+		this.regi_date = regi_date;
+	}
+}
