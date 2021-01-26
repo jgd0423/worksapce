@@ -100,3 +100,20 @@ CREATE TABLE survey_answer (
 CREATE SEQUENCE seq_survey_answer START WITH 1 INCREMENT BY 1 NOMAXVALUE NOCACHE;
 
 SELECT * FROM survey ORDER BY no;
+
+SELECT * FROM survey_answer ORDER BY no;
+
+DESC survey_answer;
+
+
+SELECT * FROM survey WHERE no > 0 AND CURRENT_TIMESTAMP > last_date;
+
+SELECT * FROM survey WHERE no > 0 AND (CURRENT_TIMESTAMP BETWEEN start_date AND last_date);
+
+
+SELECT t1.*, (SELECT COUNT(*) FROM survey_answer t2 WHERE t2.no = t1.no) survey_counter FROM survey t1 WHERE no > 0;
+
+
+
+SELECT COUNT(*) FROM survey WHERE no > 0 AND (CURRENT_TIMESTAMP BETWEEN start_date AND last_date) AND question LIKE '%f%';
+

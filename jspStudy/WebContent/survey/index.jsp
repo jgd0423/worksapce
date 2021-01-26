@@ -20,7 +20,6 @@ search_date_end : <span id="span_search_date_end">${search_date_end }</span><br 
 	<script>
 		$(document).ready(() => {
 			goList();
-			// goWrite();
 		});
 	</script>
 </c:if>
@@ -47,7 +46,7 @@ function goWriteProc() {
 			data: $("#writeForm").serialize(),
 			url: "${path}/survey_servlet/writeProc.do",
 			success: () => {
-				choosePage('1');
+				choosePageAndGoList(1);
 			}
 		});
 	}
@@ -57,8 +56,9 @@ function goList() {
 	let param = {
 			"list_gubun": $("#span_list_gubun").text(),
 			"pageNumber": $("#span_pageNumber").text(),
-			"search_option": $("span_search_option").text(),
+			"search_option": $("#span_search_option").text(),
 			"search_data": $("#span_search_data").text(),
+			"search_date_check": $("#span_search_date_check").text(),
 			"search_date_start": $("#span_search_date_start").text(),
 			"search_date_end": $("#span_search_date_end").text()
 	};
@@ -69,16 +69,22 @@ function goList() {
 		url: "${path}/survey_servlet/list.do",
 		success: (result) => {
 			$("#result").html(result);
-// 			if ($("#span_search_date_check").text() === "0") {
-// 				$("input[id=search_date_check]:checkbox").prop("checked", true);
-// 			} else {
-// 				$("input[id=search_date_check]:checkbox").prop("checked", false);
-// 			}
+			if ($("#span_search_date_check").text() === "O") {
+				$("input[id=search_date_check]:checkbox").prop("checked", true);
+			} else {
+				$("input[id=search_date_check]:checkbox").prop("checked", false);
+			}
 		}
 	});
 }
 
-function choosePage(pageNum) {
+function chooseListTypeAndGoList(gubun) {
+	$("#span_list_gubun").text(gubun);
+	$("#span_pageNumber").text(1);
+	goList();
+}
+
+function choosePageAndGoList(pageNum) {
 	$("#span_pageNumber").text(pageNum);
 	goList();
 }

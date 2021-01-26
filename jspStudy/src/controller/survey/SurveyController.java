@@ -32,22 +32,45 @@ public class SurveyController extends HttpServlet {
 		String path = request.getContextPath();
 		String url = request.getRequestURL().toString();
 		String page = "/main/main.jsp";
-		
 		Util util = new Util();
-		int[] yearMonthDay = util.getDateTime();
+		
+		int[] yearMonthDayHourMinSec = util.getDateTime();
 		HashMap<String, Integer> yearMonthDayMap = new HashMap<>();
-		yearMonthDayMap.put("nowYear", yearMonthDay[0]);
-		yearMonthDayMap.put("nowMonth", yearMonthDay[1]);
-		yearMonthDayMap.put("nowDay", yearMonthDay[2]);
-		request.setAttribute("yearMonthDayMap", yearMonthDayMap);
+		yearMonthDayMap.put("nowYear", yearMonthDayHourMinSec[0]);
+		yearMonthDayMap.put("nowMonth", yearMonthDayHourMinSec[1]);
+		yearMonthDayMap.put("nowDay", yearMonthDayHourMinSec[2]);
 		
 		String pageNum_ = request.getParameter("pageNumber");
 		int pageNum = util.numberCheck(pageNum_, 1);
-		request.setAttribute("pageNum", pageNum);
 		
 		String no_ = request.getParameter("no");
 		int no = util.numberCheck(no_, 0);
+		
+		String list_gubun = request.getParameter("list_gubun");
+		list_gubun = util.list_gubunCheck(list_gubun);
+		
+		String search_option = request.getParameter("search_option");
+		String search_data = request.getParameter("search_data");
+		String search_date_check = request.getParameter("search_date_check");
+		String search_date_start = request.getParameter("search_date_start");
+		String search_date_end = request.getParameter("search_date_end");
+		
+		String[] searchArray = util.searchCheck(search_option, search_data, search_date_start, search_date_end, search_date_check);
+		search_option = searchArray[0];
+		search_data = searchArray[1];
+		search_date_start = searchArray[2];
+		search_date_end = searchArray[3];
+		search_date_check = searchArray[4];
+		
+		request.setAttribute("yearMonthDayMap", yearMonthDayMap);
+		request.setAttribute("pageNum", pageNum);
 		request.setAttribute("no", no);
+		request.setAttribute("list_gubun", list_gubun);
+		request.setAttribute("search_option", search_option);
+		request.setAttribute("search_data", search_data);
+		request.setAttribute("search_date_start", search_date_start);
+		request.setAttribute("search_date_end", search_date_end);
+		request.setAttribute("search_date_check", search_date_check);
 		
 		if (url.indexOf("index.do") != -1) {
 			request.setAttribute("menu_gubun", "survey_index");
@@ -96,24 +119,18 @@ public class SurveyController extends HttpServlet {
 			
 			SurveyDAO dao = new SurveyDAO();
 			String writeProcTemp;
-			int result = dao.setInsertQuestion(dto);
+			dao.setInsertQuestion(dto);
 			writeProcTemp = path + "/survey/list.jsp";
 			response.sendRedirect(writeProcTemp);
+			
 			
 		} else if (url.indexOf("list.do") != -1) {
 			SurveyDAO dao = new SurveyDAO();
 			
-			String list_gubun = request.getParameter("list_gubun");
-			String search_option = request.getParameter("search_option");
-			String search_data = request.getParameter("search_data");
-			String search_date_start = request.getParameter("search_date_start");
-			String search_date_end = request.getParameter("search_date_end");
-			
 			// paging
 			final int ONE_PAGE_ROWS = 10;
 			final int MAX_PAGING_WIDTH = 10;
-//			int allRowsCount = dao.getAllRowsCount(list_gubun, search_option, search_data, search_date_start, search_date_end);
-			int allRowsCount = dao.getAllRowsCount();
+			int allRowsCount = dao.getAllRowsCount(list_gubun, search_option, search_data, search_date_start, search_date_end, search_date_check, search_date_check);
 			int maxPagesCount = (int) Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);
 			int tableRowNum = allRowsCount - (pageNum - 1) * ONE_PAGE_ROWS;
 			int pagingLoopNum = (int) Math.ceil((double)pageNum / MAX_PAGING_WIDTH) - 1;
@@ -125,13 +142,11 @@ public class SurveyController extends HttpServlet {
 			int endNum = pageNum * ONE_PAGE_ROWS;
 			int startNum = endNum - ONE_PAGE_ROWS + 1;
 			
-//			ArrayList<SurveyDTO> list = dao.getPagingList(startNum, endNum, list_gubun, search_option, search_data, search_date_start, search_date_end);
-			ArrayList<SurveyDTO> list = dao.getPagingList(startNum, endNum);
+			ArrayList<SurveyDTO> list = dao.getPagingList(startNum, endNum, list_gubun, search_option, search_data, search_date_start, search_date_end, search_date_check);
 			
 			request.setAttribute("menu_gubun", "member_list");
 			request.setAttribute("list", list);
 			request.setAttribute("allRowsCount", allRowsCount);
-			request.setAttribute("pageNum", pageNum);
 			request.setAttribute("tableRowNum", tableRowNum + 1);
 			request.setAttribute("maxPagesCount", maxPagesCount);
 			request.setAttribute("pagingStartNum", pagingStartNum);

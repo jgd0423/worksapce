@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import db.DbExample;
-import model.member.dto.MemberDTO;
 import model.survey.dto.SurveyDTO;
 
 public class SurveyDAO {
@@ -58,12 +57,46 @@ public class SurveyDAO {
 		return result;
 	}
 
-	public int getAllRowsCount() {
+	public int getAllRowsCount(String list_gubun, String search_option, String search_data, String search_date_start, String search_date_end, String search_date_check, String search_date_check2) {
 		conn = getConn();
 		int allRowsCount = 0;
 		try {
-			String sql = "SELECT COUNT(*) FROM survey WHERE no > 0";
+			if (search_date_start.length() > 0 && search_date_end.length() > 0) {
+				search_date_start = search_date_start + " 00:00:00.0";
+				search_date_end = search_date_end + " 23:59:59.999999";
+				// java.sql.Timestamp start_date = java.sql.Timestamp.valueOf(search_date_start);
+				// java.sql.Timestamp last_date = java.sql.Timestamp.valueOf(search_date_end);
+			}
+			
+			String sql = "SELECT COUNT(*) FROM " + tableName01 + " WHERE no > 0 ";
+			if (list_gubun.equals("ing")) {
+				sql += "AND (CURRENT_TIMESTAMP BETWEEN start_date AND last_date) ";
+			} else if (list_gubun.equals("end")) {
+				sql += "AND CURRENT_TIMESTAMP > last_date ";
+			}
+			
+			if (search_option.length() > 0 && search_data.length() > 0) {
+				sql += "AND " + search_option + " LIKE ? ";
+			}
+			
+
+			if (search_date_start.length() > 0 && search_date_end.length() > 0 && search_date_check.equals("O")) {
+				sql += "AND (start_date >= TO_TIMESTAMP(?) AND last_date <= TO_TIMESTAMP(?)) ";
+			}
+			
+			int pstmtNum = 0;
 			pstmt = conn.prepareStatement(sql);
+			
+			if (search_option.length() > 0 && search_data.length() > 0) {
+				pstmt.setString(++pstmtNum, "%" + search_data + "%");
+			}
+			
+
+			if (search_date_start.length() > 0 && search_date_end.length() > 0 && search_date_check.equals("O")) {
+				pstmt.setString(++pstmtNum, search_date_start);
+				pstmt.setString(++pstmtNum, search_date_end);
+			}
+			
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				allRowsCount = rs.getInt(1);
@@ -77,13 +110,31 @@ public class SurveyDAO {
 		return allRowsCount;
 	}
 
-	public ArrayList<SurveyDTO> getPagingList(int startNum, int endNum) {
+	public ArrayList<SurveyDTO> getPagingList(int startNum, int endNum, String list_gubun, String search_option, String search_data, String search_date_start, String search_date_end, String search_date_check) {
 		conn = getConn();
 		ArrayList<SurveyDTO> list = new ArrayList<>();
 		try {
-			String basic_sql = ""; 
-			basic_sql += "SELECT * FROM survey WHERE no > 0";	
-			basic_sql += " ORDER BY no DESC";
+			String basic_sql = "";
+			basic_sql += "SELECT t1.*, ";
+			basic_sql += "(SELECT COUNT(*) FROM " + tableName02 + " t2 WHERE t2.no = t1.no) survey_counter ";
+			basic_sql += "FROM " + tableName01 + " t1 WHERE no > 0 ";
+			
+			if (list_gubun.equals("ing")) {
+				basic_sql += "AND (CURRENT_TIMESTAMP BETWEEN start_date AND last_date) ";
+			} else if (list_gubun.equals("end")) {
+				basic_sql += "AND CURRENT_TIMESTAMP > last_date ";
+			}
+			
+			if (search_option.length() > 0 && search_data.length() > 0) {
+				basic_sql += "AND " + search_option + " LIKE ? ";
+			}
+			
+
+			if (search_date_start.length() > 0 && search_date_end.length() > 0 && search_date_check.equals("O")) {
+				basic_sql += "AND (start_date >= TO_TIMESTAMP(?) AND last_date <= TO_TIMESTAMP(?)) ";
+			}				
+
+			basic_sql += "ORDER BY no DESC";
 			
 			String sql = "";
 			sql += "SELECT * FROM ";
@@ -91,9 +142,22 @@ public class SurveyDAO {
 			sql += "(" + basic_sql + ") a) ";
 			sql += "WHERE Rnum >= ? AND Rnum <= ?";
 			
+			int pstmtNum = 0;
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, startNum);
-			pstmt.setInt(2, endNum);
+			
+			if (search_option.length() > 0 && search_data.length() > 0) {
+				pstmt.setString(++pstmtNum, "%" + search_data + "%");
+			}
+			
+
+			if (search_date_start.length() > 0 && search_date_end.length() > 0 && search_date_check.equals("O")) {
+				pstmt.setString(++pstmtNum, search_date_start);
+				pstmt.setString(++pstmtNum, search_date_end);
+			}				
+
+			pstmt.setInt(++pstmtNum, startNum);
+			pstmt.setInt(++pstmtNum, endNum);
+			
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				SurveyDTO dto = new SurveyDTO();
@@ -107,6 +171,7 @@ public class SurveyDAO {
 				dto.setStart_date(rs.getTimestamp("start_date"));
 				dto.setLast_date(rs.getTimestamp("last_date"));
 				dto.setRegi_date(rs.getTimestamp("regi_date"));
+				dto.setSurvey_counter(rs.getInt("survey_counter"));
 				list.add(dto);
 			}
 			
