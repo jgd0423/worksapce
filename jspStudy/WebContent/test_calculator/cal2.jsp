@@ -69,6 +69,7 @@ function resetCalc() {
 	preCalcStr = '';
 	showingNum = '';
 	$('#showingSpace').text('');
+	isCalculating = false;
 }
 
 function doCalc() {
