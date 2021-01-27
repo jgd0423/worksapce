@@ -28,8 +28,7 @@ span {
 </head>
 <body>
 
-showingSpace: <span id="showingSpace"></span><br>
-<!-- tempSpace: <span id="tempSpace"></span> -->
+<span id="showingSpace"></span><br>
 
 <table border="1" height="400px" id="calcTable">
 	<tr align=center>
@@ -61,6 +60,7 @@ showingSpace: <span id="showingSpace"></span><br>
 </body>
 
 <script>
+
 let preCalcStr = '';
 let showingNum = '';
 let isCalculating = false;
