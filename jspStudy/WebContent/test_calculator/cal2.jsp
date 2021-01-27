@@ -24,12 +24,12 @@ span {
 .colorOn {
 	background-color: #088A85;
 }
-</STYLE>
+</style>
 </head>
 <body>
 
-<span id="showingSpace"></span>
-<span id="calcSpace" style="display: none"></span>
+showingSpace: <span id="showingSpace"></span><br>
+<!-- tempSpace: <span id="tempSpace"></span> -->
 
 <table border="1" height="400px" id="calcTable">
 	<tr align=center>
@@ -61,44 +61,46 @@ span {
 </body>
 
 <script>
-let preCalcStr = "";
-let showingNum = "";
+let preCalcStr = '';
+let showingNum = '';
+let isCalculating = false;
 
 function resetCalc() {
-	preCalcStr = "";
-	showingNum = "";
-	$("#showingSpace").text('');
-	$("#calcSpace").text('');
+	preCalcStr = '';
+	showingNum = '';
+	$('#showingSpace').text('');
 }
 
 function doCalc() {
 	calcDoneNum = eval(preCalcStr);
-	$("#showingSpace").text(calcDoneNum);
-	$("#calcSpace").text('');
 	preCalcStr = calcDoneNum;
-	showingNum = '';
+	showingNum = calcDoneNum;
+	$('#showingSpace').text(calcDoneNum);
+	isCalculating = false;
 }
 
 function getSymbol(symbol) {
-	$("#showingSpace").text(showingNum);
+	isCalculating = true;
+	$('#showingSpace').text(showingNum);
 	preCalcStr += symbol;
-	$("#calcSpace").text(preCalcStr);
-	showingNum = "";
+	showingNum = '';
 }
 
-function getNumber(num) {
-// 	if ($("#calcSpace").text() === '' && preCalcStr !== '') {
-// 		preCalcStr = '';
-// 	}
+function getNumber(num) {	
+	if (isCalculating === false) {
+		resetCalc();
+		isCalculating = true;
+	}
+	
 	if (preCalcStr.length !== 0 || num !== '0') {
 		showingNum += num;
 		preCalcStr += num;
 	}
 	
-	$("#showingSpace").text(showingNum);
+	$('#showingSpace').text(showingNum);
 }
 
-const calcTable = document.querySelector("#calcTable");
+const calcTable = document.querySelector('#calcTable');
 
 function showColor(e) {
   if (e.target.className === 'color') {
