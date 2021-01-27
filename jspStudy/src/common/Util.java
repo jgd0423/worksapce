@@ -73,17 +73,27 @@ public class Util {
 			search_data = "";
 		}
 		
-		if (search_date_start == null || search_date_start.trim().equals("")) {
+		if (search_date_check == null || search_date_check.trim().equals("")) {
+			search_date_check = "";
+		}
+		
+		if (search_date_check.equals("O")) {
+			if (search_date_start == null || search_date_start.trim().equals("")) {
+				search_date_start = "";
+			}
+			search_date_start = search_date_start.trim();
+			
+			if (search_date_end == null || search_date_end.trim().equals("")) {
+				search_date_end = "";
+			}
+			search_date_end = search_date_end.trim();
+			
+			if (search_date_start.equals("") || search_date_end.equals("")) {
+				search_date_check = "";
+			}
+		} else {
 			search_date_start = "";
-		}
-		search_date_start = search_date_start.trim();
-		
-		if (search_date_end == null || search_date_end.trim().equals("")) {
 			search_date_end = "";
-		}
-		search_date_end = search_date_end.trim();
-		
-		if (search_date_start.equals("") || search_date_end.equals("")) {
 			search_date_check = "";
 		}
 		

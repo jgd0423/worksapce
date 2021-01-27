@@ -30,7 +30,7 @@ ${allRowsCount }개의 레코드가 있습니다.
 			<input type="date" id="search_date_start" value="${search_date_start }" />
 			~
 			<input type="date" id="search_date_end" value="${search_date_end }" />
-			<input type="checkbox" id="search_date_check" value="O" /><span style="color: blue; font-size: 9px;">(날짜 검색시 체크)</span>
+			<input type="checkbox" id="search_date_check" value="O" onclick="checkboxChk()" /><span style="color: blue; font-size: 9px;">(날짜 검색시 체크)</span>
 			&nbsp;
 			<input type="button" value="검색" onclick="search();" />		
 		</td>
@@ -110,12 +110,20 @@ function search() {
 	$("#span_search_date_start").text($("#search_date_start").val());
 	$("#span_search_date_end").text($("#search_date_end").val());
 	
-	if ($("#search_date_check").is(":checked") === true) {
+	choosePageAndGoList(1);
+}
+
+function checkboxChk() {
+	if ($("input:checkbox[id=search_date_check]").is(":checked") === true) {
 		$("#span_search_date_check").text($("#search_date_check").val());
+		$("#span_search_date_start").text($("#search_date_start").val());
+		$("#span_search_date_end").text($("#search_date_end").val());
 	} else {
 		$("#span_search_date_check").text("");
+		$("#span_search_date_start").text("");
+		$("#span_search_date_end").text("");
+		$("#search_date_start").val("");
+		$("#search_date_end").val("");
 	}
-	
-	choosePageAndGoList(1);
 }
 </script>

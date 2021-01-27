@@ -90,7 +90,6 @@ public class SurveyDAO {
 			if (search_option.length() > 0 && search_data.length() > 0) {
 				pstmt.setString(++pstmtNum, "%" + search_data + "%");
 			}
-			
 
 			if (search_date_start.length() > 0 && search_date_end.length() > 0 && search_date_check.equals("O")) {
 				pstmt.setString(++pstmtNum, search_date_start);
@@ -101,6 +100,7 @@ public class SurveyDAO {
 			if (rs.next()) {
 				allRowsCount = rs.getInt(1);
 			}
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
