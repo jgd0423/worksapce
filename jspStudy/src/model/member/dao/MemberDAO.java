@@ -5,9 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import db.Db;
 import db.DbExample;
-import db.DbImplOracle;
 import model.member.dto.MemberDTO;
 
 public class MemberDAO {

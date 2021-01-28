@@ -1,11 +1,13 @@
 package model.survey.dto;
 
+import java.sql.Timestamp;
+
 public class SurveyAnswerDTO {
 	// Fields
 	private int answer_no;
 	private int no;
 	private int answer;
-	private int regi_date;
+	private Timestamp regi_date;
 	
 	// Constructor
 	public SurveyAnswerDTO() {}
@@ -35,11 +37,11 @@ public class SurveyAnswerDTO {
 		this.answer = answer;
 	}
 
-	public int getRegi_date() {
+	public Timestamp getRegi_date() {
 		return regi_date;
 	}
 
-	public void setRegi_date(int regi_date) {
+	public void setRegi_date(Timestamp regi_date) {
 		this.regi_date = regi_date;
 	}
 }

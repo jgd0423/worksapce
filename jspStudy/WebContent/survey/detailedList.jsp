@@ -2,12 +2,15 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
 
-${allRowsCount }개의 레코드가 있습니다.
+${allRowsCount }개의 레코드가 있습니다.<br>
 
-<table border="1" align="center" width="80%">
+span_list_size : <span id="span_list_size" style="display: ;">${tableRowNum }</span><br>
+span_answer_total : <span id="span_answer_total" style="display: ;"></span>
+
+<table>
 	<tr>
 		<td colspan="5" align="center">
-			<h2>설문조사 목록</h2>
+			<h2>상세 설문조사 목록</h2>
 		</td>
 	</tr>
 	<tr>
@@ -32,16 +35,11 @@ ${allRowsCount }개의 레코드가 있습니다.
 			<input type="date" id="search_date_end" value="${search_date_end }" />
 			<input type="checkbox" id="search_date_check" value="O" onclick="checkboxChk()" /><span style="color: blue; font-size: 9px;">(날짜 검색시 체크)</span>
 			&nbsp;
-			<input type="button" value="검색" onclick="search();" />		
+			<input type="button" value="검색" onclick="search()" />		
 		</td>
 	</tr>
-	<tr>
-		<td>순번</td>
-		<td>질문</td>
-		<td>기간</td>
-		<td>참여수</td>
-		<td>상태</td>
-	</tr>
+</table>
+<table>
 	<c:if test="${list.size() == 0 }">
 		<tr>
 			<td colspan="5" height="200" align="center">
@@ -51,16 +49,44 @@ ${allRowsCount }개의 레코드가 있습니다.
 	</c:if>
 	<c:if test="${list.size() > 0 }">
 		<c:forEach var="dto" items="${list }">
-			<tr>
-				<td>${tableRowNum }</td>
-				<td><a href="#" onclick="goView('${dto.no }')">${dto.question }</a></td>
-				<td>${dto.start_date }<br>${dto.last_date }</td>
-				<td>${dto.survey_counter }</td>
-				<td>${dto.status }</td>
-			</tr>
+			<a named="a_${tableRowNum }"></a>
+			q_${tableRowNum } : <span id="q_${tableRowNum}">${dto.no }</span><br>
+			span_answer_${tableRowNum } : <span id="span_answer_${tableRowNum }" style="display: ;"></span><br>
+			<table border="1" width="100%">
+				<tr>
+					<td>Q) ${dto.question }</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="#a_${tableRowNum }" onclick="checkDetailedListAnswer('${tableRowNum }', '1')"><font style="font-family:'MS Gothic'"><span id="mun1_${tableRowNum }">①</span></font></a>
+						<a href="#a_${tableRowNum }" onclick="checkDetailedListAnswer('${tableRowNum }', '1')">${dto.ans1 }</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="#a_${tableRowNum }" onclick="checkDetailedListAnswer('${tableRowNum }', '2')"><font style="font-family:'MS Gothic'"><span id="mun2_${tableRowNum }">②</span></font></a>
+						<a href="#a_${tableRowNum }" onclick="checkDetailedListAnswer('${tableRowNum }', '2')">${dto.ans2 }</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="#a_${tableRowNum }" onclick="checkDetailedListAnswer('${tableRowNum }', '3')"><font style="font-family:'MS Gothic'"><span id="mun3_${tableRowNum }">③</span></font></a>
+						<a href="#a_${tableRowNum }" onclick="checkDetailedListAnswer('${tableRowNum }', '3')">${dto.ans3 }</a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="#a_${tableRowNum }" onclick="checkDetailedListAnswer('${tableRowNum }', '4')"><font style="font-family:'MS Gothic'"><span id="mun4_${tableRowNum }">④</span></font></a>
+						<a href="#a_${tableRowNum }" onclick="checkDetailedListAnswer('${tableRowNum }', '4')">${dto.ans4 }</a>
+					</td>
+				</tr>
+			</table>
+			<br>
 			<c:set var="tableRowNum" value="${tableRowNum = tableRowNum - 1 }"/>
 		</c:forEach>
 	</c:if>
+</table>
+<table>
 	<tr>
 		<td colspan="5" height="50" align="center">
 			<a href="#" onclick="choosePageAndGoList(1)"><<</a>
@@ -93,73 +119,15 @@ ${allRowsCount }개의 레코드가 있습니다.
 			<a href="#" onclick="choosePageAndGoList(${maxPagesCount })">>></a>
 		</td>
 	</tr>
+</table>
+<table>
 	<tr>
 		<td colspan="5" align="right">
 			<button type="button" onclick="chooseListTypeAndGoList('all')">전체 질문목록</button>&nbsp;
 			<button type="button" onclick="chooseListTypeAndGoList('ing')">진행중인 설문목록</button>&nbsp;
 			<button type="button" onclick="chooseListTypeAndGoList('end')">종료된 설문목록</button>&nbsp;
 			<button type="button" onclick="goWrite()">등록하기</button>&nbsp;
-			<button type="button" onclick="goDetailedList()">문제풀이</button>&nbsp;
+			<button type="button" onclick="goSaveProc()">답안저장하기</button>&nbsp;
 		</td>
 	</tr>
 </table>
-<br>
-
-<script>
-function search() {
-	$("#span_search_option").text($("#search_option").val());
-	$("#span_search_data").text($("#search_data").val());
-	$("#span_search_date_start").text($("#search_date_start").val());
-	$("#span_search_date_end").text($("#search_date_end").val());
-	
-	choosePageAndGoList(1);
-}
-
-function checkboxChk() {
-	if ($("input:checkbox[id=search_date_check]").is(":checked") === true) {
-		$("#span_search_date_check").text($("#search_date_check").val());
-		$("#span_search_date_start").text($("#search_date_start").val());
-		$("#span_search_date_end").text($("#search_date_end").val());
-	} else {
-		$("#span_search_date_check").text("");
-		$("#span_search_date_start").text("");
-		$("#span_search_date_end").text("");
-		$("#search_date_start").val("");
-		$("#search_date_end").val("");
-	}
-}
-
-function goView(no) {
-	$("#span_no").text(no);
-	let param = {
-			"no": $("#span_no").text()
-	};
-	
-	$.ajax({
-		type: "post",
-		data: param,
-		url: "${path}/survey_servlet/view.do",
-		success: (result) => {
-			$("#result").html(result);
-		}
-	});
-}
-
-function goViewProc() {
-	let param = {
-			"no": $("#span_no").text(),
-			"answer": $("#span_answer").text()
-	};
-	
-	$.ajax({
-		type: "post",
-		data: param,
-		url: "${path}/survey_servlet/viewProc.do",
-		success: (data) => {
-			goList();
-		}
-	});
-}
-
-
-</script>

@@ -24,11 +24,12 @@ ${allRowsCount }개의 레코드가 있습니다.
 	<c:if test="${list.size() > 0 }">
 		<c:forEach var="dto" items="${list }">
 			<tr>
-				<td>${tableRowNum = tableRowNum - 1 }</td>
+				<td>${tableRowNum }</td>
 				<td>${dto.writer }</td>
 				<td>${dto.content }</td>
 				<td>${dto.regiDate }<button type="button" onclick="deleteInfo('${dto.no}', '${pageNum }')" >삭제</button></td>
 			</tr>
+			<c:set var="tableRowNum" value="${tableRowNum = tableRowNum - 1 }"/>
 		</c:forEach>
 	</c:if>
 	<tr>

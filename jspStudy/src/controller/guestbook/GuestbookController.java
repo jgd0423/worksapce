@@ -92,7 +92,7 @@ public class GuestbookController extends HttpServlet {
 			request.setAttribute("list", list);
 			request.setAttribute("allRowsCount", allRowsCount);
 			request.setAttribute("pageNum", pageNum);
-			request.setAttribute("tableRowNum", tableRowNum + 1);
+			request.setAttribute("tableRowNum", tableRowNum);
 			request.setAttribute("maxPagesCount", maxPagesCount);
 			request.setAttribute("pagingStartNum", pagingStartNum);
 			request.setAttribute("pagingEndNum", pagingEndNum);

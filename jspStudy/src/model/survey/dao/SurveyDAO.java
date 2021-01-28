@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import db.DbExample;
+import model.survey.dto.SurveyAnswerDTO;
 import model.survey.dto.SurveyDTO;
 
 public class SurveyDAO {
@@ -182,5 +183,107 @@ public class SurveyDAO {
 		}
 		
 		return list;
+	}
+	
+	public SurveyDTO getSelectOne(int no) {
+		conn = getConn();
+		SurveyDTO dto = new SurveyDTO();
+		try {
+			String sql = "SELECT * FROM survey WHERE no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				dto.setNo(rs.getInt("no"));
+				dto.setQuestion(rs.getString("question"));
+				dto.setAns1(rs.getString("ans1"));
+				dto.setAns2(rs.getString("ans2"));
+				dto.setAns3(rs.getString("ans3"));
+				dto.setAns4(rs.getString("ans4"));
+				dto.setStatus(rs.getString("status"));
+				dto.setStart_date(rs.getTimestamp("start_date"));
+				dto.setLast_date(rs.getTimestamp("last_date"));
+				dto.setRegi_date(rs.getTimestamp("regi_date"));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		return dto;
+	}
+
+	public int setInsertAnswer(SurveyAnswerDTO dto) {
+		conn = getConn();
+		int result = 0;
+		try {
+			String sql = "INSERT INTO " + tableName02
+					+ " VALUES (seq_survey_answer.NEXTVAL, "
+					+ "?, ?, CURRENT_TIMESTAMP)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getNo());
+			pstmt.setInt(2, dto.getAnswer());
+			
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		return result;
+	}
+
+	public SurveyAnswerDTO getSelectOneResult(int no) {
+		conn = getConn();
+		SurveyAnswerDTO dto = new SurveyAnswerDTO();
+		try {
+			String sql = "SELECT * FROM survey_answer WHERE no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				dto.setAnswer_no(rs.getInt("no"));
+				dto.setNo(rs.getInt("no"));
+				dto.setAnswer(rs.getInt("answer"));
+				dto.setRegi_date(rs.getTimestamp("regi_date"));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		return dto;
+	}
+	
+	public ArrayList<Integer> getSurveyNoAnswers(int no) {
+		getConn();
+		ArrayList<Integer> answerList = new ArrayList<>();
+		try {
+			String sql = "SELECT no, "
+					+ "(SELECT COUNT(answer) FROM survey_answer WHERE no = ? AND answer = '1') count_of_1, "
+					+ "(SELECT COUNT(answer) FROM survey_answer WHERE no = ? AND answer = '2') count_of_2, "
+					+ "(SELECT COUNT(answer) FROM survey_answer WHERE no = ? AND answer = '3') count_of_3, "
+					+ "(SELECT COUNT(answer) FROM survey_answer WHERE no = ? AND answer = '4') count_of_4 "
+					+ "FROM survey_answer WHERE no = ? GROUP BY no";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			pstmt.setInt(2, no);
+			pstmt.setInt(3, no);
+			pstmt.setInt(4, no);
+			pstmt.setInt(5, no);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				answerList.add(rs.getInt("count_of_1"));
+				answerList.add(rs.getInt("count_of_2"));
+				answerList.add(rs.getInt("count_of_3"));
+				answerList.add(rs.getInt("count_of_4"));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return answerList;
 	}
 }

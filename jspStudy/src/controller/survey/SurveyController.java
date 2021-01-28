@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import common.Util;
 import model.survey.dao.SurveyDAO;
+import model.survey.dto.SurveyAnswerDTO;
 import model.survey.dto.SurveyDTO;
 
 @WebServlet("/survey_servlet/*")
@@ -124,11 +125,18 @@ public class SurveyController extends HttpServlet {
 			response.sendRedirect(writeProcTemp);
 			
 			
-		} else if (url.indexOf("list.do") != -1) {
+		} else if (url.indexOf("list.do") != -1 || url.indexOf("detailedList.do") != -1) {
+			
+			if (url.indexOf("list.do") != -1) {
+				page = "/survey/list.jsp";
+			} else {
+				page = "/survey/detailedList.jsp";
+			}
+			
 			SurveyDAO dao = new SurveyDAO();
 			
 			// paging
-			final int ONE_PAGE_ROWS = 10;
+			final int ONE_PAGE_ROWS = 5;
 			final int MAX_PAGING_WIDTH = 10;
 			int allRowsCount = dao.getAllRowsCount(list_gubun, search_option, search_data, search_date_start, search_date_end, search_date_check, search_date_check);
 			int maxPagesCount = (int) Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);
@@ -147,12 +155,53 @@ public class SurveyController extends HttpServlet {
 			request.setAttribute("menu_gubun", "member_list");
 			request.setAttribute("list", list);
 			request.setAttribute("allRowsCount", allRowsCount);
-			request.setAttribute("tableRowNum", tableRowNum + 1);
+			request.setAttribute("tableRowNum", tableRowNum);
 			request.setAttribute("maxPagesCount", maxPagesCount);
 			request.setAttribute("pagingStartNum", pagingStartNum);
 			request.setAttribute("pagingEndNum", pagingEndNum);
 			
-			page = "/survey/list.jsp";
+//			page = "/survey/list.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("view.do") != -1) {
+			SurveyDAO dao = new SurveyDAO();
+			SurveyDTO dto = dao.getSelectOne(no);
+			
+			request.setAttribute("dto", dto);
+			
+			page = "/survey/view.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("viewProc.do") != -1) {
+			SurveyDAO dao = new SurveyDAO();
+			SurveyAnswerDTO dto = new SurveyAnswerDTO();
+			
+			String answer_ = request.getParameter("answer");
+			int answer = Integer.parseInt(answer_);
+			
+			dto.setNo(no);
+			dto.setAnswer(answer);
+			
+			dao.setInsertAnswer(dto);
+			
+			page = "/survey_servlet/index.do";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("result.do") != -1) {
+			SurveyDAO dao = new SurveyDAO();
+			SurveyAnswerDTO dto = dao.getSelectOneResult(no);
+			ArrayList<Integer> surveyNoAnswers = dao.getSurveyNoAnswers(no);
+			
+			request.setAttribute("dto", dto);
+			request.setAttribute("surveyNoAnswer", surveyNoAnswers);
+			
+			page = "/survey/result.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 		}

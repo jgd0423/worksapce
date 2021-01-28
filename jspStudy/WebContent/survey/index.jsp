@@ -78,6 +78,51 @@ function goList() {
 	});
 }
 
+function goDetailedList() {
+	let param = {};
+	$.ajax({
+		type: "post",
+		data: param,
+		url: "${path}/survey_servlet/detailedList.do",
+		success: (data) => {
+			$("#result").html(data);
+		}
+	});
+}
+
+function goSaveProc() {
+	if (confirm('저장하시겠습니까?')) {
+		let param = {
+				"answer_total": $("#span_answer_total").text()
+		}
+		
+		$ajax({
+			type: "post",
+			data: param,
+			url: "${path}/survey_servlet/saveProc.do",
+			success: () => {
+				choosePageAndGoList(1);
+			}
+		});
+	}
+}
+
+
+// function goResult() {
+// 	let param = {
+// 			"no": $("#span_no").text()
+// 	}
+	
+// 	$.ajax({
+// 		type: "post",
+// 		data: param,
+// 		url: "${path}/survey_servlet/result.do",
+// 		success: (data) => {
+// 			goList();
+// 		}
+// 	});
+// }
+
 function chooseListTypeAndGoList(gubun) {
 	$("#span_list_gubun").text(gubun);
 	$("#span_pageNumber").text(1);
@@ -87,6 +132,74 @@ function chooseListTypeAndGoList(gubun) {
 function choosePageAndGoList(pageNum) {
 	$("#span_pageNumber").text(pageNum);
 	goList();
+}
+
+function check_answer(answer) {
+	$("#span_answer").text(answer);
+	if (answer === '1') {
+		$("#mun1").text('❶');
+		$("#mun2").text('②');
+		$("#mun3").text('③');
+		$("#mun4").text('④');
+	} else if (answer === '2') {
+		$("#mun1").text('①');
+		$("#mun2").text('❷');
+		$("#mun3").text('③');
+		$("#mun4").text('④');
+	} else if (answer === '3') {
+		$("#mun1").text('①');
+		$("#mun2").text('②');
+		$("#mun3").text('❸');
+		$("#mun4").text('④');
+	} else if (answer === '4') {
+		$("#mun1").text('①');
+		$("#mun2").text('②');
+		$("#mun3").text('③');
+		$("#mun4").text('❹');
+	}
+}
+
+function checkDetailedListAnswer(tableRowNum, answer) {
+	$("#span_answer_" + tableRowNum).text(answer);
+	
+	if (answer === '1') {
+		$("#mun1_" + tableRowNum).text('❶');
+		$("#mun2_" + tableRowNum).text('②');
+		$("#mun3_" + tableRowNum).text('③');
+		$("#mun4_" + tableRowNum).text('④');
+	} else if (answer === '2') {
+		$("#mun1_" + tableRowNum).text('①');
+		$("#mun2_" + tableRowNum).text('❷');
+		$("#mun3_" + tableRowNum).text('③');
+		$("#mun4_" + tableRowNum).text('④');
+	} else if (answer === '3') {
+		$("#mun1_" + tableRowNum).text('①');
+		$("#mun2_" + tableRowNum).text('②');
+		$("#mun3_" + tableRowNum).text('❸');
+		$("#mun4_" + tableRowNum).text('④');
+	} else if (answer === '4') {
+		$("#mun1_" + tableRowNum).text('①');
+		$("#mun2_" + tableRowNum).text('②');
+		$("#mun3_" + tableRowNum).text('③');
+		$("#mun4_" + tableRowNum).text('❹');
+	}
+	
+	let counter = parseInt($("#span_list_size").text());
+	let msg = "";
+	for (i = counter; i > 0; i--) {
+		q_no = $("#q_" + i).text();
+		answer = $("#span_answer_" + i).text();
+		
+		if (answer.length > 0) {
+			if (msg === '') {
+				msg = q_no + ":" + answer;
+			} else {
+				msg = msg + "|" + q_no + ":" + answer;
+			}
+		}
+	}
+	
+	$("#span_answer_total").text(msg);
 }
 
 

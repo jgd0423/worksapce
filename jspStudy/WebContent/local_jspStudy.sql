@@ -117,3 +117,16 @@ SELECT t1.*, (SELECT COUNT(*) FROM survey_answer t2 WHERE t2.no = t1.no) survey_
 
 SELECT COUNT(*) FROM survey WHERE no > 0 AND (CURRENT_TIMESTAMP BETWEEN start_date AND last_date) AND question LIKE '%f%';
 
+
+
+SELECT * FROM survey_answer WHERE no = 15 ORDER BY answer_no;
+
+SELECT survey.*,(SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = survey.no) survey_counter FROM survey ORDER BY no DESC;
+
+
+SELECT no, 
+(SELECT COUNT(answer) FROM survey_answer WHERE no = 15 AND answer = '1') count_of_1, 
+(SELECT COUNT(answer) FROM survey_answer WHERE no = 15 AND answer = '2') count_of_2, 
+(SELECT COUNT(answer) FROM survey_answer WHERE no = 15 AND answer = '3') count_of_3, 
+(SELECT COUNT(answer) FROM survey_answer WHERE no = 15 AND answer = '4') count_of_4 
+FROM survey_answer WHERE no = 15 GROUP BY no;
