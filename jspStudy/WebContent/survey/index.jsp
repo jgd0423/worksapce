@@ -96,7 +96,7 @@ function goSaveProc() {
 				"answer_total": $("#span_answer_total").text()
 		}
 		
-		$ajax({
+		$.ajax({
 			type: "post",
 			data: param,
 			url: "${path}/survey_servlet/saveProc.do",

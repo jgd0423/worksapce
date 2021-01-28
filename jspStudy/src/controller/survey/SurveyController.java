@@ -158,9 +158,8 @@ public class SurveyController extends HttpServlet {
 			request.setAttribute("tableRowNum", tableRowNum);
 			request.setAttribute("maxPagesCount", maxPagesCount);
 			request.setAttribute("pagingStartNum", pagingStartNum);
-			request.setAttribute("pagingEndNum", pagingEndNum);
+			request.setAttribute("pagingEndNum", pagingEndNum);			
 			
-//			page = "/survey/list.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
