@@ -30,6 +30,7 @@ ${allRowsCount }개의 레코드가 있습니다.
 			<input type="date" id="search_date_start" value="${search_date_start }" />
 			~
 			<input type="date" id="search_date_end" value="${search_date_end }" />
+			<br>
 			<input type="checkbox" id="search_date_check" value="O" onclick="checkboxChk()" /><span style="color: blue; font-size: 9px;">(날짜 검색시 체크)</span>
 			&nbsp;
 			<input type="button" value="검색" onclick="search();" />		

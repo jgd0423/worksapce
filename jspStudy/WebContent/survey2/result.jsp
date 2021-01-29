@@ -33,6 +33,3 @@
 		</c:forEach>
 	</tr>
 </table>
-<br>
-<br>
-<button type="button" onclick="goList()">목록으로</button>

@@ -56,6 +56,21 @@
 				<c:when test="${menu_gubun == 'survey_index' }">
 					<jsp:include page="../survey/index.jsp" />
 				</c:when>
+				<c:when test="${menu_gubun == 'survey2_list' }">
+					<jsp:include page="../survey2/list.jsp" />
+				</c:when>
+				<c:when test="${menu_gubun == 'survey2_write' }">
+					<jsp:include page="../survey2/write.jsp" />
+				</c:when>
+				<c:when test="${menu_gubun == 'survey2_view' }">
+					<jsp:include page="../survey2/view.jsp" />
+				</c:when>
+				<c:when test="${menu_gubun == 'survey2_result' }">
+					<jsp:include page="../survey2/result.jsp" />
+				</c:when>
+				<c:when test="${menu_gubun == 'survey2_detailedList' }">
+					<jsp:include page="../survey2/detailedList.jsp" />
+				</c:when>
 			</c:choose>
 			<!-- section -->
 		</td>

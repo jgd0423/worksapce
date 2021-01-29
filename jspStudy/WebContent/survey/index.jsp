@@ -108,20 +108,20 @@ function goSaveProc() {
 }
 
 
-// function goResult() {
-// 	let param = {
-// 			"no": $("#span_no").text()
-// 	}
+function goResult() {
+	let param = {
+			"no": $("#span_no").text()
+	}
 	
-// 	$.ajax({
-// 		type: "post",
-// 		data: param,
-// 		url: "${path}/survey_servlet/result.do",
-// 		success: (data) => {
-// 			goList();
-// 		}
-// 	});
-// }
+	$.ajax({
+		type: "post",
+		data: param,
+		url: "${path}/survey_servlet/result.do",
+		success: (result) => {
+			$("#result").html(result);
+		}
+	});
+}
 
 function chooseListTypeAndGoList(gubun) {
 	$("#span_list_gubun").text(gubun);

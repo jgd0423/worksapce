@@ -138,7 +138,7 @@ public class SurveyController extends HttpServlet {
 			// paging
 			final int ONE_PAGE_ROWS = 5;
 			final int MAX_PAGING_WIDTH = 10;
-			int allRowsCount = dao.getAllRowsCount(list_gubun, search_option, search_data, search_date_start, search_date_end, search_date_check, search_date_check);
+			int allRowsCount = dao.getAllRowsCount(list_gubun, search_option, search_data, search_date_start, search_date_end, search_date_check);
 			int maxPagesCount = (int) Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);
 			int tableRowNum = allRowsCount - (pageNum - 1) * ONE_PAGE_ROWS;
 			int pagingLoopNum = (int) Math.ceil((double)pageNum / MAX_PAGING_WIDTH) - 1;
@@ -194,15 +194,46 @@ public class SurveyController extends HttpServlet {
 			
 		} else if (url.indexOf("result.do") != -1) {
 			SurveyDAO dao = new SurveyDAO();
-			SurveyAnswerDTO dto = dao.getSelectOneResult(no);
+			SurveyDTO dto = dao.getSelectOne(no);
 			ArrayList<Integer> surveyNoAnswers = dao.getSurveyNoAnswers(no);
+			int totalAnswerCount = 0;
+			for (int i = 0; i < surveyNoAnswers.size(); i++) {
+				totalAnswerCount += surveyNoAnswers.get(i);
+			}
+			
+			ArrayList<String> answersResponseRate = new ArrayList<>();
+			
+			for (int i = 0; i < surveyNoAnswers.size(); i++) {
+				String responseRate = String.format("%.2f", (double)surveyNoAnswers.get(i) / totalAnswerCount * 100);
+				answersResponseRate.add(responseRate);
+			}
 			
 			request.setAttribute("dto", dto);
-			request.setAttribute("surveyNoAnswer", surveyNoAnswers);
+			request.setAttribute("surveyNoAnswers", surveyNoAnswers);
+			request.setAttribute("answersResponseRate", answersResponseRate);
 			
 			page = "/survey/result.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("saveProc.do") != -1) {
+			SurveyDAO dao = new SurveyDAO();
+			
+			String answer_total = request.getParameter("answer_total");
+			String[] answer_totalArr = answer_total.split("[|]");
+			
+			for (int i = 0; i < answer_totalArr.length; i++) {
+				String[] imsiArr = answer_totalArr[i].split(":");
+				int tempNo = Integer.parseInt(imsiArr[0]);
+				int tempAnswer = Integer.parseInt(imsiArr[1]);
+				
+				SurveyAnswerDTO answerDto = new SurveyAnswerDTO();
+				answerDto.setNo(tempNo);
+				answerDto.setAnswer(tempAnswer);
+				
+				dao.setInsertAnswer(answerDto);
+			}	
 		}
 	}
 }
