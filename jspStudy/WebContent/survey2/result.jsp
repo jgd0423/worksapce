@@ -33,3 +33,15 @@
 		</c:forEach>
 	</tr>
 </table>
+<br>
+<br>
+<button type="button" onclick="goList()">목록으로</button>
+
+
+<script>
+
+function goList() {
+	location.href = '${path}/survey2_servlet/list.do';
+}
+
+</script>
