@@ -240,7 +240,11 @@ public class Survey2DAO {
 		try {
 			String sql = "SELECT * FROM "
 					+ "(SELECT survey.no, "
-					+ "(SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = survey.no) total_answers, 1, 2, 3, 4 "
+					+ "(SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = survey.no) total_answers, "
+					+ "v_responses_by_question.count_of_1, "
+					+ "v_responses_by_question.count_of_2, "
+					+ "v_responses_by_question.count_of_3, "
+					+ "v_responses_by_question.count_of_4 "
 					+ "FROM survey, v_responses_by_question "
 					+ "WHERE survey.no = v_responses_by_question.no(+)) response_result "
 					+ "WHERE response_result.no = ?";
@@ -249,10 +253,10 @@ public class Survey2DAO {
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				responseResult[0] = rs.getInt("total_answers");
-				responseResult[1] = rs.getInt("1");
-				responseResult[2] = rs.getInt("2");
-				responseResult[3] = rs.getInt("3");
-				responseResult[4] = rs.getInt("4");
+				responseResult[1] = rs.getInt("count_of_1");
+				responseResult[2] = rs.getInt("count_of_2");
+				responseResult[3] = rs.getInt("count_of_3");
+				responseResult[4] = rs.getInt("count_of_4");
 			}
 		} catch(Exception e) {
 			e.printStackTrace();

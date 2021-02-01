@@ -198,17 +198,18 @@ public class Survey2Controller extends HttpServlet {
 				surveyNoAnswers[i - 1] = responseResult[i];
 			}
 
-			ArrayList<String> answersResponseRate = new ArrayList<>();
+			String[] answersResponseRate = new String[4];
 			
 			for (int i = 0; i < surveyNoAnswers.length; i++) {
 				String responseRate = String.format("%.2f", (double)surveyNoAnswers[i] / totalAnswerCount * 100);
-				answersResponseRate.add(responseRate);
+				answersResponseRate[i] = responseRate;
 			}
 			
 			request.setAttribute("dto", dto);
 			request.setAttribute("menu_gubun", "survey2_result");
 			request.setAttribute("surveyNoAnswers", surveyNoAnswers);
 			request.setAttribute("answersResponseRate", answersResponseRate);
+			request.setAttribute("sizeOfArray", 3);
 			
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
