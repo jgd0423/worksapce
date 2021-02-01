@@ -1,4 +1,4 @@
-package survey2.dao;
+package model.survey2.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import db.DbExample;
-import survey2.dto.Survey2AnswerDTO;
-import survey2.dto.Survey2DTO;
+import model.survey2.dto.Survey2AnswerDTO;
+import model.survey2.dto.Survey2DTO;
 
 public class Survey2DAO {
 	// Field
@@ -234,28 +234,25 @@ public class Survey2DAO {
 		return result;
 	}
 	
-	public ArrayList<Integer> getSurveyNoAnswers(int no) {
+	public int[] getResponseResult(int no) {
 		getConn();
-		ArrayList<Integer> answerList = new ArrayList<>();
+		int[] responseResult = new int[5];
 		try {
-			String sql = "SELECT no, "
-					+ "(SELECT COUNT(answer) FROM survey_answer WHERE no = ? AND answer = '1') count_of_1, "
-					+ "(SELECT COUNT(answer) FROM survey_answer WHERE no = ? AND answer = '2') count_of_2, "
-					+ "(SELECT COUNT(answer) FROM survey_answer WHERE no = ? AND answer = '3') count_of_3, "
-					+ "(SELECT COUNT(answer) FROM survey_answer WHERE no = ? AND answer = '4') count_of_4 "
-					+ "FROM survey_answer WHERE no = ? GROUP BY no";
+			String sql = "SELECT * FROM "
+					+ "(SELECT survey.no, "
+					+ "(SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = survey.no) total_answers, 1, 2, 3, 4 "
+					+ "FROM survey, v_responses_by_question "
+					+ "WHERE survey.no = v_responses_by_question.no(+)) response_result "
+					+ "WHERE response_result.no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, no);
-			pstmt.setInt(2, no);
-			pstmt.setInt(3, no);
-			pstmt.setInt(4, no);
-			pstmt.setInt(5, no);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				answerList.add(rs.getInt("count_of_1"));
-				answerList.add(rs.getInt("count_of_2"));
-				answerList.add(rs.getInt("count_of_3"));
-				answerList.add(rs.getInt("count_of_4"));
+				responseResult[0] = rs.getInt("total_answers");
+				responseResult[1] = rs.getInt("1");
+				responseResult[2] = rs.getInt("2");
+				responseResult[3] = rs.getInt("3");
+				responseResult[4] = rs.getInt("4");
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -263,6 +260,6 @@ public class Survey2DAO {
 			getConnClose(rs, pstmt, conn);
 		}
 		
-		return answerList;
+		return responseResult;
 	}
 }

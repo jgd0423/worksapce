@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import common.Util;
-import survey2.dao.Survey2DAO;
-import survey2.dto.Survey2AnswerDTO;
-import survey2.dto.Survey2DTO;
+import model.survey2.dao.Survey2DAO;
+import model.survey2.dto.Survey2AnswerDTO;
+import model.survey2.dto.Survey2DTO;
 
 @WebServlet("/survey2_servlet/*")
 public class Survey2Controller extends HttpServlet {
@@ -190,16 +190,18 @@ public class Survey2Controller extends HttpServlet {
 			
 			Survey2DAO dao = new Survey2DAO();
 			Survey2DTO dto = dao.getSelectOne(no);
-			ArrayList<Integer> surveyNoAnswers = dao.getSurveyNoAnswers(no);
-			int totalAnswerCount = 0;
-			for (int i = 0; i < surveyNoAnswers.size(); i++) {
-				totalAnswerCount += surveyNoAnswers.get(i);
-			}
+			int[] responseResult = dao.getResponseResult(no);
+			int totalAnswerCount = responseResult[0];
+			int[] surveyNoAnswers = new int[4];
 			
+			for (int i = 1; i < responseResult.length; i++) {
+				surveyNoAnswers[i - 1] = responseResult[i];
+			}
+
 			ArrayList<String> answersResponseRate = new ArrayList<>();
 			
-			for (int i = 0; i < surveyNoAnswers.size(); i++) {
-				String responseRate = String.format("%.2f", (double)surveyNoAnswers.get(i) / totalAnswerCount * 100);
+			for (int i = 0; i < surveyNoAnswers.length; i++) {
+				String responseRate = String.format("%.2f", (double)surveyNoAnswers[i] / totalAnswerCount * 100);
 				answersResponseRate.add(responseRate);
 			}
 			

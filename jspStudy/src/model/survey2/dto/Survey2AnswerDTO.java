@@ -1,4 +1,4 @@
-package survey2.dto;
+package model.survey2.dto;
 
 import java.sql.Timestamp;
 

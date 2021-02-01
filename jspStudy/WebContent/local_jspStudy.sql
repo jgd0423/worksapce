@@ -123,7 +123,7 @@ SELECT * FROM survey_answer WHERE no = 15 ORDER BY answer_no;
 
 SELECT survey.*, (SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = survey.no) survey_counter FROM survey ORDER BY no DESC;
 
-SELECT survey.*, (SELECT COUNT(*) FROM survey_answer WHERE survey.no = no) survey_counter FROM survey ORDER BY no DESC;
+SELECT survey.*, (SELECT COUNT(*) FROM survey_answer WHERE no = survey.no) survey_counter FROM survey ORDER BY no DESC;
 
 SELECT * FROM survey;
 SELECT * FROM survey_answer;
@@ -143,11 +143,7 @@ SELECT no,
 FROM survey_answer WHERE no = 15 GROUP BY no;
 
 
-CREATE OR REPLACE VIEW v_ansCount AS
-SELECT * FROM (SELECT answer, no FROM survey_answer)
-PIVOT(COUNT(*) FOR answer IN (1 AS ans1c, 2 AS ans2c, 3 AS ans3c ,4 AS ans4c));
-
-SELECT * FROM v_ansCount ORDER BY no;
+SELECT * FROM v_total_answers ORDER BY no;
 
 SELECT * FROM survey_answer;
 
@@ -184,4 +180,14 @@ PIVOT (COUNT(*) FOR answer IN (1, 2, 3, 4)) WHERE no = 16;
 
 
 select (select count(*) from survey_answer where a.no=no) survey_counter, b.ans1c, b.ans2c, b.ans3c, b.ans4c from survey a, v_ansCount b where a.no=b.no;
+
+CREATE OR REPLACE VIEW v_total_answers AS
+SELECT * FROM (SELECT answer, no FROM survey_answer)
+PIVOT(COUNT(*) FOR answer IN (1, 2, 3, 4));
+
+SELECT * FROM v_total_answers;
+
+SELECT * FROM survey_answer;
+
+SELECT (SELECT COUNT(*) FROM survey)
 
