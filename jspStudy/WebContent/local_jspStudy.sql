@@ -181,13 +181,15 @@ PIVOT (COUNT(*) FOR answer IN (1, 2, 3, 4)) WHERE no = 16;
 
 select (select count(*) from survey_answer where a.no=no) survey_counter, b.ans1c, b.ans2c, b.ans3c, b.ans4c from survey a, v_ansCount b where a.no=b.no;
 
-CREATE OR REPLACE VIEW v_total_answers AS
+CREATE OR REPLACE VIEW v_responses_by_question AS
 SELECT * FROM (SELECT answer, no FROM survey_answer)
-PIVOT(COUNT(*) FOR answer IN (1, 2, 3, 4));
+PIVOT(COUNT(*) FOR answer IN (1 AS count_of_1, 2 AS count_of_2, 3 AS count_of_3, 4 AS count_of_4));
 
-SELECT * FROM v_total_answers;
-
+SELECT * FROM v_responses_by_question;
+SELECT * FROM survey;
 SELECT * FROM survey_answer;
+SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = 1;
 
-SELECT (SELECT COUNT(*) FROM survey)
+SELECT * FROM (SELECT survey.no, (SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = survey.no) total_answers, v_responses_by_question.count_of_1, v_responses_by_question.count_of_2, v_responses_by_question.count_of_3, v_responses_by_question.count_of_4 FROM survey, v_responses_by_question WHERE survey.no = v_responses_by_question.no(+)) response_result WHERE response_result.no = 5;
+
 
