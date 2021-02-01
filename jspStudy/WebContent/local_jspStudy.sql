@@ -121,7 +121,18 @@ SELECT COUNT(*) FROM survey WHERE no > 0 AND (CURRENT_TIMESTAMP BETWEEN start_da
 
 SELECT * FROM survey_answer WHERE no = 15 ORDER BY answer_no;
 
-SELECT survey.*,(SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = survey.no) survey_counter FROM survey ORDER BY no DESC;
+SELECT survey.*, (SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = survey.no) survey_counter FROM survey ORDER BY no DESC;
+
+SELECT survey.*, (SELECT COUNT(*) FROM survey_answer WHERE survey.no = no) survey_counter FROM survey ORDER BY no DESC;
+
+SELECT * FROM survey;
+SELECT * FROM survey_answer;
+
+SELECT no, (SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = survey.no) survey_counter FROM survey ORDER BY no DESC;
+
+SELECT no FROM survey ORDER BY no DESC;
+
+SELECT no, (SELECT COUNT(*) FROM survey_answer WHERE survey.no = no) survey_counter FROM survey ORDER BY no DESC;
 
 
 SELECT no, 
@@ -130,3 +141,47 @@ SELECT no,
 (SELECT COUNT(answer) FROM survey_answer WHERE no = 15 AND answer = '3') count_of_3, 
 (SELECT COUNT(answer) FROM survey_answer WHERE no = 15 AND answer = '4') count_of_4 
 FROM survey_answer WHERE no = 15 GROUP BY no;
+
+
+CREATE OR REPLACE VIEW v_ansCount AS
+SELECT * FROM (SELECT answer, no FROM survey_answer)
+PIVOT(COUNT(*) FOR answer IN (1 AS ans1c, 2 AS ans2c, 3 AS ans3c ,4 AS ans4c));
+
+SELECT * FROM v_ansCount ORDER BY no;
+
+SELECT * FROM survey_answer;
+
+SELECT no, answer FROM survey_answer;
+
+SELECT * FROM (SELECT no, answer FROM survey_answer)
+PIVOT(COUNT(*) FOR answer IN (1 AS ans1c, 2 AS ans2c, 3 AS ans3c ,4 AS ans4c));
+
+
+select a.*, (select count(*) from survey_answer where a.no=no) survey_counter, b.ans1c, b.ans2c, b.ans3c, b.ans4c from survey a, v_ansCount b where a.no=b.no;
+
+select count(*) from survey_answer where no = 16;
+
+select 
+    survey.*, 
+    (select count(*) from survey_answer where survey.no = no) survey_counter, 
+    v_ansCount.ans1c, 
+    v_ansCount.ans2c, 
+    v_ansCount.ans3c, 
+    v_ansCount.ans4c 
+from 
+    survey, 
+    v_ansCount 
+where 
+    survey.no = v_ansCount.no(+);
+
+select rownum rn, tb.* from (select a.no, a.question, a.ans1, a.ans2, a.ans3, a.ans4, a.status, a.start_date, a.last_date, a.regi_date, (select count(*) from survey_answer where a.no=no) survey_counter, b.ans1c, b.ans2c, b.ans3c, b.ans4c from survey a, v_ansCount b where a.no=b.no(+)) tb;
+
+
+SELECT no, answer FROM survey_answer;
+
+SELECT * FROM (SELECT no, answer FROM survey_answer)
+PIVOT (COUNT(*) FOR answer IN (1, 2, 3, 4)) WHERE no = 16;
+
+
+select (select count(*) from survey_answer where a.no=no) survey_counter, b.ans1c, b.ans2c, b.ans3c, b.ans4c from survey a, v_ansCount b where a.no=b.no;
+

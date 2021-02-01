@@ -77,6 +77,7 @@ function json01Proc() {
 		datatype: 'JSON',
 		url: 'json02.jsp',
 		success: (data) => {
+			console.log(data);
 			$('#result_json').text(data);
 			
 			let json_sj = JSON.parse(data);
