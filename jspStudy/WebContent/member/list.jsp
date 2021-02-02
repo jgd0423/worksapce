@@ -35,7 +35,7 @@ ${allRowsCount }개의 레코드가 있습니다.
 				<td>${dto.bornYear }</td>
 				<td>${dto.regiDate }</td>
 			</tr>
-			<c:set var="tableRowNum" value="${tableRowNum = tableRowNum - 1 }"/>
+			<c:set var="tableRowNum" value="${tableRowNum - 1 }"/>
 		</c:forEach>
 	</c:if>
 	<tr>

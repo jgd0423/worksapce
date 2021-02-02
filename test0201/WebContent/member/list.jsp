@@ -1,7 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
-
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
 ${allRowsCount }개의 레코드가 있습니다.
 
 <table border="1" align="center" width="80%">
@@ -27,7 +33,7 @@ ${allRowsCount }개의 레코드가 있습니다.
 	<c:if test="${list.size() > 0 }">
 		<c:forEach var="dto" items="${list }">
 			<tr>
-				<td>${tableRowNum }</td>
+				<td>${dto.no }</td>
 				<td><a href="#" onclick="goPage('member_view', '', '${dto.no }')">${dto.id }</a></td>
 				<td>${dto.passwd }</td>
 				<td>${dto.name }</td>
@@ -35,7 +41,6 @@ ${allRowsCount }개의 레코드가 있습니다.
 				<td>${dto.bornYear }</td>
 				<td>${dto.regiDate }</td>
 			</tr>
-			<c:set var="tableRowNum" value="${tableRowNum = tableRowNum - 1 }"/>
 		</c:forEach>
 	</c:if>
 	<tr>
@@ -87,3 +92,5 @@ function goPage(value1, value2, value3) {
 }
 
 </script>
+</body>
+</html>

@@ -34,7 +34,7 @@
 <script>
 
 function save() {
-	let id = document.getElementById("use_id").value;
+	var id = document.getElementById("use_id").value;
 	
 	if (id === '') {
 		alert('다시 검색하세요.');

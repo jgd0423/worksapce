@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
 
 <form name="joinForm">
 	<table border="1" align="center" width="60%">
@@ -69,7 +76,7 @@ function id_check_win_open() {
 }
 
 function id_check() {
-	let id = $("#id").val();
+	var id = $("#id").val();
 	if (id === '') {
 		$("#label_id").html('아이디를 입력하세요.');
 		$("#label_id").css('color', 'green');
@@ -77,12 +84,12 @@ function id_check() {
 		return;
 	} 
 	
-	let param = "id=" + id;
+	var param = "id=" + id;
 	$.ajax({
 		type: "post",
 		data: param,
 		url: "${path}/member_servlet/id_check.do",
-		success: (result) => {
+		success: function (result) {
 			if (result > 0) {
 				$("#id").val('');
 				$("#label_id").html("사용할 수 없는 아이디입니다.");
@@ -154,3 +161,6 @@ function sample6_execDaumPostcode() {
 }
 
 </script>
+
+</body>
+</html>

@@ -75,7 +75,6 @@ public class MemberController extends HttpServlet {
 			MemberDTO dto = new MemberDTO();
 			dto.setId(id);
 			dto.setPasswd(passwd);
-			dto.setPasswdChk(passwdChk);
 			dto.setName(name);
 			dto.setGender(gender);
 			dto.setBornYear(bornYear);

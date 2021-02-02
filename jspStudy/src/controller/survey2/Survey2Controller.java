@@ -209,7 +209,6 @@ public class Survey2Controller extends HttpServlet {
 			request.setAttribute("menu_gubun", "survey2_result");
 			request.setAttribute("surveyNoAnswers", surveyNoAnswers);
 			request.setAttribute("answersResponseRate", answersResponseRate);
-			request.setAttribute("sizeOfArray", 3);
 			
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);

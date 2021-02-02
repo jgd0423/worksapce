@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import db.DbExample;
-import model.member.dto.MemberDTO;
 import model.memo.dto.MemoDTO;
 
 public class MemoDAO {

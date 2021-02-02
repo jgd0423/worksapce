@@ -1,7 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
-
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
 <table border="1" align="center" width="80%">
 	<tr>
 		<td colspan="2" align="center">
@@ -88,14 +94,14 @@ regiDate: <span id="json_regiDate"></span><br>
 
 <script>
 
-$(document).ready(() => {
-	$('#btnSave').click(() => {
+$(document).ready(function () {
+	$('#btnSave').click(function () {
 		json01Proc();
 	});
 });
 
 function json01Proc() {
-	let param = {
+	var param = {
 			"no": ${dto.no}
 	};
 	
@@ -104,7 +110,7 @@ function json01Proc() {
 		data: param,
 		datatype: 'JSON',
 		url: '${path}/member_servlet/json.do',
-		success: (data) => {
+		success: function (data) {
 			$('#result_json').text(data);
 			console.log(data);
 			
@@ -134,3 +140,6 @@ function goPage(value1, value2, value3) {
 
 
 </script>
+
+</body>
+</html>
