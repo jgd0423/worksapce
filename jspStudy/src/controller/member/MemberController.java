@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import common.Util;
 import model.member.dao.MemberDAO;
 import model.member.dto.MemberDTO;
 
@@ -32,6 +33,7 @@ public class MemberController extends HttpServlet {
 		String path = request.getContextPath();
 		String url = request.getRequestURL().toString();
 		String page = "/main/main.jsp";
+		Util util = new Util();
 		
 		if (url.indexOf("chuga.do") != -1) {
 			request.setAttribute("menu_gubun", "member_chuga");
@@ -145,16 +147,13 @@ public class MemberController extends HttpServlet {
 			String pageNum_ = request.getParameter("page");
 
 			// validation. charAt을 이용하거나 정규표현식을 이용해 숫자만 남기고 걸러야함
-			if (pageNum_ == null || pageNum_.trim().equals("") || pageNum_.equals("0")) {
-				pageNum_ = "1";
-			}
+			int pageNum = util.numberCheck(pageNum_, 1);
 			
 			// paging
 			final int ONE_PAGE_ROWS = 15;
 			final int MAX_PAGING_WIDTH = 15;
 			int allRowsCount = dao.getAllRowsCount();
 			int maxPagesCount = (int) Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);
-			int pageNum = Integer.parseInt(pageNum_);
 			int tableRowNum = allRowsCount - (pageNum - 1) * ONE_PAGE_ROWS;
 			int pagingLoopNum = (int) Math.ceil((double)pageNum / MAX_PAGING_WIDTH) - 1;
 			int pagingStartNum = pagingLoopNum * MAX_PAGING_WIDTH + 1;
