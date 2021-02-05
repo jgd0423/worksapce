@@ -30,7 +30,7 @@ public class BoardDAO {
 		conn = getConn();
 		int result = 0;
 		try {
-			String sql = "INSERT INTO "+ tableName01 +" VALUES (seq_board.NEXTVAL, "
+			String sql = "INSERT INTO " + tableName01 + " VALUES (seq_board.NEXTVAL, "
 					+ "?, ?, ?, ?, ?, "
 					+ "?, ?, ?, ?, ?, "
 					+ "?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
