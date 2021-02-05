@@ -161,17 +161,17 @@ public class Util {
 		return result;
 	}
 	
-	public int[] pager(int onePageRows, int maxPagingWidth, int allRowsCount, int pageNum) {
-		int maxPagesCount = (int) Math.ceil((double) allRowsCount / onePageRows);
-		int tableRowNum = allRowsCount - (pageNum - 1) * onePageRows;
-		int pagingLoopNum = (int) Math.ceil((double)pageNum / maxPagingWidth) - 1;
-		int pagingStartNum = pagingLoopNum * maxPagingWidth + 1;
-		int pagingEndNum = pagingStartNum + maxPagingWidth - 1;
+	public int[] pager(final int ONE_PAGE_ROWS, final int MAX_PAGING_WIDTH, int allRowsCount, int pageNum) {
+		int maxPagesCount = (int) Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);
+		int tableRowNum = allRowsCount - (pageNum - 1) * ONE_PAGE_ROWS;
+		int pagingLoopNum = (int) Math.ceil((double)pageNum / MAX_PAGING_WIDTH) - 1;
+		int pagingStartNum = pagingLoopNum * MAX_PAGING_WIDTH + 1;
+		int pagingEndNum = pagingStartNum + MAX_PAGING_WIDTH - 1;
 		if (pagingEndNum > maxPagesCount) {
 			pagingEndNum = maxPagesCount;
 		}
-		int endNum = pageNum * onePageRows;
-		int startNum = endNum - onePageRows + 1;
+		int endNum = pageNum * ONE_PAGE_ROWS;
+		int startNum = endNum - ONE_PAGE_ROWS + 1;
 		
 		int[] result = new int[6];
 		result[0] = tableRowNum;

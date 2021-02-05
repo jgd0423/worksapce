@@ -30,10 +30,13 @@ public class MemberController extends HttpServlet {
 	
 	protected void doProc(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		String path = request.getContextPath();
-		String url = request.getRequestURL().toString();
 		String page = "/main/main.jsp";
 		Util util = new Util();
+		
+		String[] serverInfo = util.getServerInfo(request);
+		String path = serverInfo[1];
+		String url = serverInfo[2];
+		
 		
 		if (url.indexOf("chuga.do") != -1) {
 			request.setAttribute("menu_gubun", "member_chuga");
@@ -150,19 +153,17 @@ public class MemberController extends HttpServlet {
 			int pageNum = util.numberCheck(pageNum_, 1);
 			
 			// paging
+			int allRowsCount = dao.getAllRowsCount();
 			final int ONE_PAGE_ROWS = 15;
 			final int MAX_PAGING_WIDTH = 15;
-			int allRowsCount = dao.getAllRowsCount();
-			int maxPagesCount = (int) Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);
-			int tableRowNum = allRowsCount - (pageNum - 1) * ONE_PAGE_ROWS;
-			int pagingLoopNum = (int) Math.ceil((double)pageNum / MAX_PAGING_WIDTH) - 1;
-			int pagingStartNum = pagingLoopNum * MAX_PAGING_WIDTH + 1;
-			int pagingEndNum = pagingStartNum + MAX_PAGING_WIDTH - 1;
-			if (pagingEndNum > maxPagesCount) {
-				pagingEndNum = maxPagesCount;
-			}
-			int endNum = pageNum * ONE_PAGE_ROWS;
-			int startNum = endNum - ONE_PAGE_ROWS + 1;
+			
+			int[] pagerArr = util.pager(ONE_PAGE_ROWS, MAX_PAGING_WIDTH, allRowsCount, pageNum);
+			int tableRowNum = pagerArr[0];
+			int pagingStartNum = pagerArr[1];
+			int pagingEndNum = pagerArr[2];
+			int maxPagesCount = pagerArr[3];
+			int startNum = pagerArr[4];
+			int endNum = pagerArr[5];			
 			
 			ArrayList<MemberDTO> list = dao.getPagingList(startNum, endNum);
 			
