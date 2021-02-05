@@ -192,4 +192,28 @@ SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = 1;
 
 SELECT * FROM (SELECT survey.no, (SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = survey.no) total_answers, v_responses_by_question.count_of_1, v_responses_by_question.count_of_2, v_responses_by_question.count_of_3, v_responses_by_question.count_of_4 FROM survey, v_responses_by_question WHERE survey.no = v_responses_by_question.no(+)) response_result WHERE response_result.no = 5;
 
+CREATE TABLE board(
+	no NUMBER NOT NULL,
+	num NUMBER NOT NULL,
+	tbl VARCHAR2(50) NOT NULL,
+	writer VARCHAR2(50) NOT NULL,
+	subject VARCHAR2(50) NOT NULL,
+	content CLOB NOT NULL,
+	email VARCHAR2(50) NOT NULL,
+	passwd VARCHAR2(50) NOT NULL,
+	refNo NUMBER NOT NULL,
+	stepNo NUMBER NOT NULL,
+	levelNo NUMBER NOT NULL,
+	parentNo NUMBER NOT NULL,
+	hit NUMBER NOT NULL,
+	ip VARCHAR2(50) NOT NULL,
+	memberNo NUMBER NOT NULL,
+	noticeNo NUMBER NOT NULL,
+	secretGubun VARCHAR2(1) NOT NULL CHECK (secretGubun IN ('T', 'F')),
+	regiDate DATE DEFAULT SYSDATE,
+    PRIMARY KEY(no)
+);
 
+CREATE SEQUENCE seq_board START WITH 1 INCREMENT BY 1 NOMAXVALUE NOCACHE;
+
+DESC board;
