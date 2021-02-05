@@ -1,6 +1,11 @@
 package common;
 
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 import java.util.Calendar;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 public class Util {
 	public int[] getDateTime() {
@@ -19,6 +24,7 @@ public class Util {
 		result[3] = hour;
 		result[4] = min;
 		result[5] = sec;
+		
 		return result;
 	}
 
@@ -102,6 +108,78 @@ public class Util {
 		result[2] = search_date_start;
 		result[3] = search_date_end;
 		result[4] = search_date_check;
+		
+		return result;
+	}
+
+	public String[] getServerInfo(HttpServletRequest request) throws UnknownHostException {
+		String[] result = new String[6];
+		String referer = request.getHeader("REFERER");
+		if (referer == null || referer.trim().equals("")) {
+			referer = "";
+		}
+		
+		String path = request.getContextPath();
+		String url = request.getRequestURL().toString();
+		String uri = request.getRequestURI().toString();
+		String ip = Inet4Address.getLocalHost().getHostAddress();
+		String ip6 = "";
+		
+		result[0] = referer;
+		result[1] = path;
+		result[2] = url;
+		result[3] = uri;
+		result[4] = ip;
+		result[5] = ip6;
+		
+		return result;
+	}
+	
+	public String[] sessionCheck(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		
+		int cookNo = 0;
+		if (session.getAttribute("cookNo") != null) {
+			cookNo = (Integer)session.getAttribute("cookNo");
+		}
+		
+		String cookId = "";
+		if (session.getAttribute("cookId") != null) {
+			cookId = (String)session.getAttribute("cookId");
+		}
+		
+		String cookName = "";
+		if (session.getAttribute("cookId") != null) {
+			cookName = (String)session.getAttribute("cookName");
+		}
+		
+		String[] result = new String[3];
+		result[0] = cookNo + "";
+		result[1] = cookId;
+		result[2] = cookName;
+		
+		return result;
+	}
+	
+	public int[] pager(int onePageRows, int maxPagingWidth, int allRowsCount, int pageNum) {
+		int maxPagesCount = (int) Math.ceil((double) allRowsCount / onePageRows);
+		int tableRowNum = allRowsCount - (pageNum - 1) * onePageRows;
+		int pagingLoopNum = (int) Math.ceil((double)pageNum / maxPagingWidth) - 1;
+		int pagingStartNum = pagingLoopNum * maxPagingWidth + 1;
+		int pagingEndNum = pagingStartNum + maxPagingWidth - 1;
+		if (pagingEndNum > maxPagesCount) {
+			pagingEndNum = maxPagesCount;
+		}
+		int endNum = pageNum * onePageRows;
+		int startNum = endNum - onePageRows + 1;
+		
+		int[] result = new int[6];
+		result[0] = tableRowNum;
+		result[1] = pagingStartNum;
+		result[2] = pagingEndNum;
+		result[3] = maxPagesCount;
+		result[4] = startNum;
+		result[5] = endNum;
 		
 		return result;
 	}

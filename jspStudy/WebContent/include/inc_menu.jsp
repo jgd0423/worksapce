@@ -38,8 +38,8 @@
 		<td id="survey2" style="padding: 0px 20px; ${menu_name == 'survey2' ? 'background-color: silver;' : ''}">
 			<a href="${path }/survey2_servlet/list.do">설문조사2</a>
 		</td>
-		<td style="padding: 0px 20px;">
-			<a href="#">게시판</a>
+		<td id="board" style="padding: 0px 20px; ${menu_name == 'board' ? 'background-color: silver;' : ''}">
+			<a href="${path }/board_servlet/index.do">게시판</a>
 		</td>
 		<td style="padding: 0px 20px;">
 			<a href="#">쇼핑몰</a>
