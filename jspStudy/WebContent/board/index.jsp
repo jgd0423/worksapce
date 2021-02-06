@@ -31,7 +31,7 @@ function goPage(gubun) {
 		};
 	}
 	
-	const url = "${path}/board_servlet/" + gubun + ".do";
+	const url = `${path}/board_servlet/\${gubun}.do`;
 	
 	$.ajax({
 		type: "post",
@@ -53,19 +53,27 @@ function choosePage(pageNum) {
 	goPage('list');
 }
 
+// function clickChk(gubun) {
+// 	if (gubun === 'noticeGubun') {
+// 		if ($("input:checkbox[name=noticeGubunCheckBox]").is(":checked")) {
+// 			$("#noticeGubun").val("T");
+// 		} else {
+// 			$("#noticeGubun").val("");
+// 		}
+// 	} else {
+// 		if ($("input:checkbox[name=secretGubunCheckBox]").is(":checked")) {
+// 			$("#secretGubun").val("T");
+// 		} else {
+// 			$("#secretGubun").val("");
+// 		}
+// 	}
+// }
+
 function clickChk(gubun) {
-	if (gubun === 'noticeGubun') {
-		if ($("input:checkbox[name=noticeGubunCheckBox]").is(":checked")) {
-			$("#noticeGubun").val("T");
-		} else {
-			$("#noticeGubun").val("");
-		}
+	if ($(`input:checkbox[name=\${gubun}CheckBox]`).is(":checked")) {
+		$(`#\${gubun}`).val("T");
 	} else {
-		if ($("input:checkbox[name=secretGubunCheckBox]").is(":checked")) {
-			$("#secretGubun").val("T");
-		} else {
-			$("#secretGubun").val("");
-		}
+		$(`#\${gubun}`).val("");
 	}
 }
 
