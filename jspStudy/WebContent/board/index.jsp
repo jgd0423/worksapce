@@ -17,9 +17,7 @@ $(document).ready(() => {
 
 function goPage(gubun) {
 	let param = {};
-	if (gubun === 'write') {
-		param = {};		
-	} else if (gubun === 'writeProc') {
+	if (gubun === 'writeProc') {
 		param = {
 				"writer": $("#writer").val(),
 				"email": $("#email").val(),
@@ -29,6 +27,8 @@ function goPage(gubun) {
 				"noticeGubun": $("#noticeGubun").val(),
 				"secretGubun": $("#secretGubun").val()
 		};
+	} else if (gubun === 'write') {
+		param = {};		
 	}
 	
 	const url = `${path}/board_servlet/\${gubun}.do`;
