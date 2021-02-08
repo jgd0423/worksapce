@@ -43,8 +43,8 @@ function goPage(gubun, no) {
 				"secretGubun": $("#secretGubun").val()
 		};
 	} else if (gubun === 'write') {
-		$("#span_no").text("");
 		param = {};		
+		$("#span_no").text("");
 	} else if (gubun === 'list') {
 		param = {
 				"tbl": $("#span_tbl").text(),

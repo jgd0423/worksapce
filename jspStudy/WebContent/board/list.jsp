@@ -58,7 +58,7 @@ ${allRowsCount }개의 레코드가 있습니다.
 				<td>${dto.regiDate }</td>
 				<td>${dto.hit }</td>
 				<td>${dto.ip }</td>
-				<td>${dto.num }</td>
+				<td>${dto.memberNo }</td>
 				<td>${dto.noticeNo }</td>
 				<td>${dto.secretGubun }</td>
 				<td>${dto.parentNo }</td>
