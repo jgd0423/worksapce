@@ -3,9 +3,11 @@ package model.board.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import db.DbExample;
 import model.board.dto.BoardDTO;
+import model.guestbook.dto.GuestbookDTO;
 
 public class BoardDAO {
 	// Field
@@ -25,6 +27,7 @@ public class BoardDAO {
 	public void getConnClose(ResultSet rs, PreparedStatement pstmt, Connection conn) {
 		DbExample.getConnClose(rs, pstmt, conn);
 	}
+	
 	
 	public int setInsert(BoardDTO dto) {
 		conn = getConn();
@@ -58,5 +61,120 @@ public class BoardDAO {
 			getConnClose(rs, pstmt, conn);
 		}
 		return result;
+	}
+
+	public int getMaxNum() {
+		int result = 0;
+		conn = getConn();
+		try {
+			String sql = "SELECT NVL(MAX(num), 0) FROM " + tableName01;
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		return result;
+	}
+	
+	public int getMaxRefNo() {
+		int result = 0;
+		conn = getConn();
+		try {
+			String sql = "SELECT NVL(MAX(refNo), 0) FROM " + tableName01;
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		return result;
+	}
+
+	public int getMaxNoticeNo(String tbl) {
+		int result = 0;
+		conn = getConn();
+		try {
+			String sql = "SELECT NVL(MAX(noticeNo), 0) FROM " + tableName01 + " WHERE tbl = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, tbl);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		return result;
+	}
+
+	public int getAllRowsCount() {
+		conn = getConn();
+		int allRowsCount = 0;
+		try {
+			String sql = "SELECT COUNT(*) FROM " + tableName01 + " WHERE no > 0 ";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				allRowsCount = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return allRowsCount;
+	}
+	
+	public ArrayList<BoardDTO> getPagingList(int startNum, int endNum) {
+		conn = getConn();
+		ArrayList<BoardDTO> list = new ArrayList<>();
+		try {
+			String basic_sql = ""; 
+			basic_sql += "SELECT * FROM " + tableName01 + " WHERE no > 0";	
+			basic_sql += " ORDER BY no DESC";
+			
+			String sql = "";
+			sql += "SELECT * FROM ";
+			sql += "(SELECT ROWNUM Rnum, a.* FROM ";
+			sql += "(" + basic_sql + ") a) ";
+			sql += "WHERE Rnum >= ? AND Rnum <= ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, startNum);
+			pstmt.setInt(2, endNum);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setSubject(rs.getString("subject"));
+				dto.setWriter(rs.getString("writer"));
+				dto.setRegiDate(rs.getDate("regiDate"));
+				dto.setHit(rs.getInt("hit"));
+				dto.setIp(rs.getString("ip"));
+				dto.setNum(rs.getInt("num"));
+				dto.setNoticeNo(rs.getInt("noticeNo"));
+				dto.setSecretGubun(rs.getString("secretGubun"));
+				dto.setParentNo(rs.getInt("parentNo"));
+				list.add(dto);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return list;
 	}
 }

@@ -2,23 +2,38 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
 
-<div id="result" style="border: 1px solid red; height: 500px"></div>
+menu_gubun : ${menu_gubun }<br>
+yearMonthDayMap : ${yearMonthDayMap }<br>
+ip : ${ip }<br>
+tbl : <span id="span_tbl">${tbl }</span><br>
+pageNumber : <span id="span_pageNumber">${pageNum }</span><br>
+no : <span id="span_no">${no }</span><br>
+search_option : <span id="span_search_option">${search_option }</span><br>
+search_data : <span id="span_search_data">${search_data }</span><br>
+
+<input type="text" name="a" style="display: ;" /><br><!-- ajax 테스트를 위한 것 -->
+
+<div id="result" style="height: 500px;"></div>
 
 
 <script>
 
 $(document).ready(() => {
 	<c:if test="${menu_gubun == 'board_index'}">
-		// goPage('list');
-		goPage('write');
+		goPage('list', '');
+		//goPage('write', '');
 	</c:if>
 });
 
 
-function goPage(gubun) {
+function goPage(gubun, no) {
+	const url = `${path}/board_servlet/\${gubun}.do`;
 	let param = {};
+	
 	if (gubun === 'writeProc') {
 		param = {
+				"no": $("#span_no").text(),
+				"tbl": $("#span_tbl").text(),
 				"writer": $("#writer").val(),
 				"email": $("#email").val(),
 				"passwd": $("#passwd").val(),
@@ -28,18 +43,27 @@ function goPage(gubun) {
 				"secretGubun": $("#secretGubun").val()
 		};
 	} else if (gubun === 'write') {
+		$("#span_no").text("");
 		param = {};		
+	} else if (gubun === 'list') {
+		param = {
+				"tbl": $("#span_tbl").text(),
+				"pageNumber": $("#span_pageNumber").text(),
+				"search_option": $("#span_search_option").text(),
+				"search_data": $("#span_search_data").text()
+		}
 	}
-	
-	const url = `${path}/board_servlet/\${gubun}.do`;
-	
+		
 	$.ajax({
 		type: "post",
 		data: param,
 		url: url,
 		success: (data) => {
-			if (gubun === 'writeProc') {
-				choosePage(1);
+			if (gubun === 'writeProc' || gubun === 'deleteProc') {
+				alert('aaa');
+// 				choosePage(1);
+			} else if (gubun === 'modifyProc') {
+				goPage('view', $("span_no").text());				
 			} else {
 				$("#result").html(data);			
 			}
@@ -48,9 +72,9 @@ function goPage(gubun) {
 }
 
 function choosePage(pageNum) {
-	// $("#span_pageNumber").text(pageNum);
-	// $("#span_no").text("");
-	goPage('list');
+	$("#span_pageNumber").text(pageNum);
+	$("#span_no").text("");
+	goPage('list', '');
 }
 
 // function clickChk(gubun) {

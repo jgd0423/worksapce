@@ -53,11 +53,17 @@
 <script>
 
 $(document).ready(() => {
+	$("#writer").focus();
+	
 	$("#btnWrite").click(() => {
-		if (confirm('등록하시겠습니까?')) {
-			goPage('writeProc');
-		}
-	})
+		//if (confirm('등록하시겠습니까?')) {
+			goPage('writeProc', '');
+		//}
+	});
+	
+	$("#btnList").click(() => {
+		goPage('list', '');
+	});
 });
 
 </script>
