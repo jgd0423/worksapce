@@ -60,8 +60,7 @@ function goPage(gubun, no) {
 		url: url,
 		success: (data) => {
 			if (gubun === 'writeProc' || gubun === 'deleteProc') {
-				alert('aaa');
-// 				choosePage(1);
+				choosePage(1);
 			} else if (gubun === 'modifyProc') {
 				goPage('view', $("span_no").text());				
 			} else {
