@@ -118,12 +118,34 @@ public class BoardDAO {
 		return result;
 	}
 
-	public int getAllRowsCount() {
+	public int getAllRowsCount(String tbl, String search_option, String search_data) {
 		conn = getConn();
 		int allRowsCount = 0;
 		try {
-			String sql = "SELECT COUNT(*) FROM " + tableName01 + " WHERE no > 0 ";
+			String sql = "SELECT COUNT(*) FROM " + tableName01 + " WHERE tbl = ? ";
+			
+			if (search_option.length() > 0 && search_data.length() > 0) {
+				if (search_option.equals("writer") || search_option.equals("subject") || search_option.equals("content")) {
+					sql += " AND " + search_option + " LIKE ? ";
+				} else if (search_option.equals("writer_subject_content")) {
+					sql += " and (writer LIKE ? OR subject LIKE ? OR content LIKE ?) ";
+				}
+			}
+			
+			int pstmtNum = 0;
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(++pstmtNum, tbl);
+			
+			if (search_option.length() > 0 && search_data.length() > 0) {
+				if (search_option.equals("writer") || search_option.equals("subject") || search_option.equals("content")) {
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+				} else if (search_option.equals("writer_subject_content")) {
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+				}
+			}
+			
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				allRowsCount = rs.getInt(1);
@@ -137,35 +159,68 @@ public class BoardDAO {
 		return allRowsCount;
 	}
 	
-	public ArrayList<BoardDTO> getPagingList(int startNum, int endNum) {
+	public ArrayList<BoardDTO> getPagingList(int startNum, int endNum, String tbl, String search_option, String search_data) {
 		conn = getConn();
 		ArrayList<BoardDTO> list = new ArrayList<>();
 		try {
-			String basic_sql = ""; 
-			basic_sql += "SELECT * FROM " + tableName01 + " WHERE no > 0";	
-			basic_sql += " ORDER BY no DESC";
+			String basic_sql = "";
+			basic_sql += "SELECT t1.*, ";
+			basic_sql += "(SELECT COUNT(*) FROM " + tableName01 + " t2 WHERE t2.parentNo = t1.no) child_counter ";	
+			basic_sql += "FROM " + tableName01 + " t1 WHERE tbl = ? ";
+			
+			if (search_option.length() > 0 && search_data.length() > 0) {
+				if (search_option.equals("writer") || search_option.equals("subject") || search_option.equals("content")) {
+					basic_sql += " AND " + search_option + " LIKE ? ";
+				} else if (search_option.equals("writer_subject_content")) {
+					basic_sql += " AND (writer LIKE ? OR subject LIKE ? OR content LIKE ?) ";
+				}
+			}
+			
+			basic_sql += "ORDER BY noticeNo DESC, refNo DESC, levelNo ASC";
 			
 			String sql = "";
-			sql += "SELECT * FROM ";
-			sql += "(SELECT ROWNUM Rnum, a.* FROM ";
-			sql += "(" + basic_sql + ") a) ";
+			sql += "SELECT * FROM (SELECT A.*, Rownum Rnum FROM (" + basic_sql + ") A) ";
 			sql += "WHERE Rnum >= ? AND Rnum <= ?";
 			
+			int pstmtNum = 0;
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, startNum);
-			pstmt.setInt(2, endNum);
+			pstmt.setString(++pstmtNum, tbl);
+			
+			if (search_option.length() > 0 && search_data.length() > 0) {
+				if (search_option.equals("writer") || search_option.equals("subject") || search_option.equals("content")) {
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+				} else if (search_option.equals("writer_subject_content")) {
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+				}
+			}
+			
+			pstmt.setInt(++pstmtNum, startNum);
+			pstmt.setInt(++pstmtNum, endNum);
+			
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				BoardDTO dto = new BoardDTO();
-				dto.setSubject(rs.getString("subject"));
+				dto.setNo(rs.getInt("no"));
+				dto.setNum(rs.getInt("num"));
+				dto.setTbl(rs.getString("tbl"));
 				dto.setWriter(rs.getString("writer"));
-				dto.setRegiDate(rs.getDate("regiDate"));
+				dto.setSubject(rs.getString("subject"));
+				dto.setContent(rs.getString("content"));
+				dto.setEmail(rs.getString("email"));
+				dto.setPasswd(rs.getString("passwd"));
+				dto.setRefNo(rs.getInt("refNo"));
+				dto.setStepNo(rs.getInt("stepNo"));
+				dto.setLevelNo(rs.getInt("levelNo"));
+				dto.setParentNo(rs.getInt("parentNo"));
 				dto.setHit(rs.getInt("hit"));
 				dto.setIp(rs.getString("ip"));
-				dto.setNum(rs.getInt("num"));
+				dto.setMemberNo(rs.getInt("memberNo"));
 				dto.setNoticeNo(rs.getInt("noticeNo"));
 				dto.setSecretGubun(rs.getString("secretGubun"));
-				dto.setParentNo(rs.getInt("parentNo"));
+				dto.setRegiDate(rs.getDate("regiDate"));
+				dto.setChild_counter(rs.getInt("child_counter"));
 				list.add(dto);
 			}
 			

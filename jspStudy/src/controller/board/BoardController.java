@@ -146,11 +146,9 @@ public class BoardController extends HttpServlet {
 			int result = dao.setInsert(dto);
 			
 			
-		} else if (url.indexOf("list.do") != -1) {
-			page = "/board/list.jsp";
-			
+		} else if (url.indexOf("list.do") != -1) {	
 			// paging
-			int allRowsCount = dao.getAllRowsCount();
+			int allRowsCount = dao.getAllRowsCount(tbl, search_option, search_data);
 			final int ONE_PAGE_ROWS = 10;
 			final int MAX_PAGING_WIDTH = 10;
 			
@@ -163,16 +161,24 @@ public class BoardController extends HttpServlet {
 			int endNum = pagerArr[5];
 			
 			
-			ArrayList<BoardDTO> list = dao.getPagingList(startNum, endNum);
+			ArrayList<BoardDTO> list = dao.getPagingList(startNum, endNum, tbl, search_option, search_data);
 			
 			request.setAttribute("menu_gubun", "board_list");
 			request.setAttribute("list", list);
+			
+			request.setAttribute("ONE_PAGE_ROWS", ONE_PAGE_ROWS);
+			request.setAttribute("MAX_PAGING_WIDTH", MAX_PAGING_WIDTH);
 			request.setAttribute("allRowsCount", allRowsCount);
 			request.setAttribute("tableRowNum", tableRowNum);
+			
+			request.setAttribute("pagingStartNum", pagingStartNum);
+			request.setAttribute("pagingEndNum", pagingEndNum);
+			
 			request.setAttribute("maxPagesCount", maxPagesCount);
 			request.setAttribute("pagingStartNum", pagingStartNum);
 			request.setAttribute("pagingEndNum", pagingEndNum);			
 			
+			page = "/board/list.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 		}
