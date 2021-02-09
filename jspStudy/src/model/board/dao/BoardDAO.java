@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import db.DbExample;
 import model.board.dto.BoardDTO;
-import model.guestbook.dto.GuestbookDTO;
 
 public class BoardDAO {
 	// Field

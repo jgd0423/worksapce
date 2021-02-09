@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import common.UtilBoard;
 import model.board.dao.BoardDAO;
 import model.board.dto.BoardDTO;
-import model.survey.dto.SurveyDTO;
 
 @WebServlet("/board_servlet/*")
 public class BoardController extends HttpServlet {

@@ -158,6 +158,32 @@ UNION ALL
 UNION
 (SELECT NULL, NULL, dno, dname FROM department);
 
+SELECT AVG(salary) FROM employee;
+
+SELECT MAX(salary), MIN(salary) FROM employee;
+
+SELECT AVG(salary), VARIANCE(salary), STDDEV(salary) FROM employee;
+
+SELECT COUNT(*), COUNT(COMMISSION) FROM employee;
+
+--SELECT COUNT(job) COUNT(DISTINCT job) FROM employee; 오라클에서 어케함?
+
+SELECT dno, AVG(salary) FROM employee GROUP BY dno;
+
+SELECT dno, AVG(salary) FROM employee GROUP BY dno HAVING MAX(salary) > 500;
+
+SELECT dno, job, SUM(salary) FROM employee GROUP BY dno, job;
+
+SELECT dno, job, SUM(salary) FROM employee GROUP BY ROLLUP(dno, job);
+
+SELECT dno, job, SUM(salary) FROM employee GROUP BY CUBE(dno, job);
+
+SELECT dno, job, SUM(salary) FROM employee GROUP BY GROUPING SETS(dno, job);
+
+SELECT dno, AVG(salary) FROM employee GROUP BY dno HAVING COUNT(*) > 3;
+
+SELECT COUNT(*) FROM EMPLOYEE GROUP BY dno;
+
 SELECT * FROM department;
 SELECT * FROM employee;
 SELECT * FROM salgrade;
