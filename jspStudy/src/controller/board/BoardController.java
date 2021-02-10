@@ -180,6 +180,29 @@ public class BoardController extends HttpServlet {
 			page = "/board/list.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("view.do") != -1) {
+			dao.setUpdateHit(no);
+			dto = dao.getView(no);
+			
+			String tempPage = "viewPage";
+			if (dto.getSecretGubun().equals("T")) { // 비밀글이면
+				String view_passwd = util.nullCheck(request.getParameter("view_passwd"));
+				if (dto.getPasswd().equals(view_passwd) && !dto.getPasswd().equals("")) {}
+				else {
+					tempPage = "viewPasswdPage";
+				}
+			}
+			
+			request.setAttribute("menu_gubun", "board_view");
+			request.setAttribute("dto", dto);
+			request.setAttribute("tempPage", tempPage);
+			
+			page = "/board/view.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
 		}
 	}
 

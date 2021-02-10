@@ -183,4 +183,13 @@ public class Util {
 		
 		return result;
 	}
+	
+	public String nullCheck(String str) {
+		String result = str;
+		if (result == null || result.trim().equals("")) {
+			result = "";
+		}
+		result = result.trim();
+		return result;
+	}
 }

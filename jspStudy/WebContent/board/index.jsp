@@ -52,6 +52,16 @@ function goPage(gubun, no) {
 				"search_option": $("#span_search_option").text(),
 				"search_data": $("#span_search_data").text()
 		}
+	} else if (gubun === 'view') {
+		$("#span_no").text(no);
+		param = {
+				"no": $("#span_no").text(),
+				"tbl": $("#span_tbl").text(),
+				"pageNumber": $("#span_pageNumber").text(),
+				"search_option": $("#span_search_option").text(),
+				"search_data": $("#span_search_data").text(),
+				"view_passwd": $("#view_passwd").val()
+		}
 	}
 		
 	$.ajax({
@@ -64,7 +74,7 @@ function goPage(gubun, no) {
 			} else if (gubun === 'modifyProc') {
 				goPage('view', $("span_no").text());				
 			} else {
-				$("#result").html(data);			
+				$("#result").html(data);
 			}
 		}
 	});

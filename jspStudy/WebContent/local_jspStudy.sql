@@ -221,3 +221,21 @@ DESC board;
 SELECT * FROM board;
 
 SELECT * FROM board ORDER BY noticeNo DESC;
+
+
+
+SELECT * 
+FROM 
+    (SELECT 
+        b.*, 
+        (SELECT COUNT(*) 
+        FROM board 
+        WHERE 
+            refNo = b.refNo AND stepNo = (b.stepNo + 1) AND levelNo = (b.levelNo + 1)) child_counter, 
+            LAG(no) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) preNo, 
+            LAG(subject) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) preSubject, 
+            LEAD(no) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) nxtNo, 
+            LEAD(subject) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) nxtSubject 
+        FROM board b 
+        ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) 
+WHERE no = 3;

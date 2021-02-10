@@ -231,4 +231,72 @@ public class BoardDAO {
 		
 		return list;
 	}
+
+	public void setUpdateHit(int no) {
+		conn = getConn();
+		try {
+			String sql = "UPDATE " + tableName01 + " SET hit = (hit + 1) WHERE no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public BoardDTO getView(int no) {
+		BoardDTO dto = new BoardDTO();
+		conn = getConn();
+		try {
+			String sql = "";
+			sql += "SELECT * FROM ";
+			sql += "(";
+			sql += "SELECT b.*, ";
+			sql += "(SELECT COUNT(*) FROM " + tableName01 + " WHERE refNo = b.refNo AND stepNo = (b.stepNo + 1) AND levelNo = (b.levelNo + 1)) child_counter, ";
+			sql += "LAG(no) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) preNo, ";
+			sql += "LAG(subject) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) preSubject, ";
+			sql += "LEAD(no) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) nxtNo, ";
+			sql += "LEAD(subject) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) nxtSubject ";
+			sql += "FROM " + tableName01 + " b ORDER BY noticeNo DESC, refNo DESC, levelNo ASC";
+			sql += ") WHERE no = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				dto.setNo(rs.getInt("no"));
+				dto.setNum(rs.getInt("num"));
+				dto.setTbl(rs.getString("tbl"));
+				dto.setWriter(rs.getString("writer"));
+				dto.setSubject(rs.getString("subject"));
+				dto.setContent(rs.getString("content"));
+				dto.setEmail(rs.getString("email"));
+				dto.setPasswd(rs.getString("passwd"));
+				dto.setRefNo(rs.getInt("refNo"));
+				dto.setStepNo(rs.getInt("stepNo"));
+				dto.setLevelNo(rs.getInt("levelNo"));
+				dto.setParentNo(rs.getInt("parentNo"));
+				dto.setHit(rs.getInt("hit"));
+				dto.setIp(rs.getString("ip"));
+				dto.setMemberNo(rs.getInt("memberNo"));
+				dto.setNoticeNo(rs.getInt("noticeNo"));
+				dto.setSecretGubun(rs.getString("secretGubun"));
+				dto.setRegiDate(rs.getDate("regiDate"));
+				
+				dto.setChild_counter(rs.getInt("child_counter"));
+				
+				dto.setPreNo(rs.getInt("preNo"));
+				dto.setPreSubject(rs.getString("preSubject"));
+				dto.setNxtNo(rs.getInt("nxtNo"));
+				dto.setNxtSubject(rs.getString("nxtSubject"));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		return dto;
+	}
+	
+	
 }
