@@ -43,8 +43,8 @@ function goPage(gubun, no) {
 				"secretGubun": $("#secretGubun").val()
 		};
 	} else if (gubun === 'write') {
-		param = {};		
 		$("#span_no").text("");
+		param = {};		
 	} else if (gubun === 'list') {
 		param = {
 				"tbl": $("#span_tbl").text(),
@@ -72,7 +72,7 @@ function goPage(gubun, no) {
 			if (gubun === 'writeProc' || gubun === 'deleteProc') {
 				choosePage(1);
 			} else if (gubun === 'modifyProc') {
-				goPage('view', $("span_no").text());				
+				goPage('view', $("#span_no").text());				
 			} else {
 				$("#result").html(data);
 			}

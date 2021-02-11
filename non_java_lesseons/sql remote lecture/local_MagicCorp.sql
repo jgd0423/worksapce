@@ -230,11 +230,7 @@ WHERE dno = 30;
 
 SELECT * FROM emp30;
 
-insert into emp30 VALUES (32423, 'e22', 'dfsdf', '105', sysdate, '500', '40', '20'); -- 이렇게 하면 employee 테이블에 값 들어가게 됨
-
-delete employee where eno = 32423;
-
-commit;
+INSERT INTO emp30 VALUES (32423, 'e22', 'dfsdf', '105', sysdate, '500', '40', '20'); -- 이렇게 하면 employee 테이블에 값 들어가게 됨
 
 SELECT ename FROM EMP30 WHERE salary >= 500;
 
