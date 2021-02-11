@@ -264,6 +264,7 @@ SELECT dname, AVG_SAL
 FROM S, department
 WHERE department.dno = S.dno;
 
+
 CREATE OR REPLACE PROCEDURE emp_pro
 AS
     v_ename employee.ename%type;
@@ -278,6 +279,7 @@ END;
 
 SET SERVEROUTPUT ON;
 EXEC emp_pro;
+
 
 CREATE OR REPLACE PROCEDURE emp_pro_para
 (
@@ -298,6 +300,7 @@ END;
 SET SERVEROUTPUT ON;
 EXEC emp_pro_para(102);
 
+
 CREATE OR REPLACE PROCEDURE emp_out_put_para
 (
     did IN NUMBER,
@@ -315,6 +318,7 @@ PRINT avg_sal;
 
 SELECT MAX(salary) FROM employee WHERE dno = 30;
 
+
 CREATE OR REPLACE FUNCTION max_sal
 (
     param IN NUMBER
@@ -327,6 +331,8 @@ BEGIN
 END;
 
 SELECT * FROM employee WHERE salary = max_sal(30);
+
+
 
 
 
