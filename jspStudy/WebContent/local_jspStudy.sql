@@ -190,7 +190,20 @@ SELECT * FROM survey;
 SELECT * FROM survey_answer;
 SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = 1;
 
-SELECT * FROM (SELECT survey.no, (SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = survey.no) total_answers, v_responses_by_question.count_of_1, v_responses_by_question.count_of_2, v_responses_by_question.count_of_3, v_responses_by_question.count_of_4 FROM survey, v_responses_by_question WHERE survey.no = v_responses_by_question.no(+)) response_result WHERE response_result.no = 5;
+SELECT * 
+FROM 
+    (SELECT 
+        survey.no, 
+        (SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = survey.no) total_answers, 
+        v_responses_by_question.count_of_1, 
+        v_responses_by_question.count_of_2, 
+        v_responses_by_question.count_of_3, 
+        v_responses_by_question.count_of_4 
+    FROM 
+        survey, 
+        v_responses_by_question 
+    WHERE survey.no = v_responses_by_question.no(+)) response_result 
+WHERE response_result.no = 5;
 
 CREATE TABLE board(
 	no NUMBER NOT NULL,
@@ -230,12 +243,13 @@ FROM
         b.*, 
         (SELECT COUNT(*) 
         FROM board 
-        WHERE 
-            refNo = b.refNo AND stepNo = (b.stepNo + 1) AND levelNo = (b.levelNo + 1)) child_counter, 
-            LAG(no) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) preNo, 
-            LAG(subject) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) preSubject, 
-            LEAD(no) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) nxtNo, 
-            LEAD(subject) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) nxtSubject 
-        FROM board b 
-        ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) 
+        WHERE refNo = b.refNo AND stepNo = (b.stepNo + 1) AND levelNo = (b.levelNo + 1)) child_counter, 
+        LAG(no) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) preNo, 
+        LAG(subject) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) preSubject, 
+        LEAD(no) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) nxtNo, 
+        LEAD(subject) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) nxtSubject 
+    FROM board b 
+    ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) 
 WHERE no = 3;
+
+SELECT COUNT(*) FROM board b WHERE refNo = b.refNo AND stepNo = (b.stepNo + 1) AND levelNo = (b.levelNo + 1);
