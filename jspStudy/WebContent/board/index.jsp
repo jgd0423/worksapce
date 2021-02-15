@@ -35,15 +35,15 @@ function goPage(gubun, no) {
 			param = {};		
 	} else if (gubun === 'writeProc') {
 		param = {
-			"no": $("#span_no").text(),
-			"tbl": $("#span_tbl").text(),
-			"writer": $("#writer").val(),
-			"email": $("#email").val(),
-			"passwd": $("#passwd").val(),
-			"subject": $("#subject").val(),
-			"content": $("#content").val(),
-			"noticeGubun": $("#noticeGubun").val(),
-			"secretGubun": $("#secretGubun").val()
+				"no": $("#span_no").text(),
+				"tbl": $("#span_tbl").text(),
+				"writer": $("#writer").val(),
+				"email": $("#email").val(),
+				"passwd": $("#passwd").val(),
+				"subject": $("#subject").val(),
+				"content": $("#content").val(),
+				"noticeGubun": $("#noticeGubun").val(),
+				"secretGubun": $("#secretGubun").val()
 		};
 	} else if (gubun === 'list') {
 		param = {
