@@ -87,6 +87,19 @@ public class BoardController extends HttpServlet {
 			
 		} else if (url.indexOf("write.do") != -1 || url.indexOf("reply.do") != -1) {
 			request.setAttribute("menu_gubun", "board_write");
+			
+			if (url.indexOf("reply.do") != -1) {
+				dto = dao.getView(no);
+				String parentContent = "";
+				parentContent += "[" + dto.getWriter() + "]님이 작성한 글입니다.\n";
+				parentContent += dto.getContent();
+				parentContent = parentContent.replace("\n", "\n> ");
+				parentContent += "\n-------------------------------\n";
+				dto.setContent(parentContent);
+				request.setAttribute("dto", dto);
+
+			}
+			
 			page = "/board/write.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
@@ -119,6 +132,19 @@ public class BoardController extends HttpServlet {
 			int stepNo = 1;
 			int levelNo = 1;
 			int parentNo = 0;
+			
+			// refNo : 부모글 refNo 번호
+			// stepNo : 부모글 stepNo + 1
+			// levelNo : 부모 levelNo보다 큰 숫자들은 1씩 증가, 그리고 부모글 levelNo + 1
+			
+			if (no > 0) {
+				BoardDTO dbDto = dao.getView(no);
+				dao.setUpdateReLevel(dbDto); // 답변글. 부모글보다 큰 levelNo값을 전부 1씩 증가시켜준다.
+				refNo = dbDto.getRefNo();
+				stepNo = dbDto.getStepNo() + 1;
+				levelNo = dbDto.getLevelNo() + 1;
+				parentNo = dbDto.getNo();
+			}
 			
 			int hit = 0;
 			
@@ -202,6 +228,7 @@ public class BoardController extends HttpServlet {
 			page = "/board/view.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
+
 			
 		}
 	}

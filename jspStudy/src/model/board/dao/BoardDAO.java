@@ -297,6 +297,22 @@ public class BoardDAO {
 		}
 		return dto;
 	}
+
+	public void setUpdateReLevel(BoardDTO dto) {
+		conn = getConn();
+		try {
+			String sql = "UPDATE " + tableName01 + " SET levelNo = (levelNo + 1) WHERE refNo = ? AND levelNo > ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getRefNo());
+			pstmt.setInt(2, dto.getLevelNo());
+			pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+	}
 	
 	
 }

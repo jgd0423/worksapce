@@ -30,28 +30,28 @@ function goPage(gubun, no) {
 	const url = `${path}/board_servlet/\${gubun}.do`;
 	let param = {};
 	
-	if (gubun === 'writeProc') {
+	if (gubun === 'write') {
+			$("#span_no").text("");
+			param = {};		
+	} else if (gubun === 'writeProc') {
 		param = {
-				"no": $("#span_no").text(),
-				"tbl": $("#span_tbl").text(),
-				"writer": $("#writer").val(),
-				"email": $("#email").val(),
-				"passwd": $("#passwd").val(),
-				"subject": $("#subject").val(),
-				"content": $("#content").val(),
-				"noticeGubun": $("#noticeGubun").val(),
-				"secretGubun": $("#secretGubun").val()
+			"no": $("#span_no").text(),
+			"tbl": $("#span_tbl").text(),
+			"writer": $("#writer").val(),
+			"email": $("#email").val(),
+			"passwd": $("#passwd").val(),
+			"subject": $("#subject").val(),
+			"content": $("#content").val(),
+			"noticeGubun": $("#noticeGubun").val(),
+			"secretGubun": $("#secretGubun").val()
 		};
-	} else if (gubun === 'write') {
-		$("#span_no").text("");
-		param = {};		
 	} else if (gubun === 'list') {
 		param = {
 				"tbl": $("#span_tbl").text(),
 				"pageNumber": $("#span_pageNumber").text(),
 				"search_option": $("#span_search_option").text(),
 				"search_data": $("#span_search_data").text()
-		}
+		};
 	} else if (gubun === 'view') {
 		$("#span_no").text(no);
 		param = {
@@ -61,7 +61,11 @@ function goPage(gubun, no) {
 				"search_option": $("#span_search_option").text(),
 				"search_data": $("#span_search_data").text(),
 				"view_passwd": $("#view_passwd").val()
-		}
+		};
+	} else if (gubun === 'reply') {
+		param = {
+				"no": $("#span_no").text()
+		};
 	}
 		
 	$.ajax({

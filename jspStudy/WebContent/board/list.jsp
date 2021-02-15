@@ -4,7 +4,7 @@
 
 ${allRowsCount }개의 레코드가 있습니다.
 
-<table border="1" align="center" width="80%">
+<table border="1" align="center" width="95%">
 	<tr>
 		<td colspan="10" align="center">
 			<h2>게시글 목록</h2>

@@ -20,11 +20,11 @@
 	</tr>
 	<tr>
 		<td style="align: center;">제목</td>
-		<td><input type="text" name="subject" id="subject" /></td>
+		<td><input type="text" name="subject" id="subject" value="${dto.subject }" /></td>
 	</tr>
 	<tr>
 		<td style="align: center;">내용</td>
-		<td><textarea name="content" id="content" style="width: 300px; height: 100px;"></textarea></td>
+		<td><textarea name="content" id="content" style="width: 300px; height: 100px;" wrap="hard">${dto.content }</textarea></td>
 	</tr>
 	<tr>
 		<td style="align: center;">공지글</td>
