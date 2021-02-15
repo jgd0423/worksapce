@@ -154,4 +154,10 @@ function search() {
 	choosePage(1);
 }
 
+function chooseAll() {
+	$("#span_search_option").text("");
+	$("#span_search_data").text("");
+	choosePage(1);
+}
+
 </script>

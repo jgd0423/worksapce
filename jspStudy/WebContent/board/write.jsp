@@ -4,7 +4,7 @@
 
 <table border="1" align="center" width="80%">
 	<tr>
-		<td colspan="2"><h2>게시글쓰기</h2></td>
+		<td colspan="2"><h2>${dto.no > 0 ? '답변글쓰기' : '게시글쓰기' }</h2></td>
 	</tr>
 	<tr>
 		<td style="align: center;">작성자</td>

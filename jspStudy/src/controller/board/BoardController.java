@@ -37,13 +37,13 @@ public class BoardController extends HttpServlet {
 		yearMonthDayMap.put("nowMonth", yearMonthDayHourMinSec[1]);
 		yearMonthDayMap.put("nowDay", yearMonthDayHourMinSec[2]);
 		
-		String serverInfo[] = util.getServerInfo(request); //request.getContextPath();
+		String serverInfo[] = util.getServerInfo(request);   // request.getContextPath();
 		String referer = serverInfo[0];
 		String path = serverInfo[1];
 		String url = serverInfo[2];
 		String uri = serverInfo[3];
 		String ip = serverInfo[4];
-//		String ip6 = serverInfo[5];
+		// String ip6 = serverInfo[5];
 		
 		String pageNum_ = request.getParameter("pageNumber");
 		int pageNum = util.numberCheck(pageNum_, 1);
@@ -128,7 +128,7 @@ public class BoardController extends HttpServlet {
 			}
 			
 			int num = dao.getMaxNum() + 1;
-			int refNo = dao.getMaxRefNo() + 1; // 글 그룹을 의미, 쿼리를 실행시켜서 가장 큰 ref 값을 가져온 후 + 1
+			int refNo = dao.getMaxRefNo() + 1;   // 글 그룹을 의미, 쿼리를 실행시켜서 가장 큰 ref 값을 가져온 후 + 1
 			int stepNo = 1;
 			int levelNo = 1;
 			int parentNo = 0;
@@ -137,9 +137,9 @@ public class BoardController extends HttpServlet {
 			// stepNo : 부모글 stepNo + 1
 			// levelNo : 부모 levelNo보다 큰 숫자들은 1씩 증가, 그리고 부모글 levelNo + 1
 			
-			if (no > 0) {
+			if (no > 0) {   // 답변글일 경우
 				BoardDTO dbDto = dao.getView(no);
-				dao.setUpdateReLevel(dbDto); // 답변글. 부모글보다 큰 levelNo값을 전부 1씩 증가시켜준다.
+				dao.setUpdateReLevel(dbDto);   // 답변글. 부모글보다 큰 levelNo값을 전부 1씩 증가시켜준다.
 				refNo = dbDto.getRefNo();
 				stepNo = dbDto.getStepNo() + 1;
 				levelNo = dbDto.getLevelNo() + 1;
@@ -213,7 +213,7 @@ public class BoardController extends HttpServlet {
 			dto = dao.getView(no);
 			
 			String tempPage = "viewPage";
-			if (dto.getSecretGubun().equals("T")) { // 비밀글이면
+			if (dto.getSecretGubun().equals("T")) {   // 비밀글이면
 				String view_passwd = util.nullCheck(request.getParameter("view_passwd"));
 				if (dto.getPasswd().equals(view_passwd) && !dto.getPasswd().equals("")) {}
 				else {

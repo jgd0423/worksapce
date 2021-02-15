@@ -162,9 +162,9 @@ public class Util {
 	}
 	
 	public int[] pager(final int ONE_PAGE_ROWS, final int MAX_PAGING_WIDTH, int allRowsCount, int pageNum) {
-		int maxPagesCount = (int) Math.ceil((double) allRowsCount / ONE_PAGE_ROWS);
+		int maxPagesCount = (int)Math.ceil((double)allRowsCount / ONE_PAGE_ROWS);
 		int tableRowNum = allRowsCount - (pageNum - 1) * ONE_PAGE_ROWS;
-		int pagingLoopNum = (int) Math.ceil((double)pageNum / MAX_PAGING_WIDTH) - 1;
+		int pagingLoopNum = (int)Math.ceil((double)pageNum / MAX_PAGING_WIDTH) - 1;
 		int pagingStartNum = pagingLoopNum * MAX_PAGING_WIDTH + 1;
 		int pagingEndNum = pagingStartNum + MAX_PAGING_WIDTH - 1;
 		if (pagingEndNum > maxPagesCount) {
