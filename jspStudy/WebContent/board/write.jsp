@@ -30,9 +30,7 @@
 				id="content" 
 				style="width: 300px; height: 100px;" 
 				wrap="hard"
-			>
-				${dto.content }
-			</textarea>
+			>${dto.content }</textarea>
 		</td>
 	</tr>
 	<tr>
