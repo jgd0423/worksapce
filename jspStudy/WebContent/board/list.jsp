@@ -84,7 +84,7 @@ ${allRowsCount }개의 레코드가 있습니다.
 					<c:if test="${dto.noticeNo == 0 }">${tableRowNum }</c:if>
 				</td>
 				<td>
-					<c:forEach var="i" begin="2" end="${dto.stepNo }" step="1">&nbsp;</c:forEach><!-- varStatus="status" -->
+					<c:forEach var="i" begin="2" end="${dto.stepNo }" step="1">&nbsp;&nbsp;</c:forEach><!-- varStatus="status" -->
 					<c:if test="${dto.stepNo > 1 }">
 						<c:set var="reVar" value="[Re]:" />
 					</c:if>

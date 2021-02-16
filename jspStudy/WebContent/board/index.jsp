@@ -32,7 +32,6 @@ function goPage(gubun, no) {
 	
 	if (gubun === 'write') {
 			$("#span_no").text("");
-			param = {};		
 	} else if (gubun === 'writeProc') {
 		param = {
 				"no": $("#span_no").text(),
@@ -65,6 +64,21 @@ function goPage(gubun, no) {
 	} else if (gubun === 'reply') {
 		param = {
 				"no": $("#span_no").text()
+		};
+	} else if (gubun === 'modify') {
+		param = {
+				"no": $("#span_no").text()
+		};
+	} else if (gubun === 'modifyProc') {
+		param = {
+				"no": $("#span_no").text(),
+				"writer": $("#writer").val(),
+				"email": $("#email").val(),
+				"passwd": $("#passwd").val(),
+				"subject": $("#subject").val(),
+				"content": $("#content").val(),
+				"noticeGubun": $("#noticeGubun").val(),
+				"secretGubun": $("#secretGubun").val()
 		};
 	}
 		

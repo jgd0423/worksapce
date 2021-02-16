@@ -253,3 +253,11 @@ FROM
 WHERE no = 3;
 
 SELECT COUNT(*) FROM board b WHERE refNo = b.refNo AND stepNo = (b.stepNo + 1) AND levelNo = (b.levelNo + 1);
+
+SELECT noticeNo FROM board WHERE no = 4;
+
+UPDATE board SET noticeNo = (noticeNo - 1) WHERE noticeNo > (SELECT noticeNo FROM board WHERE no = 4);
+
+UPDATE board SET noticeNo = 2 WHERE no = 19;
+UPDATE board SET noticeNo = 3 WHERE no = 10;
+commit;

@@ -4,15 +4,15 @@
 
 <table border="1" align="center" width="80%">
 	<tr>
-		<td colspan="2"><h2>${dto.no > 0 ? '답변글쓰기' : '게시글쓰기' }</h2></td>
+		<td colspan="2"><h2>수정하기</h2></td>
 	</tr>
 	<tr>
 		<td style="align: center;">작성자</td>
-		<td><input type="text" name="writer" id="writer" /></td>
+		<td><input type="text" name="writer" id="writer" value="${dto.writer }" /></td>
 	</tr>
 	<tr>
 		<td style="align: center;">이메일</td>
-		<td><input type="text" name="email" id="email" /></td>
+		<td><input type="text" name="email" id="email" value="${dto.email }" /></td>
 	</tr>
 	<tr>
 		<td style="align: center;">비밀번호</td>
@@ -30,21 +30,25 @@
 				id="content" 
 				style="width: 300px; height: 100px;" 
 				wrap="hard"
-			>
-				${dto.content }
-			</textarea>
+			>${dto.content }</textarea>
 		</td>
 	</tr>
 	<tr>
 		<td style="align: center;">공지글</td>
 		<td>
-			<input type="text" name="nogiceGubun" id="noticeGubun" />
+			<input 
+				type="text" 
+				name="nogiceGubun" 
+				id="noticeGubun" 
+				value="${dto.noticeNo > 0 ? 'T' : '' }" 
+			/>
 			<input 
 				type="checkbox" 
 				name="noticeGubunCheckBox" 
 				id="noticeGubunCheckBox" 
 				value="T" 
-				onclick="clickChk('noticeGubun')" 
+				onclick="clickChk('noticeGubun')"
+				${dto.noticeNo > 0 ? 'checked' : '' }
 			/>
 			공지글 체크
 		</td>
@@ -52,19 +56,26 @@
 	<tr>
 		<td style="align: center;">비밀글</td>
 		<td>
-			<input type="text" name="secretGubun" id="secretGubun" />
+			<input 
+				type="text" 
+				name="secretGubun" 
+				id="secretGubun" 
+				value="${dto.secretGubun == 'T' ? 'T' : '' }" 
+			/>
 			<input 
 				type="checkbox" 
 				name="secretGubunCheckBox" 
 				id="secretGubunCheckBox" 
-				value="T" onclick="clickChk('secretGubun')" 
-			/>
+				value="T" 
+				onclick="clickChk('secretGubun')" 
+				${dto.secretGubun == 'T' ? 'checked' : '' }
+			/>	
 			비밀글 체크
 		</td>
 	</tr>
 	<tr>
 		<td align="center" colspan="2" height="50px">
-			<button type="button" id="btnWrite">등록하기</button>
+			<button type="button" id="btnModify">수정하기</button>
 			<button type="button" id="btnList">목록으로</button>
 		</td>
 	</tr>
@@ -75,10 +86,8 @@
 $(document).ready(() => {
 	$("#writer").focus();
 	
-	$("#btnWrite").click(() => {
-		//if (confirm('등록하시겠습니까?')) {
-			goPage('writeProc', '');
-		//}
+	$("#btnModify").click(() => {
+		goPage('modifyProc', ${dto.no});
 	});
 	
 	$("#btnList").click(() => {

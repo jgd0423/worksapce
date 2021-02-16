@@ -37,7 +37,7 @@
 			</tr>
 			<tr>
 				<td>내용 : </td>
-				<td id="content">${dto.content}</td>
+				<td>${dto.content}</td>
 			</tr>
 			<tr>
 				<td>이메일 : </td>

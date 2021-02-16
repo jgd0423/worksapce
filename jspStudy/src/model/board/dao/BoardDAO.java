@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import db.DbExample;
 import model.board.dto.BoardDTO;
+import model.member.dto.MemberDTO;
 
 public class BoardDAO {
 	// Field
@@ -305,6 +306,57 @@ public class BoardDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getRefNo());
 			pstmt.setInt(2, dto.getLevelNo());
+			pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+	}
+
+	public int setUpdate(BoardDTO dto) {
+		conn = getConn();
+		int result = 0;
+		try {
+			String sql = "UPDATE " + tableName01 + " SET "
+					+ "writer = ?, "
+					+ "email = ?, "
+					+ "subject = ?, "
+					+ "content = ?, "
+					+ "memberNo = ?, "
+					+ "noticeNo = ?, "
+					+ "secretGubun = ? "
+					+ "WHERE no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getWriter());
+			pstmt.setString(2, dto.getEmail());
+			pstmt.setString(3, dto.getSubject());
+			pstmt.setString(4, dto.getContent());
+			pstmt.setInt(5, dto.getMemberNo());
+			pstmt.setInt(6, dto.getNoticeNo());
+			pstmt.setString(7, dto.getSecretGubun());
+			pstmt.setInt(8, dto.getNo());
+
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return result;
+	}
+
+	public void setNoticeNoLargerThenCurrentNoticeNo(int no) {
+		conn = getConn();
+		try {
+			String sql = "UPDATE " + tableName01 + " SET "
+					+ "noticeNo = (noticeNo - 1) "
+					+ "WHERE noticeNo > "
+					+ "(SELECT noticeNo FROM board WHERE no = ?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
 			pstmt.executeUpdate();
 		} catch(Exception e) {
 			e.printStackTrace();

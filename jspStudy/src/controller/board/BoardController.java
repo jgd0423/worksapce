@@ -1,6 +1,7 @@
 package controller.board;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import common.UtilBoard;
 import model.board.dao.BoardDAO;
 import model.board.dto.BoardDTO;
+import model.member.dto.MemberDTO;
 
 @WebServlet("/board_servlet/*")
 public class BoardController extends HttpServlet {
@@ -212,6 +214,10 @@ public class BoardController extends HttpServlet {
 			dao.setUpdateHit(no);
 			dto = dao.getView(no);
 			
+			String content = dto.getContent();
+			content = content.replace("\n", "<br>");
+			dto.setContent(content);
+			
 			String tempPage = "viewPage";
 			if (dto.getSecretGubun().equals("T")) {   // 비밀글이면
 				String view_passwd = util.nullCheck(request.getParameter("view_passwd"));
@@ -230,6 +236,51 @@ public class BoardController extends HttpServlet {
 			rd.forward(request, response);
 
 			
+		} else if (url.indexOf("modify.do") != -1) {
+			dto = dao.getView(no);
+			
+			request.setAttribute("dto", dto);
+			
+			page = "/board/modify.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("modifyProc.do") != -1) {
+			String writer = request.getParameter("writer");
+			String email = request.getParameter("email");
+			String passwd = request.getParameter("passwd");
+			String subject = request.getParameter("subject");
+			String content = request.getParameter("content");
+			String noticeGubun = request.getParameter("noticeGubun");
+			String secretGubun = request.getParameter("secretGubun");
+			if (secretGubun == null || secretGubun.trim().equals("") || !secretGubun.equals("T")) {
+				secretGubun = "F";
+			} else {
+				secretGubun = "T";
+			}
+			
+			dto = dao.getView(no);
+			int noticeNo = dto.getNoticeNo();
+			if (noticeNo > 0 && (noticeGubun == null || noticeGubun.trim().equals("") || !noticeGubun.equals("T"))) {
+				dao.setNoticeNoLargerThenCurrentNoticeNo(no);
+				noticeNo = 0;
+			} else if (noticeNo == 0 && noticeGubun.equals("T")) {
+				noticeNo = dao.getMaxNoticeNo(tbl) + 1;
+			}
+
+			// 비밀번호 체크 어떻게?
+
+			dto.setWriter(writer);
+			dto.setEmail(email);
+			dto.setSubject(subject);
+			dto.setContent(content);
+			dto.setMemberNo(cookNo);
+			dto.setNoticeNo(noticeNo);
+			dto.setSecretGubun(secretGubun);
+			dto.setNo(no);
+			
+			int result = dao.setUpdate(dto);
 		}
 	}
 
