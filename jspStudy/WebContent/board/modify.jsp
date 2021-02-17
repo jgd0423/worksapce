@@ -4,7 +4,9 @@
 
 <table border="1" align="center" width="80%">
 	<tr>
-		<td colspan="2"><h2>수정하기</h2></td>
+		<td colspan="2">
+			<h2>게시글수정</h2>
+		</td>
 	</tr>
 	<tr>
 		<td style="align: center;">작성자</td>
@@ -16,7 +18,7 @@
 	</tr>
 	<tr>
 		<td style="align: center;">비밀번호</td>
-		<td><input type="text" name="passwd" id="passwd" /></td>
+		<td><input type="password" name="passwd" id="passwd" /></td>
 	</tr>
 	<tr>
 		<td style="align: center;">제목</td>
@@ -40,7 +42,7 @@
 				type="text" 
 				name="nogiceGubun" 
 				id="noticeGubun" 
-				value="${dto.noticeNo > 0 ? 'T' : '' }" 
+				value="${dto.noticeNo > 0 ? 'T' : 'F' }" 
 			/>
 			<input 
 				type="checkbox" 
@@ -60,7 +62,7 @@
 				type="text" 
 				name="secretGubun" 
 				id="secretGubun" 
-				value="${dto.secretGubun == 'T' ? 'T' : '' }" 
+				value="${dto.secretGubun}" 
 			/>
 			<input 
 				type="checkbox" 
@@ -84,14 +86,15 @@
 <script>
 
 $(document).ready(() => {
-	$("#writer").focus();
+	$("#subject").select();
+	$("#subject").focus();
 	
 	$("#btnModify").click(() => {
-		goPage('modifyProc', ${dto.no});
+		goPage('modifyProc', '');
 	});
 	
 	$("#btnList").click(() => {
-		goPage('list', '');
+		choosePage(1);
 	});
 });
 

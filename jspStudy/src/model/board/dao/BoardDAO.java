@@ -365,6 +365,22 @@ public class BoardDAO {
 		}
 		
 	}
+
+	public int setDelete(BoardDTO dto) {
+		conn = getConn();
+		int result = 0;
+		try {
+			String sql = "DELETE FROM board WHERE no = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getNo());
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		return result;
+	}
 	
 	
 }

@@ -37,7 +37,7 @@
 			</tr>
 			<tr>
 				<td>내용 : </td>
-				<td>${dto.content}</td>
+				<td id="content">${dto.content}</td>
 			</tr>
 			<tr>
 				<td>이메일 : </td>
@@ -106,6 +106,10 @@
 <script>
 
 $(document).ready(() => {
+	// content의 줄바꿈
+	const content = $("#content").text().replace(/(?:\r\n|\r|\n)/g, '<br/>');
+	$("#content").html(content);
+	
 	$("#btnViewPasswd").click(() => {
 		goPage('view', $("#span_no").text());
 	});

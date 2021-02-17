@@ -214,9 +214,10 @@ public class BoardController extends HttpServlet {
 			dao.setUpdateHit(no);
 			dto = dao.getView(no);
 			
-			String content = dto.getContent();
-			content = content.replace("\n", "<br>");
-			dto.setContent(content);
+			// content의 줄바꿈
+			// String content = dto.getContent();
+			// content = content.replace("\n", "</br>");
+			// dto.setContent(content);
 			
 			String tempPage = "viewPage";
 			if (dto.getSecretGubun().equals("T")) {   // 비밀글이면
@@ -237,8 +238,9 @@ public class BoardController extends HttpServlet {
 
 			
 		} else if (url.indexOf("modify.do") != -1) {
-			dto = dao.getView(no);
+			request.setAttribute("menu_gubun", "board_modify");
 			
+			dto = dao.getView(no);
 			request.setAttribute("dto", dto);
 			
 			page = "/board/modify.jsp";
@@ -268,19 +270,61 @@ public class BoardController extends HttpServlet {
 			} else if (noticeNo == 0 && noticeGubun.equals("T")) {
 				noticeNo = dao.getMaxNoticeNo(tbl) + 1;
 			}
-
-			// 비밀번호 체크 어떻게?
-
-			dto.setWriter(writer);
-			dto.setEmail(email);
-			dto.setSubject(subject);
-			dto.setContent(content);
-			dto.setMemberNo(cookNo);
-			dto.setNoticeNo(noticeNo);
-			dto.setSecretGubun(secretGubun);
-			dto.setNo(no);
 			
-			int result = dao.setUpdate(dto);
+			// 비밀번호 체크
+			String dbPasswd = dto.getPasswd();
+			boolean isSamePasswd = (passwd.equals(dbPasswd));
+			
+			if (isSamePasswd) {
+				dto.setWriter(writer);
+				dto.setEmail(email);
+				dto.setPasswd(passwd);
+				dto.setSubject(subject);
+				dto.setContent(content);
+				dto.setMemberNo(cookNo);
+				dto.setNoticeNo(noticeNo);
+				dto.setSecretGubun(secretGubun);
+				dto.setNo(no);
+				
+				int result = dao.setUpdate(dto);				
+			}
+			
+			request.setAttribute("isSamePasswd", isSamePasswd);
+			
+			page = "/board/passwdChk.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+		} else if (url.indexOf("delete.do") != -1) {
+			request.setAttribute("menu_gubun", "board_delete");
+			
+			dto = dao.getView(no);
+			request.setAttribute("dto", dto);
+			
+			page = "/board/delete.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("deleteProc.do") != -1) {
+			dto = dao.getView(no);
+			String passwd = request.getParameter("passwd");
+
+			// 비밀번호 체크
+			String dbPasswd = dto.getPasswd();
+			boolean isSamePasswd = (passwd.equals(dbPasswd));
+			
+			if (isSamePasswd) {
+				int result = dao.setDelete(dto);
+			}
+			
+			request.setAttribute("isSamePasswd", isSamePasswd);
+			
+			page = "/board/passwdChk.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
 		}
 	}
 

@@ -32,17 +32,9 @@ function goPage(gubun, no) {
 	
 	if (gubun === 'write') {
 			$("#span_no").text("");
-	} else if (gubun === 'writeProc') {
+	} else if (gubun === 'reply' || gubun === 'modify' || gubun === 'delete') {
 		param = {
-				"no": $("#span_no").text(),
-				"tbl": $("#span_tbl").text(),
-				"writer": $("#writer").val(),
-				"email": $("#email").val(),
-				"passwd": $("#passwd").val(),
-				"subject": $("#subject").val(),
-				"content": $("#content").val(),
-				"noticeGubun": $("#noticeGubun").val(),
-				"secretGubun": $("#secretGubun").val()
+				"no": $("#span_no").text()
 		};
 	} else if (gubun === 'list') {
 		param = {
@@ -61,17 +53,10 @@ function goPage(gubun, no) {
 				"search_data": $("#span_search_data").text(),
 				"view_passwd": $("#view_passwd").val()
 		};
-	} else if (gubun === 'reply') {
-		param = {
-				"no": $("#span_no").text()
-		};
-	} else if (gubun === 'modify') {
-		param = {
-				"no": $("#span_no").text()
-		};
-	} else if (gubun === 'modifyProc') {
+	} else if (gubun === 'writeProc' || gubun === 'modifyProc' || gubun === 'deleteProc') {
 		param = {
 				"no": $("#span_no").text(),
+				"tbl": $("#span_tbl").text(),
 				"writer": $("#writer").val(),
 				"email": $("#email").val(),
 				"passwd": $("#passwd").val(),
@@ -87,10 +72,20 @@ function goPage(gubun, no) {
 		data: param,
 		url: url,
 		success: (data) => {
-			if (gubun === 'writeProc' || gubun === 'deleteProc') {
+			if (gubun === 'writeProc') {
 				choosePage(1);
 			} else if (gubun === 'modifyProc') {
-				goPage('view', $("#span_no").text());				
+				if (data === 'false') {
+					alert('비밀번호가 틀렸습니다.');
+				} else {
+					goPage('view', $("#span_no").text());					
+				}
+			} else if (gubun === 'deleteProc') {
+				if (data === 'false') {
+					alert('비밀번호가 틀렸습니다.');
+				} else {
+					choosePage(1);
+				}
 			} else {
 				$("#result").html(data);
 			}

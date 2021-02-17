@@ -16,7 +16,7 @@
 	</tr>
 	<tr>
 		<td style="align: center;">비밀번호</td>
-		<td><input type="text" name="passwd" id="passwd" /></td>
+		<td><input type="password" name="passwd" id="passwd" /></td>
 	</tr>
 	<tr>
 		<td style="align: center;">제목</td>
@@ -55,7 +55,8 @@
 				type="checkbox" 
 				name="secretGubunCheckBox" 
 				id="secretGubunCheckBox" 
-				value="T" onclick="clickChk('secretGubun')" 
+				value="T" 
+				onclick="clickChk('secretGubun')" 
 			/>
 			비밀글 체크
 		</td>
