@@ -261,3 +261,20 @@ UPDATE board SET noticeNo = (noticeNo - 1) WHERE noticeNo > (SELECT noticeNo FRO
 UPDATE board SET noticeNo = 2 WHERE no = 19;
 UPDATE board SET noticeNo = 3 WHERE no = 10;
 commit;
+
+CREATE TABLE board_comment (
+    comment_no NUMBER NOT NULL PRIMARY KEY,
+    board_no NUMBER NOT NULL REFERENCES board(no),
+    writer VARCHAR2(50) NOT NULL,
+    content CLOB NOT NULL,
+    passwd VARCHAR2(50) NOT NULL,
+    memberNo NUMBER NOT NULL,
+    ip VARCHAR2(50) NOT NULL,
+    regiDate DATE DEFAULT SYSDATE
+);
+
+CREATE SEQUENCE seq_board_comment START WITH 1 INCREMENT BY 1 NOMAXVALUE NOCACHE;
+
+SELECT * FROM board_comment WHERE board_no = 19 ORDER BY comment_no DESC;
+
+DESC board_comment;

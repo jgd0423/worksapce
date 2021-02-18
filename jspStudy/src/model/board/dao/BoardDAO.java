@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import db.DbExample;
 import model.board.dto.BoardDTO;
+import model.board.dto.CommentDTO;
 import model.member.dto.MemberDTO;
 
 public class BoardDAO {
@@ -15,8 +16,8 @@ public class BoardDAO {
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	
-	String tableName01 = "board";
-	String tableName02 = "board_comment";
+	final String BOARD = "board";
+	final String BOARD_COMMENT = "board_comment";
 	
 	// Method
 	public Connection getConn() {
@@ -33,7 +34,7 @@ public class BoardDAO {
 		conn = getConn();
 		int result = 0;
 		try {
-			String sql = "INSERT INTO " + tableName01 + " VALUES (seq_board.NEXTVAL, "
+			String sql = "INSERT INTO " + BOARD + " VALUES (seq_board.NEXTVAL, "
 					+ "?, ?, ?, ?, ?, "
 					+ "?, ?, ?, ?, ?, "
 					+ "?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
@@ -67,7 +68,7 @@ public class BoardDAO {
 		int result = 0;
 		conn = getConn();
 		try {
-			String sql = "SELECT NVL(MAX(num), 0) FROM " + tableName01;
+			String sql = "SELECT NVL(MAX(num), 0) FROM " + BOARD;
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -85,7 +86,7 @@ public class BoardDAO {
 		int result = 0;
 		conn = getConn();
 		try {
-			String sql = "SELECT NVL(MAX(refNo), 0) FROM " + tableName01;
+			String sql = "SELECT NVL(MAX(refNo), 0) FROM " + BOARD;
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
@@ -103,7 +104,7 @@ public class BoardDAO {
 		int result = 0;
 		conn = getConn();
 		try {
-			String sql = "SELECT NVL(MAX(noticeNo), 0) FROM " + tableName01 + " WHERE tbl = ?";
+			String sql = "SELECT NVL(MAX(noticeNo), 0) FROM " + BOARD + " WHERE tbl = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, tbl);
 			rs = pstmt.executeQuery();
@@ -122,7 +123,7 @@ public class BoardDAO {
 		conn = getConn();
 		int allRowsCount = 0;
 		try {
-			String sql = "SELECT COUNT(*) FROM " + tableName01 + " WHERE tbl = ? ";
+			String sql = "SELECT COUNT(*) FROM " + BOARD + " WHERE tbl = ? ";
 			
 			if (search_option.length() > 0 && search_data.length() > 0) {
 				if (search_option.equals("writer") || search_option.equals("subject") || search_option.equals("content")) {
@@ -165,8 +166,8 @@ public class BoardDAO {
 		try {
 			String basic_sql = "";
 			basic_sql += "SELECT t1.*, ";
-			basic_sql += "(SELECT COUNT(*) FROM " + tableName01 + " t2 WHERE t2.parentNo = t1.no) child_counter ";	
-			basic_sql += "FROM " + tableName01 + " t1 WHERE tbl = ? ";
+			basic_sql += "(SELECT COUNT(*) FROM " + BOARD + " t2 WHERE t2.parentNo = t1.no) child_counter ";	
+			basic_sql += "FROM " + BOARD + " t1 WHERE tbl = ? ";
 			
 			if (search_option.length() > 0 && search_data.length() > 0) {
 				if (search_option.equals("writer") || search_option.equals("subject") || search_option.equals("content")) {
@@ -236,7 +237,7 @@ public class BoardDAO {
 	public void setUpdateHit(int no) {
 		conn = getConn();
 		try {
-			String sql = "UPDATE " + tableName01 + " SET hit = (hit + 1) WHERE no = ?";
+			String sql = "UPDATE " + BOARD + " SET hit = (hit + 1) WHERE no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, no);
 			pstmt.executeUpdate();
@@ -253,12 +254,12 @@ public class BoardDAO {
 			sql += "SELECT * FROM ";
 			sql += "(";
 			sql += "SELECT b.*, ";
-			sql += "(SELECT COUNT(*) FROM " + tableName01 + " WHERE refNo = b.refNo AND stepNo = (b.stepNo + 1) AND levelNo = (b.levelNo + 1)) child_counter, ";
+			sql += "(SELECT COUNT(*) FROM " + BOARD + " WHERE refNo = b.refNo AND stepNo = (b.stepNo + 1) AND levelNo = (b.levelNo + 1)) child_counter, ";
 			sql += "LAG(no) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) preNo, ";
 			sql += "LAG(subject) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) preSubject, ";
 			sql += "LEAD(no) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) nxtNo, ";
 			sql += "LEAD(subject) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) nxtSubject ";
-			sql += "FROM " + tableName01 + " b ORDER BY noticeNo DESC, refNo DESC, levelNo ASC";
+			sql += "FROM " + BOARD + " b ORDER BY noticeNo DESC, refNo DESC, levelNo ASC";
 			sql += ") WHERE no = ?";
 			
 			pstmt = conn.prepareStatement(sql);
@@ -302,7 +303,7 @@ public class BoardDAO {
 	public void setUpdateReLevel(BoardDTO dto) {
 		conn = getConn();
 		try {
-			String sql = "UPDATE " + tableName01 + " SET levelNo = (levelNo + 1) WHERE refNo = ? AND levelNo > ?";
+			String sql = "UPDATE " + BOARD + " SET levelNo = (levelNo + 1) WHERE refNo = ? AND levelNo > ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getRefNo());
 			pstmt.setInt(2, dto.getLevelNo());
@@ -319,7 +320,7 @@ public class BoardDAO {
 		conn = getConn();
 		int result = 0;
 		try {
-			String sql = "UPDATE " + tableName01 + " SET "
+			String sql = "UPDATE " + BOARD + " SET "
 					+ "writer = ?, "
 					+ "email = ?, "
 					+ "subject = ?, "
@@ -351,7 +352,7 @@ public class BoardDAO {
 	public void setNoticeNoLargerThenCurrentNoticeNo(int no) {
 		conn = getConn();
 		try {
-			String sql = "UPDATE " + tableName01 + " SET "
+			String sql = "UPDATE " + BOARD + " SET "
 					+ "noticeNo = (noticeNo - 1) "
 					+ "WHERE noticeNo > "
 					+ "(SELECT noticeNo FROM board WHERE no = ?)";
@@ -381,6 +382,91 @@ public class BoardDAO {
 		}
 		return result;
 	}
+
+	public int setInsertComment(CommentDTO commentDto) {
+		conn = getConn();
+		int result = 0;
+		try {
+			String sql = "INSERT INTO " + BOARD_COMMENT + " VALUES (seq_board_comment.NEXTVAL, "
+					+ "?, ?, ?, ?, ?, ?, SYSDATE)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, commentDto.getBoard_no());
+			pstmt.setString(2, commentDto.getWriter());
+			pstmt.setString(3, commentDto.getContent());
+			pstmt.setString(4, commentDto.getPasswd());
+			pstmt.setInt(5, commentDto.getMemberNo());
+			pstmt.setString(6, commentDto.getIp());
+
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		return result;
+	}
+
+	public int getAllCommentRowsCount(int no) {
+		conn = getConn();
+		int allRowsCount = 0;
+		try {
+			String sql = "SELECT COUNT(*) FROM " + BOARD_COMMENT + " WHERE board_no = ? ORDER BY comment_no DESC";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				allRowsCount = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return allRowsCount;
+	}
+
+	public ArrayList<CommentDTO> getCommentPagingList(int no, int startNum, int endNum) {
+		conn = getConn();
+		ArrayList<CommentDTO> list = new ArrayList<>();
+		try {
+			String basic_sql = "";
+			basic_sql += "SELECT * FROM " + BOARD_COMMENT + " WHERE board_no = ?";
+			basic_sql += " ORDER BY comment_no DESC";
+			
+			String sql = "";
+			sql += "SELECT * FROM ";
+			sql += "(SELECT ROWNUM Rnum, a.* FROM ";
+			sql += "(" + basic_sql + ") a) ";
+			sql += "WHERE Rnum >= ? AND Rnum <= ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			pstmt.setInt(2, startNum);
+			pstmt.setInt(3, endNum);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				CommentDTO dto = new CommentDTO();
+				dto.setComment_no(rs.getInt("comment_no"));
+				dto.setBoard_no(rs.getInt("board_no"));
+				dto.setWriter(rs.getString("writer"));
+				dto.setContent(rs.getString("content"));
+				dto.setPasswd(rs.getString("passwd"));
+				dto.setMemberNo(rs.getInt("memberNo"));
+				dto.setIp(rs.getString("ip"));
+				dto.setRegiDate(rs.getDate("regiDate"));
+				list.add(dto);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return list;
+	}
+	
 	
 	
 }

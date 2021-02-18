@@ -13,7 +13,7 @@ search_data : <span id="span_search_data">${search_data }</span><br>
 
 <input type="text" name="a" style="display: ;" /><br><!-- ajax 테스트를 위한 것 -->
 
-<div id="result" style="height: 500px;"></div>
+<div id="result" style="height: 100%;"></div>
 
 
 <script>
@@ -21,7 +21,6 @@ search_data : <span id="span_search_data">${search_data }</span><br>
 $(document).ready(() => {
 	<c:if test="${menu_gubun == 'board_index'}">
 		goPage('list', '');
-		//goPage('write', '');
 	</c:if>
 });
 
@@ -65,6 +64,18 @@ function goPage(gubun, no) {
 				"noticeGubun": $("#noticeGubun").val(),
 				"secretGubun": $("#secretGubun").val()
 		};
+	} else if (gubun === 'commentWrite') {
+		param = {
+				"no": $("#span_no").text(),
+				"commentPageNumber": $("#span_commentPageNumber").text()
+		}
+	} else if (gubun === 'commentWriteProc') {
+		param = {
+				"no": $("#span_no").text(),
+				"comment_writer": $("#comment_writer").val(),
+				"comment_passwd": $("#comment_passwd").val(),
+				"comment_content": $("#comment_content").val()
+		}
 	}
 		
 	$.ajax({
@@ -86,6 +97,10 @@ function goPage(gubun, no) {
 				} else {
 					choosePage(1);
 				}
+			} else if (gubun === 'commentWrite') {
+				$("#comment_result").html(data);
+			} else if (gubun === 'commentWriteProc') {
+				chooseCommentPage(1);
 			} else {
 				$("#result").html(data);
 			}

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import common.UtilBoard;
 import model.board.dao.BoardDAO;
 import model.board.dto.BoardDTO;
+import model.board.dto.CommentDTO;
 import model.member.dto.MemberDTO;
 
 @WebServlet("/board_servlet/*")
@@ -50,6 +51,9 @@ public class BoardController extends HttpServlet {
 		String pageNum_ = request.getParameter("pageNumber");
 		int pageNum = util.numberCheck(pageNum_, 1);
 		
+		String commentPageNumber_ = request.getParameter("commentPageNumber");
+		int commentPageNumber = util.numberCheck(commentPageNumber_, 1);
+		
 		String tbl_ = request.getParameter("tbl_");
 		String tbl = util.tblCheck(tbl_, "freeboard");
 		
@@ -71,6 +75,7 @@ public class BoardController extends HttpServlet {
 		request.setAttribute("ip", ip);
 		request.setAttribute("tbl", tbl);
 		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("commentPageNumber", commentPageNumber);
 		request.setAttribute("no", no);
 		request.setAttribute("search_option", search_option);
 		request.setAttribute("search_data", search_data);
@@ -215,9 +220,9 @@ public class BoardController extends HttpServlet {
 			dto = dao.getView(no);
 			
 			// content의 줄바꿈
-			// String content = dto.getContent();
-			// content = content.replace("\n", "</br>");
-			// dto.setContent(content);
+			String content = dto.getContent();
+			content = content.replace("\n", "</br>");
+			dto.setContent(content);
 			
 			String tempPage = "viewPage";
 			if (dto.getSecretGubun().equals("T")) {   // 비밀글이면
@@ -228,6 +233,7 @@ public class BoardController extends HttpServlet {
 				}
 			}
 			
+
 			request.setAttribute("menu_gubun", "board_view");
 			request.setAttribute("dto", dto);
 			request.setAttribute("tempPage", tempPage);
@@ -295,6 +301,58 @@ public class BoardController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
+			/* 비밀번호 체크 다른 방법1
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			
+			if (isSamePasswd) {
+				int result = dao.setUpdate(dto);
+				out.println("<script>alert('수정완료'); goPage('view', '" + no + "');</script>");
+			} else {
+				out.println("<script>alert('비밀번호오류'); goPage('view', '" + no + "');</script>");
+			}
+			out.flush();
+			out.close(); 
+			
+			index.jsp : goPage에
+			
+			success: function(data) {
+			} else if (value1 === 'sujungProc") {
+				$("#result").html(data);
+			}
+			*/
+			
+			/* 비밀번호 체크 다른 방법2
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			
+			if (isSamePasswd) {
+				int result = dao.setUpdate(dto);
+				out.println("<script>$('#span_passwd').text('O');</script>");
+			} else {
+				out.println("<script>$('#span_passwd').text('X');</script>");
+			}
+			out.flush();
+			out.close(); 
+			
+			index.jsp에
+			passwd : <span id="span_passwd></span><br> 추가하기
+			
+			success: function(data) {
+			} else if (value1 === 'sujungProc") {
+				$("#result").html(data);
+				
+				if ($("#span_passwd").text() === "O" {
+					alert('수정됨');
+					goPage('view', $("#span_no").text());
+				} else {
+					alert('비밀번호 틀림');
+					goPage('sujung', $("#span_no").text());
+				}
+			}	
+			*/
+			
+			
 		} else if (url.indexOf("delete.do") != -1) {
 			request.setAttribute("menu_gubun", "board_delete");
 			
@@ -324,6 +382,60 @@ public class BoardController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
+			
+		} else if (url.indexOf("commentWrite.do") != -1) {			
+			// paging
+			int allRowsCount = dao.getAllCommentRowsCount(no);
+			final int ONE_PAGE_ROWS = 5;
+			final int MAX_PAGING_WIDTH = 10;
+			
+			int[] pagerArr = util.pager(ONE_PAGE_ROWS, MAX_PAGING_WIDTH, allRowsCount, commentPageNumber);
+			int tableRowNum = pagerArr[0];
+			int pagingStartNum = pagerArr[1];
+			int pagingEndNum = pagerArr[2];
+			int maxPagesCount = pagerArr[3];
+			int startNum = pagerArr[4];
+			int endNum = pagerArr[5];
+			
+			
+			ArrayList<CommentDTO> list = dao.getCommentPagingList(no, startNum, endNum);
+			
+			request.setAttribute("list", list);
+			
+			request.setAttribute("ONE_PAGE_ROWS", ONE_PAGE_ROWS);
+			request.setAttribute("MAX_PAGING_WIDTH", MAX_PAGING_WIDTH);
+
+			request.setAttribute("allRowsCount", allRowsCount);
+			request.setAttribute("tableRowNum", tableRowNum);
+			
+			request.setAttribute("pagingStartNum", pagingStartNum);
+			request.setAttribute("pagingEndNum", pagingEndNum);
+			
+			request.setAttribute("maxPagesCount", maxPagesCount);
+			request.setAttribute("pagingStartNum", pagingStartNum);
+			request.setAttribute("pagingEndNum", pagingEndNum);			
+			
+			page = "/board/comment_list.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("commentWriteProc.do") != -1) {
+			// input comment data
+			String comment_writer = request.getParameter("comment_writer");
+			String comment_passwd = request.getParameter("comment_passwd");
+			String comment_content = request.getParameter("comment_content");
+			
+			CommentDTO commentDto = new CommentDTO();
+			commentDto.setWriter(comment_writer);
+			commentDto.setPasswd(comment_passwd);
+			commentDto.setContent(comment_content);
+			commentDto.setBoard_no(no);
+			commentDto.setMemberNo(cookNo);
+			commentDto.setIp(ip);
+			
+			int result = dao.setInsertComment(commentDto);
+
 			
 		}
 	}

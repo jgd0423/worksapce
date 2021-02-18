@@ -94,7 +94,8 @@
 			</tr>
 			<tr>
 				<td colspan="2" height="50px" style="padding: 20 0 0 0;">
-					Comment...
+					commentPageNumber : <span id="span_commentPageNumber">${commentPageNumber }</span><br>
+					<div id="comment_result"></div>
 				</td>
 			</tr>
 		</table>
@@ -107,8 +108,9 @@
 
 $(document).ready(() => {
 	// content의 줄바꿈
-	const content = $("#content").text().replace(/(?:\r\n|\r|\n)/g, '<br/>');
-	$("#content").html(content);
+	// const content = $("#content").text().replace(/(?:\r\n|\r|\n)/g, '<br/>');
+	// $("#content").html(content);
+	goPage('commentWrite', '');
 	
 	$("#btnViewPasswd").click(() => {
 		goPage('view', $("#span_no").text());
