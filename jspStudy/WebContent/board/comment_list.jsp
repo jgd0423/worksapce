@@ -12,69 +12,92 @@
 		</td>
 	</tr>
 </table>
-레코드 수 : ${allRowsCount }
-<table align="center" width="95%">
-	<c:if test="${list.size() == 0 }">
-		<tr>
-			<td colspan="4" height="200" align="center">등록된 댓글이 없습니다.</td>
-		</tr>
-	</c:if>
-	<c:if test="${list.size() > 0 }">
+
+<c:if test="${list.size() > 0 }">
+	<table align="center" width="95%">
 		<c:forEach var="dto" items="${list }">
 			<tr>
-				<td>${tableRowNum }</td>
-				<td>${dto.writer }</td>
-				<td>${dto.content }</td>
+				<td style="padding: 0 0 10 10;">
+					<table align="center" style="width: 100%;">
+						<tr>
+							<td>${dto.writer } &nbsp; (${dto.regiDate })</td>
+						</tr>
+						<tr>
+							<td>${dto.content }</td>
+						</tr>
+					</table>
+					<hr />
+				</td>
 			</tr>
-			<c:set var="tableRowNum" value="${tableRowNum = tableRowNum - 1 }"/>
 		</c:forEach>
-	</c:if>
-	<tr>
-		<td colspan="7" height="50" align="center">
-			<a href="#" onclick="chooseCommentPage(1)"><<</a>
-			<c:choose>
-				<c:when test="${pageNum - 1 <= 0 }">
-					<a href="#" onclick="chooseCommentPage(${pageNum })"><</a>
-				</c:when>
-				<c:otherwise>
-					<a href="#" onclick="chooseCommentPage(${pageNum - 1 })"><</a>
-				</c:otherwise>
-			</c:choose>
-			<c:forEach var="i" begin="${pagingStartNum }" end="${pagingEndNum }" step="1" >
+		<tr>
+			<td colspan="7" height="50" align="center">
+				<a href="#comment" onclick="chooseCommentPage(1)"><<</a>
 				<c:choose>
-					<c:when test="${commentPageNumber == i }">
-						<b>[${i }]</b>
+					<c:when test="${pageNum - 1 <= 0 }">
+						<a href="#comment" onclick="chooseCommentPage(${pageNum })"><</a>
 					</c:when>
 					<c:otherwise>
-						<a href="#" onclick="chooseCommentPage(${i })">${i }</a>
+						<a href="#comment" onclick="chooseCommentPage(${pageNum - 1 })"><</a>
 					</c:otherwise>
 				</c:choose>
-			</c:forEach>
-			<c:choose>
-				<c:when test="${pageNum + 1 >= maxPagesCount }">
-					<a href="#" onclick="chooseCommentPage(${maxPagesCount })">></a>
-				</c:when>
-				<c:otherwise>
-					<a href="#" onclick="chooseCommentPage(${pageNum + 1 })">></a>
-				</c:otherwise>
-			</c:choose>
-			<a href="#" onclick="chooseCommentPage(${maxPagesCount })">>></a>
-		</td>
-	</tr>
-</table>
+				<c:forEach var="i" begin="${pagingStartNum }" end="${pagingEndNum }" step="1" >
+					<c:choose>
+						<c:when test="${commentPageNumber == i }">
+							<b>[${i }]</b>
+						</c:when>
+						<c:otherwise>
+							<a href="#comment" onclick="chooseCommentPage(${i })">${i }</a>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+				<c:choose>
+					<c:when test="${pageNum + 1 >= maxPagesCount }">
+						<a href="#comment" onclick="chooseCommentPage(${maxPagesCount })">></a>
+					</c:when>
+					<c:otherwise>
+						<a href="#comment" onclick="chooseCommentPage(${pageNum + 1 })">></a>
+					</c:otherwise>
+				</c:choose>
+				<a href="#comment" onclick="chooseCommentPage(${maxPagesCount })">>></a>
+			</td>
+		</tr>
+	</table>
+</c:if>
 
 
 <script>
 
 $(document).ready(() => {
 	$("#btnCommentSave").click(() => {
-		goPage('commentWriteProc', '');
+		commentSave();
 	})
 });
 
+function commentSave() {
+	const param = {
+			"commentPageNumber": $("#span_commentPageNumber").text(),
+			"no": $("#span_no").text(),
+			"comment_writer": $("#comment_writer").val(),
+			"comment_passwd": $("#comment_passwd").val(),
+			"comment_content": $("#comment_content").val()
+	};
+	const url = "${path}/board_servlet/commentProc.do";
+	
+	$.ajax({
+		type: "post",
+		data: param,
+		url: url,
+		success: (data) => {
+			$("#span_commentPageNumber").text(${commentPageNumber});
+			commentList();
+		}
+	});
+}
+
 function chooseCommentPage(commentPageNumber) {
 	$("#span_commentPageNumber").text(commentPageNumber);
-	goPage('commentWrite', '');
+	commentList();
 }
 
 </script>

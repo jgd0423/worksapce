@@ -94,8 +94,9 @@
 			</tr>
 			<tr>
 				<td colspan="2" height="50px" style="padding: 20 0 0 0;">
+					<a name="comment"></a>
 					commentPageNumber : <span id="span_commentPageNumber">${commentPageNumber }</span><br>
-					<div id="comment_result"></div>
+					<div id="commentResult"></div>
 				</td>
 			</tr>
 		</table>
@@ -110,11 +111,28 @@ $(document).ready(() => {
 	// content의 줄바꿈
 	// const content = $("#content").text().replace(/(?:\r\n|\r|\n)/g, '<br/>');
 	// $("#content").html(content);
-	goPage('commentWrite', '');
 	
 	$("#btnViewPasswd").click(() => {
 		goPage('view', $("#span_no").text());
 	});
-})
+	
+	commentList();
+});
+
+function commentList() {
+	const param = {
+			"no": $("#span_no").text(),
+			"commentPageNumber": $("#span_commentPageNumber").text()
+	};
+	const url = "${path}/board_servlet/commentList.do";
+	$.ajax({
+		type: "post",
+		data: param,
+		url: url,
+		success: (data) => {
+			$("#commentResult").html(data);
+		}
+	});
+}
 
 </script>

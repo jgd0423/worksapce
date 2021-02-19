@@ -51,10 +51,7 @@ public class BoardController extends HttpServlet {
 		String pageNum_ = request.getParameter("pageNumber");
 		int pageNum = util.numberCheck(pageNum_, 1);
 		
-		String commentPageNumber_ = request.getParameter("commentPageNumber");
-		int commentPageNumber = util.numberCheck(commentPageNumber_, 1);
-		
-		String tbl_ = request.getParameter("tbl_");
+		String tbl_ = request.getParameter("tbl");
 		String tbl = util.tblCheck(tbl_, "freeboard");
 		
 		String no_ = request.getParameter("no");
@@ -75,7 +72,6 @@ public class BoardController extends HttpServlet {
 		request.setAttribute("ip", ip);
 		request.setAttribute("tbl", tbl);
 		request.setAttribute("pageNum", pageNum);
-		request.setAttribute("commentPageNumber", commentPageNumber);
 		request.setAttribute("no", no);
 		request.setAttribute("search_option", search_option);
 		request.setAttribute("search_data", search_data);
@@ -383,8 +379,10 @@ public class BoardController extends HttpServlet {
 			rd.forward(request, response);
 			
 			
-		} else if (url.indexOf("commentWrite.do") != -1) {			
+		} else if (url.indexOf("commentList.do") != -1) {
 			// paging
+			String commentPageNumber_ = request.getParameter("commentPageNumber");
+			int commentPageNumber = util.numberCheck(commentPageNumber_, 1);
 			int allRowsCount = dao.getAllCommentRowsCount(no);
 			final int ONE_PAGE_ROWS = 5;
 			final int MAX_PAGING_WIDTH = 10;
@@ -398,13 +396,14 @@ public class BoardController extends HttpServlet {
 			int endNum = pagerArr[5];
 			
 			
-			ArrayList<CommentDTO> list = dao.getCommentPagingList(no, startNum, endNum);
+			ArrayList<CommentDTO> list = dao.getCommentPagingList(startNum, endNum, no);
 			
 			request.setAttribute("list", list);
 			
 			request.setAttribute("ONE_PAGE_ROWS", ONE_PAGE_ROWS);
 			request.setAttribute("MAX_PAGING_WIDTH", MAX_PAGING_WIDTH);
-
+			
+			request.setAttribute("commentPageNumber", commentPageNumber);
 			request.setAttribute("allRowsCount", allRowsCount);
 			request.setAttribute("tableRowNum", tableRowNum);
 			
@@ -413,14 +412,16 @@ public class BoardController extends HttpServlet {
 			
 			request.setAttribute("maxPagesCount", maxPagesCount);
 			request.setAttribute("pagingStartNum", pagingStartNum);
-			request.setAttribute("pagingEndNum", pagingEndNum);			
+			request.setAttribute("pagingEndNum", pagingEndNum);
+			
+			request.setAttribute("cookName", cookName);
 			
 			page = "/board/comment_list.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
 			
-		} else if (url.indexOf("commentWriteProc.do") != -1) {
+		} else if (url.indexOf("commentProc.do") != -1) {
 			// input comment data
 			String comment_writer = request.getParameter("comment_writer");
 			String comment_passwd = request.getParameter("comment_passwd");

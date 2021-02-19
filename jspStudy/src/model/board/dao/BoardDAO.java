@@ -410,7 +410,7 @@ public class BoardDAO {
 		conn = getConn();
 		int allRowsCount = 0;
 		try {
-			String sql = "SELECT COUNT(*) FROM " + BOARD_COMMENT + " WHERE board_no = ? ORDER BY comment_no DESC";
+			String sql = "SELECT COUNT(*) FROM " + BOARD_COMMENT + " WHERE board_no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, no);
 			rs = pstmt.executeQuery();
@@ -426,7 +426,7 @@ public class BoardDAO {
 		return allRowsCount;
 	}
 
-	public ArrayList<CommentDTO> getCommentPagingList(int no, int startNum, int endNum) {
+	public ArrayList<CommentDTO> getCommentPagingList(int startNum, int endNum, int no) {
 		conn = getConn();
 		ArrayList<CommentDTO> list = new ArrayList<>();
 		try {
