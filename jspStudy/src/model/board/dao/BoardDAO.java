@@ -371,7 +371,7 @@ public class BoardDAO {
 		conn = getConn();
 		int result = 0;
 		try {
-			String sql = "DELETE FROM board WHERE no = ? ";
+			String sql = "DELETE FROM " + BOARD + " WHERE no = ? ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getNo());
 			result = pstmt.executeUpdate();
@@ -490,6 +490,24 @@ public class BoardDAO {
 		}
 		return status;
 		
+	}
+
+	public int setDeleteComment(int comment_no, String passwd) {
+		conn = getConn();
+		int result = 0;
+		try {
+			String sql = "DELETE FROM " + BOARD_COMMENT + " WHERE comment_no = ? AND passwd = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, comment_no);
+			pstmt.setString(2, passwd);
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		System.out.println(result);
+		return result;
 	}
 	
 	

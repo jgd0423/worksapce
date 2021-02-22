@@ -20,10 +20,22 @@
 				<td style="padding: 0 0 10 10;">
 					<table align="center" style="width: 100%;">
 						<tr>
-							<td>${dto.writer } &nbsp; (${dto.regiDate })</td>
+							<td>
+								${dto.writer } 
+								&nbsp;
+								(${dto.regiDate }) 
+								<button 
+									class="btnCommentDelete" 
+									value="${dto.comment_no }" 
+									type="button" 
+									style="float: right;"
+								>
+									삭제
+								</button>
+							</td>
 						</tr>
 						<tr>
-							<td>${dto.content }</td>
+							<td id="content${dto.comment_no }">${dto.content }</td>
 						</tr>
 					</table>
 					<hr />
@@ -71,6 +83,44 @@
 $(document).ready(() => {
 	$("#btnCommentSave").click(() => {
 		commentSave();
+	});
+	
+	$(".btnCommentDelete").click((event) => {
+		const { 
+			target:{ value } 
+		} = event;
+		const content = document.querySelector(`#content\${value}`);
+
+		if (content.children.length === 0) {
+			const input = document.createElement("input");
+			input.setAttribute("id", `input\${value}`);
+			input.setAttribute("style", "float: right");
+			input.setAttribute("placeholder", "비밀번호 입력")
+			const confirm = document.createElement("button");
+			confirm.innerText = '확인';
+			confirm.setAttribute("type", "button");
+			confirm.setAttribute("id", `confirm\${value}`);
+			confirm.setAttribute("class", "confirm");
+			confirm.setAttribute("style", "float: right");
+			confirm.setAttribute("value", value);
+			content.append(confirm);
+			content.append(input);
+			event.target.innerText = "취소";
+		} else {
+			const input = document.querySelector(`#input\${value}`);
+			const confirm = document.querySelector(`#confirm\${value}`);
+			input.remove();
+			confirm.remove();
+			event.target.innerText = "삭제";
+		}
+	});
+	
+	$(document).on("click", ".confirm", (event) => {
+		const { 
+			target:{ value } 
+		} = event;
+		const password = document.querySelector(`#input\${value}`).value;
+		commentDelete(value, password);
 	})
 });
 
@@ -82,7 +132,7 @@ function commentSave() {
 			"comment_passwd": $("#comment_passwd").val(),
 			"comment_content": $("#comment_content").val()
 	};
-	const url = "${path}/board_servlet/commentProc.do";
+	const url = "${path}/board_servlet/commentWrite.do";
 	
 	$.ajax({
 		type: "post",
@@ -98,6 +148,23 @@ function commentSave() {
 function chooseCommentPage(commentPageNumber) {
 	$("#span_commentPageNumber").text(commentPageNumber);
 	commentList();
+}
+
+function commentDelete(comment_no, password) {
+	const param = {
+			"comment_no": comment_no,
+			"passwd": password
+	};
+	const url = "${path}/board_servlet/commentDelete.do";
+	
+	$.ajax({
+		type: "post",
+		data: param,
+		url: url,
+		success: (data) => {
+			commentList();
+		}
+	})
 }
 
 </script>

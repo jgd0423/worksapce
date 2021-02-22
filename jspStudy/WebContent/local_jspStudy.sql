@@ -277,6 +277,8 @@ SELECT * FROM board_comment WHERE board_no = 19 ORDER BY comment_no DESC;
 
 DESC board_comment;
 
+SELECT * FROM board_comment;
+
 CREATE TABLE boardChk (
     no NUMBER NOT NULL PRIMARY KEY,
     tbl VARCHAR2(50) NOT NULL,

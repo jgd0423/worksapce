@@ -425,7 +425,7 @@ public class BoardController extends HttpServlet {
 			rd.forward(request, response);
 			
 			
-		} else if (url.indexOf("commentProc.do") != -1) {
+		} else if (url.indexOf("commentWrite.do") != -1) {
 			// input comment data
 			String comment_writer = request.getParameter("comment_writer");
 			String comment_passwd = request.getParameter("comment_passwd");
@@ -442,6 +442,11 @@ public class BoardController extends HttpServlet {
 			int result = dao.setInsertComment(commentDto);
 
 			
+		} else if (url.indexOf("commentDelete.do") != -1) {
+			String comment_no_ = request.getParameter("comment_no");
+			int comment_no = Integer.parseInt(comment_no_);
+			String passwd = request.getParameter("passwd");
+			int result = dao.setDeleteComment(comment_no, passwd);
 		}
 	}
 
