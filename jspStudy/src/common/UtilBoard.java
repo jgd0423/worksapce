@@ -1,5 +1,9 @@
 package common;
 
+import java.util.ArrayList;
+
+import model.board.dao.BoardDAO;
+
 public class UtilBoard extends Util {
 	public String tblCheck(String tbl, String defaultTbl) {
 		if (tbl == null || tbl.trim().equals("")) {
@@ -7,6 +11,12 @@ public class UtilBoard extends Util {
 		}
 		tbl = tbl.trim();
 		return tbl;
+	}
+	
+	public ArrayList<String> tblStatus(String tbl) {
+		BoardDAO dao = new BoardDAO();
+		ArrayList<String> tblStatus = dao.isUsingTable(tbl);
+		return tblStatus;
 	}
 	
 	// overloading

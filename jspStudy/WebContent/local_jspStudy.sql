@@ -235,8 +235,6 @@ SELECT * FROM board ORDER BY noticeNo DESC, refNo DESC, levelNo ASC;
 
 SELECT * FROM board ORDER BY noticeNo DESC;
 
-
-
 SELECT * 
 FROM 
     (SELECT 
@@ -278,3 +276,26 @@ CREATE SEQUENCE seq_board_comment START WITH 1 INCREMENT BY 1 NOMAXVALUE NOCACHE
 SELECT * FROM board_comment WHERE board_no = 19 ORDER BY comment_no DESC;
 
 DESC board_comment;
+
+CREATE TABLE boardChk (
+    no NUMBER NOT NULL PRIMARY KEY,
+    tbl VARCHAR2(50) NOT NULL,
+    tblName VARCHAR2(50) NOT NULL,
+    serviceGubun VARCHAR2(1) NOT NULL CHECK (serviceGubun IN ('T', 'F')),
+    regiDate DATE DEFAULT SYSDATE,
+    UNIQUE(tbl),
+    UNIQUE(tblName)
+);
+drop table boardChk;
+CREATE SEQUENCE seq_boardChk START WITH 1 INCREMENT BY 1 NOMAXVALUE NOCACHE;
+
+INSERT INTO boardChk VALUES (seq_boardChk.NEXTVAL, 'freeboard', '자유게시판', 'T', SYSDATE);
+INSERT INTO boardChk VALUES (seq_boardChk.NEXTVAL, 'funnyboard', '유머게시판', 'T', SYSDATE);
+INSERT INTO boardChk VALUES (seq_boardChk.NEXTVAL, 'memberboard', '회원전용게시판', 'F', SYSDATE);
+INSERT INTO boardChk VALUES (seq_boardChk.NEXTVAL, 'javaboard', '자바게시판', 'T', SYSDATE);
+
+SELECT * FROM boardChk;
+
+SELECT * FROM board ORDER BY noticeNo DESC, refNo DESC, levelNo ASC;
+
+SELECT tblName, serviceGubun FROM boardChk WHERE tbl = 'dsfdfds';

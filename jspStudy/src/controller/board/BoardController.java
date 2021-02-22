@@ -53,7 +53,10 @@ public class BoardController extends HttpServlet {
 		
 		String tbl_ = request.getParameter("tbl");
 		String tbl = util.tblCheck(tbl_, "freeboard");
-		
+		ArrayList<String> tblStatus = util.tblStatus(tbl);
+		String isUsingTable = tblStatus.get(0);
+		String tableName = tblStatus.get(1);
+
 		String no_ = request.getParameter("no");
 		int no = util.numberCheck(no_, 0);
 		
@@ -71,6 +74,8 @@ public class BoardController extends HttpServlet {
 		request.setAttribute("yearMonthDayMap", yearMonthDayMap);
 		request.setAttribute("ip", ip);
 		request.setAttribute("tbl", tbl);
+		request.setAttribute("isUsingTable", isUsingTable);
+		request.setAttribute("tableName", tableName);
 		request.setAttribute("pageNum", pageNum);
 		request.setAttribute("no", no);
 		request.setAttribute("search_option", search_option);
@@ -187,7 +192,6 @@ public class BoardController extends HttpServlet {
 			int maxPagesCount = pagerArr[3];
 			int startNum = pagerArr[4];
 			int endNum = pagerArr[5];
-			
 			
 			ArrayList<BoardDTO> list = dao.getPagingList(startNum, endNum, tbl, search_option, search_data);
 			

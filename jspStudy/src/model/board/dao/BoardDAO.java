@@ -466,6 +466,31 @@ public class BoardDAO {
 		
 		return list;
 	}
+
+	public ArrayList<String> isUsingTable(String tbl) {
+		ArrayList<String> status = new ArrayList<>();
+		conn = getConn();
+		try {
+			String sql = "SELECT tblName, serviceGubun FROM boardChk WHERE tbl = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, tbl);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				status.add(rs.getString("serviceGubun"));
+				status.add(rs.getString("tblName"));
+			}
+			if (status.size() == 0) {
+				status.add("F");
+				status.add("none");
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		return status;
+		
+	}
 	
 	
 	

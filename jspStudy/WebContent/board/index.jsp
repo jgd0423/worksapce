@@ -85,6 +85,13 @@ function goPage(gubun, no) {
 				} else {
 					choosePage(1);
 				}
+			} else if (gubun === 'list') {
+				if ('${isUsingTable}' === 'F') {
+					alert('잘못된 접근입니다.');
+					history.back();
+				} else {
+					$("#result").html(data);
+				}
 			} else {
 				$("#result").html(data);
 			}
