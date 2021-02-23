@@ -506,7 +506,7 @@ public class BoardDAO {
 		} finally {
 			getConnClose(rs, pstmt, conn);
 		}
-		System.out.println(result);
+		
 		return result;
 	}
 	

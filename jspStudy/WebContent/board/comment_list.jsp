@@ -87,7 +87,7 @@ $(document).ready(() => {
 	
 	$(".btnCommentDelete").click((event) => {
 		const { 
-			target:{ value } 
+			target: { value } 
 		} = event;
 		const content = document.querySelector(`#content\${value}`);
 
@@ -117,7 +117,7 @@ $(document).ready(() => {
 	
 	$(document).on("click", ".confirm", (event) => {
 		const { 
-			target:{ value } 
+			target: { value } 
 		} = event;
 		const password = document.querySelector(`#input\${value}`).value;
 		commentDelete(value, password);

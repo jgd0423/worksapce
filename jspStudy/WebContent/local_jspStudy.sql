@@ -301,3 +301,19 @@ SELECT * FROM boardChk;
 SELECT * FROM board ORDER BY noticeNo DESC, refNo DESC, levelNo ASC;
 
 SELECT tblName, serviceGubun FROM boardChk WHERE tbl = 'dsfdfds';
+
+CREATE TABLE product (
+    no NUMBER NOT NULL,
+    name VARCHAR2(50) NOT NULL,
+    price NUMBER DEFAULT 0,
+    description CLOB,
+    product_img VARCHAR2(1000) NOT NULL,
+    regi_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(no)
+);
+
+CREATE SEQUENCE seq_product START WITH 1 INCREMENT BY 1 NOMAXVALUE NOCACHE;
+
+DESC product;
+
+SELECT * FROM product WHERE no > 0;

@@ -74,6 +74,9 @@
 				<c:when test="${menu_gubun == 'board_index' }">
 					<jsp:include page="../board/index.jsp" />
 				</c:when>
+				<c:when test="${menu_gubun == 'product_index' }">
+					<jsp:include page="../shop/product/index.jsp" />
+				</c:when>
 			</c:choose>
 			<!-- section -->
 		</td>
