@@ -26,6 +26,14 @@
 		</td>
 	</tr>
 	<tr>
+		<td style="align: center;">상품이미지</td>
+		<td>
+			<input type="file" name="file" />
+			<input type="file" name="file" />
+			<input type="file" name="file" />
+		</td>
+	</tr>
+	<tr>
 		<td align="center" colspan="2" height="50px">
 			<button type="button" id="btnWrite">등록하기</button>
 			<button type="button" id="btnList">목록으로</button>
@@ -36,16 +44,14 @@
 <script>
 
 $(document).ready(() => {
-	$("#writer").focus();
+	$("#name").focus();
 	
 	$("#btnWrite").click(() => {
-		//if (confirm('등록하시겠습니까?')) {
-			goPage('writeProc', '');
-		//}
+		chooseProc('writeProc', '1', '');
 	});
 	
 	$("#btnList").click(() => {
-		goPage('list', '');
+		chooseProc('list', '1', '');
 	});
 });
 

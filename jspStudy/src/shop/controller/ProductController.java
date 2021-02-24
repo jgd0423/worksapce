@@ -2,6 +2,7 @@ package shop.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
@@ -11,7 +12,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+
+
 import shop.common.UtilProduct;
+import shop.common.Constants;
 import shop.model.dao.ProductDAO;
 import shop.model.dto.ProductDTO;
 
@@ -126,16 +132,36 @@ public class ProductController extends HttpServlet {
 			
 			
 		} else if (url.indexOf("writeProc.do") != -1) {
-			String name = request.getParameter("name");
-			String price_ = request.getParameter("price");
+			String img_path01 = request.getSession().getServletContext().getRealPath("/attach/product_img/");	
+			String img_path02 = img_path01.replace("\\", "/");
+			String img_path03 = img_path01.replace("\\", "\\\\");
+			
+			// MultipartRequest 선언되면 파일이 서버에 저장됨
+			MultipartRequest multi = new MultipartRequest(request, img_path03, Constants.MAX_UPLOAD, "utf-8", new DefaultFileRenamePolicy());
+			
+			String name = multi.getParameter("name");
+			String price_ = multi.getParameter("price");
 			int price = Integer.parseInt(price_);
-			String description = request.getParameter("description");
+			String description = multi.getParameter("description");
 			
-			dto.setName(name);
-			dto.setPrice(price);
-			dto.setDescription(description);
+			System.out.println("name: " + name);
+			System.out.println("price: " + price);
+			System.out.println("description: " + description);
 			
-			int result = dao.setInsert(dto);
+			Enumeration files = multi.getFileNames();
+			while (files.hasMoreElements()) {
+				String formName = (String)files.nextElement();
+				String fileName = multi.getFilesystemName(formName);
+				System.out.println("formName: " + formName);
+				System.out.println("fileName: " + fileName);
+			}
+			
+			
+//			dto.setName(name);
+//			dto.setPrice(price);
+//			dto.setDescription(description);
+			
+//			int result = dao.setInsert(dto);
 		}
 	}
 
