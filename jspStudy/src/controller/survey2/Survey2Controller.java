@@ -145,7 +145,7 @@ public class Survey2Controller extends HttpServlet {
 			if (result > 0) {
 				temp = path + "/survey2_servlet/list.do";
 			} else {
-				temp = path + "/member_servlet/write.do";
+				temp = path + "/survey2_servlet/write.do";
 			}
 			response.sendRedirect(temp);	
 			

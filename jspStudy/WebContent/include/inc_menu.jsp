@@ -41,7 +41,10 @@
 		<td id="board" style="padding: 0px 20px; ${menu_name == 'board' ? 'background-color: silver;' : ''}">
 			<a href="${path }/board_servlet/index.do">게시판(ajax)</a>
 		</td>
-		<td style="padding: 0px 20px; ${menu_name == 'product' ? 'background-color: silver;' : ''}"">
+		<td id="board2" style="padding: 0px 20px; ${menu_name == 'board2' ? 'background-color: silver;' : ''}">
+			<a href="${path }/board2_servlet/list.do">게시판</a>
+		</td>
+		<td style="padding: 0px 20px; ${menu_name == 'product' ? 'background-color: silver;' : ''}">
 			<a href="${path }/product_servlet/index.do">Mall(상품관리-ajax)</a>
 		</td>
 		<td style="padding: 0px 20px;">
