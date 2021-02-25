@@ -2,16 +2,18 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
 
+
 <table align="center" width="95%">
 	<tr>
-		<td style="padding : 0 0 20 0;">
+		<td style="padding : 0 0 20 0;">				
 			이름 : <input type="text" name="comment_writer" id="comment_writer" size="10" value="${cookName }" />
 			비밀번호 : <input type="text" name="comment_passwd" id="comment_passwd" size="10" /><br>
 			댓글 : <input type="text" name="comment_content" id="comment_content" size="40" />
-			<button type="button" id="btnCommentSave">확인</button>
+			<button type="button" id="btnCommentSave" onclick="commentWrite()">확인</button>
 		</td>
 	</tr>
 </table>
+
 
 <c:if test="${list.size() > 0 }">
 	<table align="center" width="95%">
@@ -77,13 +79,77 @@
 	</table>
 </c:if>
 
+
 <script>
+
+function commentWrite() {
+	document.commentWriteForm.method = 'post';
+	document.commentWriteForm.action = '${path}/board2_servlet/commentWrite.do';
+	document.commentWriteForm.submit();
+}
+
+$(document).ready(() => {	
+	$(".btnCommentDelete").click((event) => {
+		const { 
+			target: { value } 
+		} = event;
+		const content = document.querySelector(`#content\${value}`);
+
+		if (content.children.length === 0) {
+			const input = document.createElement("input");
+			input.setAttribute("id", `input\${value}`);
+			input.setAttribute("style", "float: right");
+			input.setAttribute("placeholder", "비밀번호 입력")
+			const confirm = document.createElement("button");
+			confirm.innerText = '확인';
+			confirm.setAttribute("type", "button");
+			confirm.setAttribute("id", `confirm\${value}`);
+			confirm.setAttribute("class", "confirm");
+			confirm.setAttribute("style", "float: right");
+			confirm.setAttribute("value", value);
+			content.append(confirm);
+			content.append(input);
+			event.target.innerText = "취소";
+		} else {
+			const input = document.querySelector(`#input\${value}`);
+			const confirm = document.querySelector(`#confirm\${value}`);
+			input.remove();
+			confirm.remove();
+			event.target.innerText = "삭제";
+		}
+	});
+	
+	$(document).on("click", ".confirm", (event) => {
+		const { 
+			target: { value } 
+		} = event;
+		const password = document.querySelector(`#input\${value}`).value;
+		commentDelete(value, password);
+	})
+});
 
 function chooseCommentPage(commentPageNumber, no) {
 	let url = '';
 	url += `${path}/board2_servlet/view.do?commentPageNumber=\${commentPageNumber}`;
 	url += `&no=\${no}`;
 	location.href = url;
+}
+
+function commentDelete(comment_no, password) {
+	const param = {
+			"comment_no": comment_no,
+			"passwd": password
+	};
+	const url = "${path}/board_servlet/commentDelete.do";
+	
+	$.ajax({
+		type: "post",
+		data: param,
+		url: url,
+		success: (data) => {
+			commentList();
+		}
+	})
 }
 
 </script>

@@ -143,11 +143,7 @@ public class ProductController extends HttpServlet {
 			String price_ = multi.getParameter("price");
 			int price = Integer.parseInt(price_);
 			String description = multi.getParameter("description");
-			
-			System.out.println("name: " + name);
-			System.out.println("price: " + price);
-			System.out.println("description: " + description);
-			
+
 			String[] array = new String[3];
 			Enumeration files = multi.getFileNames();
 			while (files.hasMoreElements()) {

@@ -275,6 +275,27 @@ public class Board2Controller extends HttpServlet {
 			rd.forward(request, response);
 			
 			
+		} else if (url.indexOf("commentWrite.do") != -1) {
+			// input comment data
+			String comment_writer = request.getParameter("comment_writer");
+			String comment_passwd = request.getParameter("comment_passwd");
+			String comment_content = request.getParameter("comment_content");
+			
+			System.out.println(comment_writer);
+			System.out.println(comment_passwd);
+			System.out.println(comment_content);
+			
+			CommentDTO commentDto = new CommentDTO();
+			commentDto.setWriter(comment_writer);
+			commentDto.setPasswd(comment_passwd);
+			commentDto.setContent(comment_content);
+			commentDto.setBoard_no(no);
+			commentDto.setMemberNo(cookNo);
+			commentDto.setIp(ip);
+			
+			//int result = dao.setInsertComment(commentDto);
+
+			
 		}
 	}
 }
