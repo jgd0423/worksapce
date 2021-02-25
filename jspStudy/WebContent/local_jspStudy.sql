@@ -317,3 +317,6 @@ CREATE SEQUENCE seq_product START WITH 1 INCREMENT BY 1 NOMAXVALUE NOCACHE;
 DESC product;
 
 SELECT * FROM product WHERE no > 0;
+
+drop table product;
+drop sequence seq_product;
