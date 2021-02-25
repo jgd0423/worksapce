@@ -66,13 +66,29 @@ ${allRowsCount }개의 레코드가 있습니다.
 		<c:forEach var="dto" items="${list }">
 			<tr>
 				<td>${tableRowNum }</td>
-				<td></td>
+				<td>
+					<c:choose>
+						<c:when test="${fn:split(dto.product_img, ',')[0] == '-' }">
+							<a href="#" onclick="chooseProc('view', '', '${dto.no }')">이미지X</a>
+						</c:when>
+						<c:otherwise>
+							<c:set var="temp1" value="${fn:split(dto.product_img, ',')[0] }"></c:set>
+							<a href="#" onclick="chooseProc('view', '', '${dto.no}')">
+								<img 
+									src="${path }/attach/product_img/${temp1}" 
+									alt="${dto.name }" title="${dto.name }" 
+									style="width: 50px; height: 50px;"
+								/>
+							</a>
+						</c:otherwise>
+					</c:choose>
+				</td>
 				<td>
 					<a href="#" onclick="goPage('view', '${dto.no }')">${dto.name }</a>
 				</td>
-				<td>${dto.price }</td>
+				<td><fmt:formatNumber type="number" maxFractionDigits="3" value="${dto.price }"/></td>
 				<td>${dto.product_img }</td>
-				<td></td>
+				<td><fmt:formatNumber type="number" maxFractionDigits="3" value="0"/></td>
 				<td>${dto.regi_date }</td>
 			</tr>
 			<c:set var="tableRowNum" value="${tableRowNum = tableRowNum - 1 }"/>
@@ -121,16 +137,6 @@ ${allRowsCount }개의 레코드가 있습니다.
 
 <script>
 
-function search() {
-	$("#span_search_option").text($("#search_option").val());
-	$("#span_search_data").text($("#search_data").val());
-	choosePage(1);
-}
 
-function chooseAll() {
-	$("#span_search_option").text("");
-	$("#span_search_data").text("");
-	choosePage(1);
-}
 
 </script>

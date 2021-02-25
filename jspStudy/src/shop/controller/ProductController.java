@@ -15,12 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
-
 import shop.common.UtilProduct;
-import shop.common.Constants;
 import shop.model.dao.ProductDAO;
 import shop.model.dto.ProductDTO;
-
 
 @WebServlet("/product_servlet/*")
 public class ProductController extends HttpServlet {
@@ -135,9 +132,12 @@ public class ProductController extends HttpServlet {
 			String img_path01 = request.getSession().getServletContext().getRealPath("/attach/product_img/");	
 			String img_path02 = img_path01.replace("\\", "/");
 			String img_path03 = img_path01.replace("\\", "\\\\");
+			final int MAX_SIZE = 10 * 1024 * 1024;
+			
+			System.out.println(img_path03);
 			
 			// MultipartRequest 선언되면 파일이 서버에 저장됨
-			MultipartRequest multi = new MultipartRequest(request, img_path03, Constants.MAX_UPLOAD, "utf-8", new DefaultFileRenamePolicy());
+			MultipartRequest multi = new MultipartRequest(request, img_path03, MAX_SIZE, "utf-8", new DefaultFileRenamePolicy());
 			
 			String name = multi.getParameter("name");
 			String price_ = multi.getParameter("price");
@@ -148,21 +148,46 @@ public class ProductController extends HttpServlet {
 			System.out.println("price: " + price);
 			System.out.println("description: " + description);
 			
+			String[] array = new String[3];
 			Enumeration files = multi.getFileNames();
 			while (files.hasMoreElements()) {
 				String formName = (String)files.nextElement();
 				String fileName = multi.getFilesystemName(formName);
-				System.out.println("formName: " + formName);
-				System.out.println("fileName: " + fileName);
+				
+				if (formName.equals("0")) {
+					array[0] = fileName;
+				} else if (formName.equals("1")) {
+					array[1] = fileName;
+				} else if (formName.equals("2")) {
+					array[2] = fileName;
+				}
+				
+				//String fileOrgName = multi.getOriginalFileName(formName);
+				//String fileType = multi.getContentType(formName);
+				//System.out.println("formName: " + formName);
+				//System.out.println("fileName: " + fileName);		
+				//System.out.println(formName + " : " + fileName);
+				//System.out.println("fileOrgName: " + fileOrgName);
+				//System.out.println("fileType: " + fileType);
 			}
 			
+			String temp = "";
+			for (int i = 0; i < array.length; i++) {
+				String imsi = array[i];
+				if (imsi == null) {
+					imsi = "-";
+				}
+				temp += "," + imsi;
+			}
 			
-//			dto.setName(name);
-//			dto.setPrice(price);
-//			dto.setDescription(description);
+			temp = temp.substring(1);
 			
-//			int result = dao.setInsert(dto);
+			dto.setName(name);
+			dto.setPrice(price);
+			dto.setDescription(description);
+			dto.setProduct_img(temp);
+			
+			int result = dao.setInsert(dto);
 		}
 	}
-
 }

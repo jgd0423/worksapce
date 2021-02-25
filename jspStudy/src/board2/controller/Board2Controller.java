@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import board2.model.dao.Board2DAO;
 import board2.model.dto.Board2DTO;
 import common.UtilBoard;
+import model.board.dto.CommentDTO;
+import model.survey2.dao.Survey2DAO;
+import model.survey2.dto.Survey2DTO;
 
 @WebServlet("/board2_servlet/*")
 public class Board2Controller extends HttpServlet {
@@ -207,7 +210,71 @@ public class Board2Controller extends HttpServlet {
 			} else {
 				temp = path + "/board2_servlet/write.do";
 			}
-			response.sendRedirect(temp);	
+			response.sendRedirect(temp);
+			
+			
+		} else if (url.indexOf("view.do") != -1) {
+			dao.setUpdateHit(no);
+			dto = dao.getView(no);
+			
+			// content의 줄바꿈
+			String content = dto.getContent();
+			content = content.replace("\n", "</br>");
+			dto.setContent(content);
+			
+			String tempPage = "viewPage";
+			if (dto.getSecretGubun().equals("T")) {   // 비밀글이면
+				String view_passwd = util.nullCheck(request.getParameter("view_passwd"));
+				if (dto.getPasswd().equals(view_passwd) && !dto.getPasswd().equals("")) {}
+				else {
+					tempPage = "viewPasswdPage";
+				}
+			}
+			
+			// paging
+			String commentPageNumber_ = request.getParameter("commentPageNumber");
+			int commentPageNumber = util.numberCheck(commentPageNumber_, 1);
+			int allRowsCount = dao.getAllCommentRowsCount(no);
+			final int ONE_PAGE_ROWS = 5;
+			final int MAX_PAGING_WIDTH = 10;
+			
+			int[] pagerArr = util.pager(ONE_PAGE_ROWS, MAX_PAGING_WIDTH, allRowsCount, commentPageNumber);
+			int tableRowNum = pagerArr[0];
+			int pagingStartNum = pagerArr[1];
+			int pagingEndNum = pagerArr[2];
+			int maxPagesCount = pagerArr[3];
+			int startNum = pagerArr[4];
+			int endNum = pagerArr[5];
+			
+			
+			ArrayList<CommentDTO> list = dao.getCommentPagingList(startNum, endNum, no);
+			
+			request.setAttribute("list", list);
+			
+			request.setAttribute("ONE_PAGE_ROWS", ONE_PAGE_ROWS);
+			request.setAttribute("MAX_PAGING_WIDTH", MAX_PAGING_WIDTH);
+			
+			request.setAttribute("commentPageNumber", commentPageNumber);
+			request.setAttribute("allRowsCount", allRowsCount);
+			request.setAttribute("tableRowNum", tableRowNum);
+			
+			request.setAttribute("pagingStartNum", pagingStartNum);
+			request.setAttribute("pagingEndNum", pagingEndNum);
+			
+			request.setAttribute("maxPagesCount", maxPagesCount);
+			request.setAttribute("pagingStartNum", pagingStartNum);
+			request.setAttribute("pagingEndNum", pagingEndNum);
+			
+			request.setAttribute("cookName", cookName);
+
+			request.setAttribute("menu_gubun", "board2_view");
+			request.setAttribute("dto", dto);
+			request.setAttribute("tempPage", tempPage);
+			
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
 		}
 	}
 }

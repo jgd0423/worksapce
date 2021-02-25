@@ -170,7 +170,7 @@ function chooseAll() {
 }
 
 function goView(no) {
-	location.href = `${path}/board2_servlet/list.do?no=\${no}`;
+	location.href = `${path}/board2_servlet/view.do?no=\${no}`;
 }
 
 function goWrite() {

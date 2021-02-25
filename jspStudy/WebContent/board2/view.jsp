@@ -53,7 +53,7 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-					<button type="button" onclick="goPage('write', '')">글쓰기</button>
+					<button type="button" onclick="goWrite()">글쓰기</button>
 					<c:if test="${dto.noticeNo == 0 }">
 						<button type="button" onclick="goPage('reply', '${dto.no}')">답변쓰기</button>
 					</c:if>
@@ -61,7 +61,7 @@
 					<c:if test="${dto.child_counter == 0 }">
 						<button type="button" onclick="goPage('delete', '${dto.no}')">삭제하기</button>
 					</c:if>
-					<button type="button" onclick="choosePage(1)">목록으로</button>
+					<button type="button" onclick="goList()">목록으로</button>
 				</td>
 			</tr>
 			<tr>
@@ -74,7 +74,7 @@
 									이전글이 없습니다.
 								</c:if>
 								<c:if test="${dto.preSubject != null }">
-									<a href="#" onclick="goPage('view', ${dto.preNo})">${dto.preSubject }</a>
+									<a href="#" onclick="goPage(${dto.preNo})">${dto.preSubject }</a>
 								</c:if>
 							</td>
 						</tr>
@@ -85,7 +85,7 @@
 									다음글이 없습니다.
 								</c:if>
 								<c:if test="${dto.nxtSubject != null }">
-									<a href="#" onclick="goPage('view', ${dto.nxtNo})">${dto.nxtSubject }</a>
+									<a href="#" onclick="goPage(${dto.nxtNo})">${dto.nxtSubject }</a>
 								</c:if>
 							</td>
 						</tr>
@@ -95,8 +95,7 @@
 			<tr>
 				<td colspan="2" height="50px" style="padding: 20 0 0 0;">
 					<a name="comment"></a>
-					commentPageNumber : <span id="span_commentPageNumber">${commentPageNumber }</span><br>
-					<div id="commentResult"></div>
+					<jsp:include page="../board2/comment_list.jsp" />
 				</td>
 			</tr>
 		</table>
@@ -107,32 +106,16 @@
 
 <script>
 
-$(document).ready(() => {
-	// content의 줄바꿈
-	// const content = $("#content").text().replace(/(?:\r\n|\r|\n)/g, '<br/>');
-	// $("#content").html(content);
-	
-	$("#btnViewPasswd").click(() => {
-		goPage('view', $("#span_no").text());
-	});
-	
-	commentList();
-});
+function goPage(no) {
+	location.href = `${path}/board2_servlet/view.do?no=\${no}`;
+}
 
-function commentList() {
-	const param = {
-			"no": $("#span_no").text(),
-			"commentPageNumber": $("#span_commentPageNumber").text()
-	};
-	const url = "${path}/board_servlet/commentList.do";
-	$.ajax({
-		type: "post",
-		data: param,
-		url: url,
-		success: (data) => {
-			$("#commentResult").html(data);
-		}
-	});
+function goList() {
+	location.href = '${path}/board2_servlet/list.do';
+}
+
+function goWrite() {
+	location.href = '${path}/board2_servlet/write.do';
 }
 
 </script>

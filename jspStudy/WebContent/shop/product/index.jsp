@@ -16,7 +16,7 @@ search_data : <span id="span_search_data">${search_data }</span><br>
 
 $(document).ready(() => {
 	<c:if test="${menu_gubun == 'product_index'}">
-		chooseProc('write', '1', '');		
+		chooseProc('list', '1', '');		
 	</c:if>
 });
 
@@ -67,7 +67,7 @@ function goPage(proc) {
 		
 		const fileCounter = parseInt($('input[name="file"]').length);
 		for (i = 0; i < fileCounter; i++) {
-			param.append(`file\${i}`, $('input[name="file"]')[i].files[0]);
+			param.append(i, $('input[name="file"]')[i].files[0]);
 		}
 	}
 	

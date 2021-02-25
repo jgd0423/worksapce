@@ -46,11 +46,11 @@
 			<td colspan="7" height="50" align="center">
 				<a href="#comment" onclick="chooseCommentPage(1)"><<</a>
 				<c:choose>
-					<c:when test="${pageNum - 1 <= 0 }">
-						<a href="#comment" onclick="chooseCommentPage(${pageNum })"><</a>
+					<c:when test="${commentPageNumber - 1 <= 0 }">
+						<a href="#comment" onclick="chooseCommentPage(${commentPageNumber })"><</a>
 					</c:when>
 					<c:otherwise>
-						<a href="#comment" onclick="chooseCommentPage(${pageNum - 1 })"><</a>
+						<a href="#comment" onclick="chooseCommentPage(${commentPageNumber - 1 })"><</a>
 					</c:otherwise>
 				</c:choose>
 				<c:forEach var="i" begin="${pagingStartNum }" end="${pagingEndNum }" step="1" >
@@ -64,11 +64,11 @@
 					</c:choose>
 				</c:forEach>
 				<c:choose>
-					<c:when test="${pageNum + 1 >= maxPagesCount }">
+					<c:when test="${commentPageNumber + 1 >= maxPagesCount }">
 						<a href="#comment" onclick="chooseCommentPage(${maxPagesCount })">></a>
 					</c:when>
 					<c:otherwise>
-						<a href="#comment" onclick="chooseCommentPage(${pageNum + 1 })">></a>
+						<a href="#comment" onclick="chooseCommentPage(${commentPageNumber + 1 })">></a>
 					</c:otherwise>
 				</c:choose>
 				<a href="#comment" onclick="chooseCommentPage(${maxPagesCount })">>></a>

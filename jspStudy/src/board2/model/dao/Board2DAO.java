@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import board2.model.dto.Board2DTO;
 import db.DbExample;
+import model.board.dto.CommentDTO;
 
 public class Board2DAO {
 	// Field
@@ -402,5 +403,107 @@ public class Board2DAO {
 			getConnClose(rs, pstmt, conn);
 		}
 		return status;
+	}
+	
+	public int setInsertComment(CommentDTO commentDto) {
+		conn = getConn();
+		int result = 0;
+		try {
+			String sql = "INSERT INTO " + BOARD_COMMENT + " VALUES (seq_board_comment.NEXTVAL, "
+					+ "?, ?, ?, ?, ?, ?, SYSDATE)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, commentDto.getBoard_no());
+			pstmt.setString(2, commentDto.getWriter());
+			pstmt.setString(3, commentDto.getContent());
+			pstmt.setString(4, commentDto.getPasswd());
+			pstmt.setInt(5, commentDto.getMemberNo());
+			pstmt.setString(6, commentDto.getIp());
+
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		return result;
+	}
+
+	public int getAllCommentRowsCount(int no) {
+		conn = getConn();
+		int allRowsCount = 0;
+		try {
+			String sql = "SELECT COUNT(*) FROM " + BOARD_COMMENT + " WHERE board_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				allRowsCount = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return allRowsCount;
+	}
+
+	public ArrayList<CommentDTO> getCommentPagingList(int startNum, int endNum, int no) {
+		conn = getConn();
+		ArrayList<CommentDTO> list = new ArrayList<>();
+		try {
+			String basic_sql = "";
+			basic_sql += "SELECT * FROM " + BOARD_COMMENT + " WHERE board_no = ?";
+			basic_sql += " ORDER BY comment_no DESC";
+			
+			String sql = "";
+			sql += "SELECT * FROM ";
+			sql += "(SELECT ROWNUM Rnum, a.* FROM ";
+			sql += "(" + basic_sql + ") a) ";
+			sql += "WHERE Rnum >= ? AND Rnum <= ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			pstmt.setInt(2, startNum);
+			pstmt.setInt(3, endNum);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				CommentDTO dto = new CommentDTO();
+				dto.setComment_no(rs.getInt("comment_no"));
+				dto.setBoard_no(rs.getInt("board_no"));
+				dto.setWriter(rs.getString("writer"));
+				dto.setContent(rs.getString("content"));
+				dto.setPasswd(rs.getString("passwd"));
+				dto.setMemberNo(rs.getInt("memberNo"));
+				dto.setIp(rs.getString("ip"));
+				dto.setRegiDate(rs.getDate("regiDate"));
+				list.add(dto);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return list;
+	}
+
+	public int setDeleteComment(int comment_no, String passwd) {
+		conn = getConn();
+		int result = 0;
+		try {
+			String sql = "DELETE FROM " + BOARD_COMMENT + " WHERE comment_no = ? AND passwd = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, comment_no);
+			pstmt.setString(2, passwd);
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return result;
 	}
 }

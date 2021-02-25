@@ -38,7 +38,7 @@ public class ProductDAO {
 			pstmt.setString(1, dto.getName());
 			pstmt.setInt(2, dto.getPrice());
 			pstmt.setString(3, dto.getDescription());
-			pstmt.setString(4, "imgPath");
+			pstmt.setString(4, dto.getProduct_img());
 			result = pstmt.executeUpdate();
 		} catch(Exception e) {
 			e.printStackTrace();
