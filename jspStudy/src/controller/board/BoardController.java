@@ -446,6 +446,7 @@ public class BoardController extends HttpServlet {
 			String comment_no_ = request.getParameter("comment_no");
 			int comment_no = Integer.parseInt(comment_no_);
 			String passwd = request.getParameter("passwd");
+			
 			int result = dao.setDeleteComment(comment_no, passwd);
 		}
 	}

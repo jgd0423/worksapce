@@ -56,11 +56,11 @@
 					<td colspan="2">
 						<button type="button" onclick="goWrite()">글쓰기</button>
 						<c:if test="${dto.noticeNo == 0 }">
-							<button type="button" onclick="goPage('reply', '${dto.no}')">답변쓰기</button>
+							<button type="button" onclick="goReply(${dto.no})">답변쓰기</button>
 						</c:if>
-						<button type="button" onclick="goPage('modify', '${dto.no}')">수정하기</button>
+						<button type="button" onclick="goModify(${dto.no})">수정하기</button>
 						<c:if test="${dto.child_counter == 0 }">
-							<button type="button" onclick="goPage('delete', '${dto.no}')">삭제하기</button>
+							<button type="button" onclick="goDelete(${dto.no})">삭제하기</button>
 						</c:if>
 						<button type="button" onclick="goList()">목록으로</button>
 					</td>
@@ -75,7 +75,7 @@
 										이전글이 없습니다.
 									</c:if>
 									<c:if test="${dto.preSubject != null }">
-										<a href="#" onclick="goPage(${dto.preNo})">${dto.preSubject }</a>
+										<a href="#" onclick="goNearPage(${dto.preNo})">${dto.preSubject }</a>
 									</c:if>
 								</td>
 							</tr>
@@ -86,7 +86,7 @@
 										다음글이 없습니다.
 									</c:if>
 									<c:if test="${dto.nxtSubject != null }">
-										<a href="#" onclick="goPage(${dto.nxtNo})">${dto.nxtSubject }</a>
+										<a href="#" onclick="goNearPage(${dto.nxtNo})">${dto.nxtSubject }</a>
 									</c:if>
 								</td>
 							</tr>
@@ -107,7 +107,7 @@
 
 <script>
 
-function goPage(no) {
+function goNearPage(no) {
 	location.href = `${path}/board2_servlet/view.do?no=\${no}`;
 }
 
@@ -123,6 +123,18 @@ function goView(no) {
 	document.viewForm.method = 'post';
 	document.viewForm.action = `${path}/board2_servlet/view.do?no=\${no}`;
 	document.viewForm.submit();
+}
+
+function goReply(no) {
+	location.href = `${path}/board2_servlet/reply.do?no=\${no}`;
+}
+
+function goModify(no) {
+	location.href = `${path}/board2_servlet/modify.do?no=\${no}`;
+}
+
+function goDelete(no) {
+	location.href = `${path}/board2_servlet/delete.do?no=\${no}`;
 }
 
 </script>

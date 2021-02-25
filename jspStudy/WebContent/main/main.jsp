@@ -83,6 +83,12 @@
 				<c:when test="${menu_gubun == 'board2_view' }">
 					<jsp:include page="../board2/view.jsp" />
 				</c:when>
+				<c:when test="${menu_gubun == 'board2_modify' }">
+					<jsp:include page="../board2/modify.jsp" />
+				</c:when>
+				<c:when test="${menu_gubun == 'board2_delete' }">
+					<jsp:include page="../board2/delete.jsp" />
+				</c:when>
 				<c:when test="${menu_gubun == 'product_index' }">
 					<jsp:include page="../shop/product/index.jsp" />
 				</c:when>

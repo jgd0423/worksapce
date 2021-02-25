@@ -2,18 +2,21 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
 
-<form name="writeForm" id="writeForm">
+<form name="modifyForm">
+	<input type="hidden" name="no" id="no" value="${dto.no }" />
 	<table border="1" align="center" width="80%">
 		<tr>
-			<td colspan="2"><h2>${dto.no > 0 ? '답변글쓰기' : '게시글쓰기' }</h2></td>
+			<td colspan="2">
+				<h2>게시글수정</h2>
+			</td>
 		</tr>
 		<tr>
 			<td style="align: center;">작성자</td>
-			<td><input type="text" name="writer" id="writer" /></td>
+			<td><input type="text" name="writer" id="writer" value="${dto.writer }" /></td>
 		</tr>
 		<tr>
 			<td style="align: center;">이메일</td>
-			<td><input type="text" name="email" id="email" /></td>
+			<td><input type="text" name="email" id="email" value="${dto.email }" /></td>
 		</tr>
 		<tr>
 			<td style="align: center;">비밀번호</td>
@@ -37,13 +40,19 @@
 		<tr>
 			<td style="align: center;">공지글</td>
 			<td>
-				<input type="text" name="nogiceGubun" id="noticeGubun" />
+				<input 
+					type="text" 
+					name="noticeGubun" 
+					id="noticeGubun" 
+					value="${dto.noticeNo > 0 ? 'T' : 'F' }" 
+				/>
 				<input 
 					type="checkbox" 
 					name="noticeGubunCheckBox" 
 					id="noticeGubunCheckBox" 
 					value="T" 
-					onclick="clickChk('noticeGubun')" 
+					onclick="clickChk('noticeGubun')"
+					${dto.noticeNo > 0 ? 'checked' : '' }
 				/>
 				공지글 체크
 			</td>
@@ -51,21 +60,27 @@
 		<tr>
 			<td style="align: center;">비밀글</td>
 			<td>
-				<input type="text" name="secretGubun" id="secretGubun" />
+				<input 
+					type="text" 
+					name="secretGubun" 
+					id="secretGubun" 
+					value="${dto.secretGubun}" 
+				/>
 				<input 
 					type="checkbox" 
 					name="secretGubunCheckBox" 
 					id="secretGubunCheckBox" 
 					value="T" 
 					onclick="clickChk('secretGubun')" 
-				/>
+					${dto.secretGubun == 'T' ? 'checked' : '' }
+				/>	
 				비밀글 체크
 			</td>
 		</tr>
 		<tr>
 			<td align="center" colspan="2" height="50px">
-				<button type="button" onclick="goWrite()" id="btnWrite">등록하기</button>
-				<button type="button" onclick="goList()" id="btnList">목록으로</button>
+				<button type="button" id="btnModify">수정하기</button>
+				<button type="button" id="btnList">목록으로</button>
 			</td>
 		</tr>
 	</table>
@@ -81,14 +96,27 @@ function clickChk(gubun) {
 	}
 }
 
-function goList() {
-	location.href = '${path}/board2_servlet/list.do';
+$(document).ready(() => {
+	$("#subject").select();
+	$("#subject").focus();
+	
+	$("#btnModify").click(() => {
+		goModify();
+	});
+	
+	$("#btnList").click(() => {
+		goList();
+	});
+});
+
+function goModify() {
+	document.modifyForm.method = 'post';
+	document.modifyForm.action = '${path}/board2_servlet/modifyProc.do';
+	document.modifyForm.submit();
 }
 
-function goWrite() {
-	document.writeForm.method = 'post';
-	document.writeForm.action = '${path}/board2_servlet/writeProc.do?no=${dto.no}';
-	document.writeForm.submit();
+function goList() {
+	location.href = '${path}/board2_servlet/list.do';
 }
 
 </script>

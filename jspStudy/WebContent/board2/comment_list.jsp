@@ -9,7 +9,7 @@
 			이름 : <input type="text" name="comment_writer" id="comment_writer" size="10" value="${cookName }" />
 			비밀번호 : <input type="text" name="comment_passwd" id="comment_passwd" size="10" /><br>
 			댓글 : <input type="text" name="comment_content" id="comment_content" size="40" />
-			<button type="button" id="btnCommentSave" onclick="commentWrite()">확인</button>
+			<button type="button" id="btnCommentSave">확인</button>
 		</td>
 	</tr>
 </table>
@@ -83,12 +83,16 @@
 <script>
 
 function commentWrite() {
-	document.commentWriteForm.method = 'post';
-	document.commentWriteForm.action = '${path}/board2_servlet/commentWrite.do';
-	document.commentWriteForm.submit();
+	
 }
 
 $(document).ready(() => {	
+	$("#btnCommentSave").click(() => {
+		document.viewForm.method = 'post';
+		document.viewForm.action = '${path}/board2_servlet/commentWrite.do';
+		document.viewForm.submit();
+	});
+	
 	$(".btnCommentDelete").click((event) => {
 		const { 
 			target: { value } 
@@ -98,6 +102,7 @@ $(document).ready(() => {
 		if (content.children.length === 0) {
 			const input = document.createElement("input");
 			input.setAttribute("id", `input\${value}`);
+			input.setAttribute("name", `commentPasswd\${value}`);
 			input.setAttribute("style", "float: right");
 			input.setAttribute("placeholder", "비밀번호 입력")
 			const confirm = document.createElement("button");
@@ -123,8 +128,10 @@ $(document).ready(() => {
 		const { 
 			target: { value } 
 		} = event;
-		const password = document.querySelector(`#input\${value}`).value;
-		commentDelete(value, password);
+		
+		document.viewForm.method = 'post';
+		document.viewForm.action = '${path}/board2_servlet/commentDelete.do?comment_no=' + value + '&no=${dto.no}';
+		document.viewForm.submit();
 	})
 });
 
@@ -133,23 +140,6 @@ function chooseCommentPage(commentPageNumber, no) {
 	url += `${path}/board2_servlet/view.do?commentPageNumber=\${commentPageNumber}`;
 	url += `&no=\${no}`;
 	location.href = url;
-}
-
-function commentDelete(comment_no, password) {
-	const param = {
-			"comment_no": comment_no,
-			"passwd": password
-	};
-	const url = "${path}/board_servlet/commentDelete.do";
-	
-	$.ajax({
-		type: "post",
-		data: param,
-		url: url,
-		success: (data) => {
-			commentList();
-		}
-	})
 }
 
 </script>

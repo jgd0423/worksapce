@@ -1,6 +1,7 @@
 package board2.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -281,10 +282,6 @@ public class Board2Controller extends HttpServlet {
 			String comment_passwd = request.getParameter("comment_passwd");
 			String comment_content = request.getParameter("comment_content");
 			
-			System.out.println(comment_writer);
-			System.out.println(comment_passwd);
-			System.out.println(comment_content);
-			
 			CommentDTO commentDto = new CommentDTO();
 			commentDto.setWriter(comment_writer);
 			commentDto.setPasswd(comment_passwd);
@@ -293,8 +290,128 @@ public class Board2Controller extends HttpServlet {
 			commentDto.setMemberNo(cookNo);
 			commentDto.setIp(ip);
 			
-			//int result = dao.setInsertComment(commentDto);
+			int result = dao.setInsertComment(commentDto);
+			
+			String temp = path + "/board2_servlet/view.do?no=" + no;
+			response.sendRedirect(temp);
+			
+			
+		} else if (url.indexOf("commentDelete.do") != -1) {
+			String comment_no_ = request.getParameter("comment_no");
+			int comment_no = Integer.parseInt(comment_no_);
+			String passwd = request.getParameter("commentPasswd" + comment_no);
+			
+			int result = dao.setDeleteComment(comment_no, passwd);
+			
+			String temp = path + "/board2_servlet/view.do?no=" + no;
+			response.sendRedirect(temp);
+			
+			
+		} else if (url.indexOf("modify.do") != -1) {
+			request.setAttribute("menu_gubun", "board2_modify");
+			
+			dto = dao.getView(no);
+			request.setAttribute("dto", dto);
+			
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("modifyProc.do") != -1) {
+			String writer = request.getParameter("writer");
+			String email = request.getParameter("email");
+			String passwd = request.getParameter("passwd");
+			String subject = request.getParameter("subject");
+			String content = request.getParameter("content");
+			String noticeGubun = request.getParameter("noticeGubun");
+			String secretGubun = request.getParameter("secretGubun");
+			if (secretGubun == null || secretGubun.trim().equals("") || !secretGubun.equals("T")) {
+				secretGubun = "F";
+			} else {
+				secretGubun = "T";
+			}
+			
+			dto = dao.getView(no);
+			int noticeNo = dto.getNoticeNo();
+			System.out.println(noticeGubun);
+			if (noticeNo > 0 && (noticeGubun == null || noticeGubun.trim().equals("") || !noticeGubun.equals("T"))) {
+				dao.setNoticeNoLargerThenCurrentNoticeNo(no);
+				noticeNo = 0;
+			} else if (noticeNo == 0 && noticeGubun.equals("T")) {
+				noticeNo = dao.getMaxNoticeNo(tbl) + 1;
+			}
+			
+			// 비밀번호 체크
+			String dbPasswd = dto.getPasswd();
+			boolean isSamePasswd = (passwd.equals(dbPasswd));
+			
+			if (!isSamePasswd) {
+				response.setContentType("text/html; charset=utf-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('비밀번호가 틀렸습니다.');");
+				out.println("history.back();");
+				out.println("</script>");
+				return;
+			}
+		
+			dto.setWriter(writer);
+			dto.setEmail(email);
+			dto.setPasswd(passwd);
+			dto.setSubject(subject);
+			dto.setContent(content);
+			dto.setMemberNo(cookNo);
+			dto.setNoticeNo(noticeNo);
+			dto.setSecretGubun(secretGubun);
+			dto.setNo(no);
+			
+			int result = dao.setUpdate(dto);				
+			
+			String temp;
+			if (result > 0) {
+				temp = path + "/board2_servlet/view.do?no=" + no;
+			} else {
+				temp = path + "/board2_servlet/modify.do?no=" + no;
+			}
+			response.sendRedirect(temp);
+			
+		} else if (url.indexOf("delete.do") != -1) {
+			request.setAttribute("menu_gubun", "board2_delete");
+			
+			dto = dao.getView(no);
+			request.setAttribute("dto", dto);
+			
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("deleteProc.do") != -1) {
+			dto = dao.getView(no);
+			String passwd = request.getParameter("passwd");
 
+			// 비밀번호 체크
+			String dbPasswd = dto.getPasswd();
+			boolean isSamePasswd = (passwd.equals(dbPasswd));
+			
+			if (!isSamePasswd) {
+				response.setContentType("text/html; charset=utf-8");
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('비밀번호가 틀렸습니다.');");
+				out.println("history.back();");
+				out.println("</script>");
+				return;
+			}
+			
+			int result = dao.setDelete(dto);
+			
+			String temp;
+			if (result > 0) {
+				temp = path + "/board2_servlet/list.do";
+			} else {
+				temp = path + "/board2_servlet/delete.do?no=" + no;
+			}
+			response.sendRedirect(temp);
 			
 		}
 	}

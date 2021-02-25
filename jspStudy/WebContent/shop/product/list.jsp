@@ -76,7 +76,8 @@ ${allRowsCount }개의 레코드가 있습니다.
 							<a href="#" onclick="chooseProc('view', '', '${dto.no}')">
 								<img 
 									src="${path }/attach/product_img/${temp1}" 
-									alt="${dto.name }" title="${dto.name }" 
+									alt="${dto.name }" 
+									title="${dto.name }" 
 									style="width: 50px; height: 50px;"
 								/>
 							</a>

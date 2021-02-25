@@ -40,7 +40,7 @@
 		<td>
 			<input 
 				type="text" 
-				name="nogiceGubun" 
+				name="noticeGubun" 
 				id="noticeGubun" 
 				value="${dto.noticeNo > 0 ? 'T' : 'F' }" 
 			/>
