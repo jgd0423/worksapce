@@ -20,8 +20,9 @@ public class BoardDAO {
 	final String BOARD_COMMENT = "board_comment";
 	
 	// Method
-	public Connection getConn() {
+	public Connection getConn(String methodName) {
 		conn = DbExample.getConn();
+		System.out.println("methodName: " + methodName);
 		return conn;
 	}
 	
@@ -30,7 +31,7 @@ public class BoardDAO {
 	}
 	
 	public int setInsert(BoardDTO dto) {
-		conn = getConn();
+		conn = getConn("setInsert");
 		int result = 0;
 		try {
 			String sql = "INSERT INTO " + BOARD + " VALUES (seq_board.NEXTVAL, "
@@ -65,7 +66,7 @@ public class BoardDAO {
 
 	public int getMaxNum() {
 		int result = 0;
-		conn = getConn();
+		conn = getConn("getMaxNum");
 		try {
 			String sql = "SELECT NVL(MAX(num), 0) FROM " + BOARD;
 			pstmt = conn.prepareStatement(sql);
@@ -83,7 +84,7 @@ public class BoardDAO {
 	
 	public int getMaxRefNo() {
 		int result = 0;
-		conn = getConn();
+		conn = getConn("getMaxRefNo");
 		try {
 			String sql = "SELECT NVL(MAX(refNo), 0) FROM " + BOARD;
 			pstmt = conn.prepareStatement(sql);
@@ -101,7 +102,7 @@ public class BoardDAO {
 
 	public int getMaxNoticeNo(String tbl) {
 		int result = 0;
-		conn = getConn();
+		conn = getConn("getMaxNoticeNo");
 		try {
 			String sql = "SELECT NVL(MAX(noticeNo), 0) FROM " + BOARD + " WHERE tbl = ?";
 			pstmt = conn.prepareStatement(sql);
@@ -119,7 +120,7 @@ public class BoardDAO {
 	}
 
 	public int getAllRowsCount(String tbl, String search_option, String search_data) {
-		conn = getConn();
+		conn = getConn("getAllRowsCount");
 		int allRowsCount = 0;
 		try {
 			String sql = "SELECT COUNT(*) FROM " + BOARD + " WHERE tbl = ? ";
@@ -160,7 +161,7 @@ public class BoardDAO {
 	}
 	
 	public ArrayList<BoardDTO> getPagingList(int startNum, int endNum, String tbl, String search_option, String search_data) {
-		conn = getConn();
+		conn = getConn("getPagingList");
 		ArrayList<BoardDTO> list = new ArrayList<>();
 		try {
 			String basic_sql = "";
@@ -234,7 +235,7 @@ public class BoardDAO {
 	}
 
 	public void setUpdateHit(int no) {
-		conn = getConn();
+		conn = getConn("setUpdateHit");
 		try {
 			String sql = "UPDATE " + BOARD + " SET hit = (hit + 1) WHERE no = ?";
 			pstmt = conn.prepareStatement(sql);
@@ -247,7 +248,7 @@ public class BoardDAO {
 
 	public BoardDTO getView(int no) {
 		BoardDTO dto = new BoardDTO();
-		conn = getConn();
+		conn = getConn("getView");
 		try {
 			String sql = "";
 			sql += "SELECT * FROM ";
@@ -300,7 +301,7 @@ public class BoardDAO {
 	}
 
 	public void setUpdateReLevel(BoardDTO dto) {
-		conn = getConn();
+		conn = getConn("setUpdateReLevel");
 		try {
 			String sql = "UPDATE " + BOARD + " SET levelNo = (levelNo + 1) WHERE refNo = ? AND levelNo > ?";
 			pstmt = conn.prepareStatement(sql);
@@ -316,7 +317,7 @@ public class BoardDAO {
 	}
 
 	public int setUpdate(BoardDTO dto) {
-		conn = getConn();
+		conn = getConn("setUpdate");
 		int result = 0;
 		try {
 			String sql = "UPDATE " + BOARD + " SET "
@@ -349,7 +350,7 @@ public class BoardDAO {
 	}
 
 	public void setNoticeNoLargerThenCurrentNoticeNo(int no) {
-		conn = getConn();
+		conn = getConn("setNoticeNoLargerThenCurrentNoticeNo");
 		try {
 			String sql = "UPDATE " + BOARD + " SET "
 					+ "noticeNo = (noticeNo - 1) "
@@ -367,7 +368,7 @@ public class BoardDAO {
 	}
 
 	public int setDelete(BoardDTO dto) {
-		conn = getConn();
+		conn = getConn("setDelete");
 		int result = 0;
 		try {
 			String sql = "DELETE FROM " + BOARD + " WHERE no = ? ";
@@ -383,7 +384,7 @@ public class BoardDAO {
 	}
 
 	public int setInsertComment(CommentDTO commentDto) {
-		conn = getConn();
+		conn = getConn("setInsertComment");
 		int result = 0;
 		try {
 			String sql = "INSERT INTO " + BOARD_COMMENT + " VALUES (seq_board_comment.NEXTVAL, "
@@ -406,7 +407,7 @@ public class BoardDAO {
 	}
 
 	public int getAllCommentRowsCount(int no) {
-		conn = getConn();
+		conn = getConn("getAllCommentRowsCount");
 		int allRowsCount = 0;
 		try {
 			String sql = "SELECT COUNT(*) FROM " + BOARD_COMMENT + " WHERE board_no = ?";
@@ -426,7 +427,7 @@ public class BoardDAO {
 	}
 
 	public ArrayList<CommentDTO> getCommentPagingList(int startNum, int endNum, int no) {
-		conn = getConn();
+		conn = getConn("getCommentPagingList");
 		ArrayList<CommentDTO> list = new ArrayList<>();
 		try {
 			String basic_sql = "";
@@ -468,7 +469,7 @@ public class BoardDAO {
 
 	public ArrayList<String> isUsingTable(String tbl) {
 		ArrayList<String> status = new ArrayList<>();
-		conn = getConn();
+		conn = getConn("isUsingTable");
 		try {
 			String sql = "SELECT tblName, serviceGubun FROM boardChk WHERE tbl = ?";
 			pstmt = conn.prepareStatement(sql);
@@ -491,7 +492,7 @@ public class BoardDAO {
 	}
 
 	public int setDeleteComment(int comment_no, String passwd) {
-		conn = getConn();
+		conn = getConn("setDeleteComment");
 		int result = 0;
 		try {
 			String sql = "DELETE FROM " + BOARD_COMMENT + " WHERE comment_no = ? AND passwd = ?";
