@@ -37,7 +37,19 @@
 							</td>
 						</tr>
 						<tr>
-							<td id="content${dto.comment_no }">${dto.content }</td>
+							<td id="content${dto.comment_no }">
+								${dto.content }
+								<div id="delete__container" style="display: none; float: right;">
+									<input id="input${dto.comment_no }" name="commentPasswd${dto.comment_no }" placeholder="비밀번호 입력">
+									<button 
+										type="button" 
+										class="confirm" 
+										value="${dto.comment_no }"
+									>
+										확인
+									</button>
+								</div>
+							</td>
 						</tr>
 					</table>
 					<hr />
@@ -94,37 +106,20 @@ $(document).ready(() => {
 	});
 	
 	$(".btnCommentDelete").click((event) => {
-		const { 
-			target: { value } 
-		} = event;
-		const content = document.querySelector(`#content\${value}`);
-
-		if (content.children.length === 0) {
-			const input = document.createElement("input");
-			input.setAttribute("id", `input\${value}`);
-			input.setAttribute("name", `commentPasswd\${value}`);
-			input.setAttribute("style", "float: right");
-			input.setAttribute("placeholder", "비밀번호 입력")
-			const confirm = document.createElement("button");
-			confirm.innerText = '확인';
-			confirm.setAttribute("type", "button");
-			confirm.setAttribute("id", `confirm\${value}`);
-			confirm.setAttribute("class", "confirm");
-			confirm.setAttribute("style", "float: right");
-			confirm.setAttribute("value", value);
-			content.append(confirm);
-			content.append(input);
-			event.target.innerText = "취소";
+		const deleteContainer = document.querySelector("#delete__container");
+		const {
+			style: { display }
+		} = deleteContainer;
+		if (display === 'none') {
+			deleteContainer.style.display = 'inline-block';
+			event.target.innerText = '취소';
 		} else {
-			const input = document.querySelector(`#input\${value}`);
-			const confirm = document.querySelector(`#confirm\${value}`);
-			input.remove();
-			confirm.remove();
-			event.target.innerText = "삭제";
+			deleteContainer.style.display = 'none';
+			event.target.innerText = '삭제';
 		}
 	});
 	
-	$(document).on("click", ".confirm", (event) => {
+	$(".confirm").click((event) => {
 		const { 
 			target: { value } 
 		} = event;

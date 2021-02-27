@@ -301,6 +301,9 @@ public class Board2Controller extends HttpServlet {
 			int comment_no = Integer.parseInt(comment_no_);
 			String passwd = request.getParameter("commentPasswd" + comment_no);
 			
+			System.out.println(comment_no);
+			System.out.println(passwd);
+			
 			int result = dao.setDeleteComment(comment_no, passwd);
 			
 			String temp = path + "/board2_servlet/view.do?no=" + no;
