@@ -144,18 +144,18 @@ public class ProductController extends HttpServlet {
 			int price = Integer.parseInt(price_);
 			String description = multi.getParameter("description");
 
-			String[] array = new String[3];
+			String[] fileNamesArray = new String[3];
 			Enumeration files = multi.getFileNames();
 			while (files.hasMoreElements()) {
 				String formName = (String)files.nextElement();
 				String fileName = multi.getFilesystemName(formName);
 				
 				if (formName.equals("0")) {
-					array[0] = fileName;
+					fileNamesArray[0] = fileName;
 				} else if (formName.equals("1")) {
-					array[1] = fileName;
+					fileNamesArray[1] = fileName;
 				} else if (formName.equals("2")) {
-					array[2] = fileName;
+					fileNamesArray[2] = fileName;
 				}
 				
 				//String fileOrgName = multi.getOriginalFileName(formName);
@@ -167,21 +167,21 @@ public class ProductController extends HttpServlet {
 				//System.out.println("fileType: " + fileType);
 			}
 			
-			String temp = "";
-			for (int i = 0; i < array.length; i++) {
-				String imsi = array[i];
-				if (imsi == null) {
-					imsi = "-";
+			String product_img = "";
+			for (int i = 0; i < fileNamesArray.length; i++) {
+				String fileName = fileNamesArray[i];
+				if (fileName == null) {
+					fileName = "-";
 				}
-				temp += "," + imsi;
+				product_img += "," + fileName;
 			}
 			
-			temp = temp.substring(1);
+			product_img = product_img.substring(1);
 			
 			dto.setName(name);
 			dto.setPrice(price);
 			dto.setDescription(description);
-			dto.setProduct_img(temp);
+			dto.setProduct_img(product_img);
 			
 			int result = dao.setInsert(dto);
 		}
