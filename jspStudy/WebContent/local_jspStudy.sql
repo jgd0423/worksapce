@@ -318,5 +318,9 @@ DESC product;
 
 SELECT * FROM product WHERE no > 0;
 
+delete from product where no = 2;
+
 drop table product;
 drop sequence seq_product;
+
+commit;

@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import db.DbExample;
+import model.survey.dto.SurveyDTO;
 import shop.model.dto.ProductDTO;
 
 public class ProductDAO {
@@ -141,5 +142,56 @@ public class ProductDAO {
 		}
 		
 		return list;
+	}
+	
+	public ProductDTO getView(int no) {
+		conn = getConn();
+		ProductDTO dto = new ProductDTO();
+		try {
+			String sql = "SELECT * FROM "+ PRODUCT +" WHERE no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				dto.setNo(rs.getInt("no"));
+				dto.setName(rs.getString("name"));
+				dto.setPrice(rs.getInt("price"));
+				dto.setDescription(rs.getString("description"));
+				dto.setProduct_img(rs.getString("product_img"));
+				dto.setRegi_date(rs.getTimestamp("regi_date"));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		return dto;
+	}
+
+	public int setUpdate(ProductDTO dto) {
+		conn = getConn();
+		int result = 0;
+		try {
+			String sql = "UPDATE " + PRODUCT + " SET "
+					+ "name = ?, "
+					+ "price = ?, "
+					+ "description = ?, "
+					+ "product_img = ? "
+					+ "WHERE no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getName());
+			pstmt.setInt(2, dto.getPrice());
+			pstmt.setString(3, dto.getDescription());
+			pstmt.setString(4, dto.getProduct_img());
+			pstmt.setInt(5, dto.getNo());
+
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return result;
 	}
 }

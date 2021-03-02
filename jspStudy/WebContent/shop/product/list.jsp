@@ -67,25 +67,25 @@ ${allRowsCount }개의 레코드가 있습니다.
 			<tr>
 				<td>${tableRowNum }</td>
 				<td>
-					<c:choose>
-						<c:when test="${fn:split(dto.product_img, ',')[0] == '-' }">
-							<a href="#" onclick="chooseProc('view', '', '${dto.no }')">이미지X</a>
-						</c:when>
-						<c:otherwise>
-							<c:set var="temp1" value="${fn:split(dto.product_img, ',')[0] }"></c:set>
-							<a href="#" onclick="chooseProc('view', '', '${dto.no}')">
-								<img 
-									src="${path }/attach/product_img/${temp1}" 
-									alt="${dto.name }" 
-									title="${dto.name }" 
-									style="width: 50px; height: 50px;"
-								/>
-							</a>
-						</c:otherwise>
-					</c:choose>
+					<c:if test="${dto.product_img == '-,-,-' }">
+						<a href="#" onclick="chooseProc('view', '', '${dto.no }')">이미지X</a>
+					</c:if>
+					<c:if test="${dto.product_img != '-,-,-' }">
+						<c:set var="temp1" value="${fn:split(dto.product_img, ',')[0] }"></c:set>
+						<c:set var="temp2" value="${fn:split(temp1, '|')[0] }"></c:set>
+						<c:set var="temp3" value="${fn:split(temp1, '|')[1] }"></c:set>
+						<a href="#" onclick="chooseProc('view', '', '${dto.no}')">
+							<img 
+								src="${path }/attach/product_img/${temp3}" 
+								alt="${dto.name }" 
+								title="${dto.name }" 
+								style="width: 50px; height: 50px;"
+							/>
+						</a>
+					</c:if>
 				</td>
 				<td>
-					<a href="#" onclick="goPage('view', '${dto.no }')">${dto.name }</a>
+					<a href="#" onclick="chooseProc('view', '', '${dto.no }')">${dto.name }</a>
 				</td>
 				<td><fmt:formatNumber type="number" maxFractionDigits="3" value="${dto.price }"/></td>
 				<td>${dto.product_img }</td>

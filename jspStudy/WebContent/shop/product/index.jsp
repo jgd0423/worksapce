@@ -40,14 +40,14 @@ function chooseProc(proc, pageNumber, no) {
 }
 
 function goPage(proc) {
-	let param;
+	let param = {};
 	let processData;
 	let contentType;
 	const url = `${path}/product_servlet/\${proc}.do`;
 	
 	if (proc === "write") {
 		param = {};
-	} else if (proc === "writeProc") {
+	} else if (proc === "writeProc" || proc === "modifyProc") {
 		// 파일 첨부할 때 false 처리 해야함 (왜?)
 		processData = false;
 		contentType = false;
@@ -57,18 +57,17 @@ function goPage(proc) {
 		if (proc === 'modifyProc') {
 			param.append("no", $("#span_no").text());
 		}
+
 		param.append("name", $("#name").val());
 		param.append("price", $("#price").val());
 		param.append("description", $("#description").val());
-		
-// 		console.log($('input[name="file"]')[0].files[0]);
-// 		console.log($('input[name="file"]')[1].files[0]);
-// 		console.log($('input[name="file"]')[2].files[0]);
 		
 		const fileCounter = parseInt($('input[name="file"]').length);
 		for (i = 0; i < fileCounter; i++) {
 			param.append(i, $('input[name="file"]')[i].files[0]);
 		}
+	} else if (proc === "view" || proc === 'modify') {
+		param.no = $("#span_no").text();
 	}
 	
 	$.ajax({
@@ -78,7 +77,14 @@ function goPage(proc) {
 		contentType: contentType,
 		url: url,
 		success: (data) => {
-			$("#result").html(data);
+			if (proc === 'writeProc') {
+				chooseProc('list', '1', '');
+			} else if (proc === 'modifyProc') {
+				chooseProc('view', '1', $("#span_no").text());
+			}
+			else {
+				$("#result").html(data);				
+			}
 		}
 	});
 }

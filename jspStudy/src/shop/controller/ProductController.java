@@ -1,5 +1,6 @@
 package shop.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -128,7 +129,7 @@ public class ProductController extends HttpServlet {
 			rd.forward(request, response);
 			
 			
-		} else if (url.indexOf("writeProc.do") != -1) {
+		} else if (url.indexOf("writeProc.do") != -1 || url.indexOf("modifyProc.do") != -1) {
 			String img_path01 = request.getSession().getServletContext().getRealPath("/attach/product_img/");	
 			String img_path02 = img_path01.replace("\\", "/");
 			String img_path03 = img_path01.replace("\\", "\\\\");
@@ -139,26 +140,34 @@ public class ProductController extends HttpServlet {
 			// MultipartRequest 선언되면 파일이 서버에 저장됨
 			MultipartRequest multi = new MultipartRequest(request, img_path03, MAX_SIZE, "utf-8", new DefaultFileRenamePolicy());
 			
+			String tempNo = multi.getParameter("no");
+			if (tempNo != null) {
+				no = Integer.parseInt(tempNo);
+			}
 			String name = multi.getParameter("name");
 			String price_ = multi.getParameter("price");
 			int price = Integer.parseInt(price_);
 			String description = multi.getParameter("description");
 
 			String[] fileNamesArray = new String[3];
+			for (int i = 0; i < fileNamesArray.length; i++) {
+				fileNamesArray[i] = "-";
+			}
+			
+			if (no > 0) {
+				fileNamesArray = dao.getView(no).getProduct_img().split(",");
+			}
+			
 			Enumeration files = multi.getFileNames();
 			while (files.hasMoreElements()) {
 				String formName = (String)files.nextElement();
 				String fileName = multi.getFilesystemName(formName);
-				
-				if (formName.equals("0")) {
-					fileNamesArray[0] = fileName;
-				} else if (formName.equals("1")) {
-					fileNamesArray[1] = fileName;
-				} else if (formName.equals("2")) {
-					fileNamesArray[2] = fileName;
-				}
+								
+				int fileNamesArrayIndex = Integer.parseInt(formName);
+				fileNamesArray[fileNamesArrayIndex] = fileName;
 				
 				//String fileOrgName = multi.getOriginalFileName(formName);
+				// 파일 타입으로 파일 체크해야함
 				//String fileType = multi.getContentType(formName);
 				//System.out.println("formName: " + formName);
 				//System.out.println("fileName: " + fileName);		
@@ -167,23 +176,100 @@ public class ProductController extends HttpServlet {
 				//System.out.println("fileType: " + fileType);
 			}
 			
+			for (int i = 0; i < fileNamesArray.length; i++) {
+				// 배열 안에 파일명이 null일 경우
+				String fileName = fileNamesArray[i];
+				if (fileName == null) {
+					continue;
+				}
+				
+				// 실제 경로에 파일이 존재하지 않을 경우
+				String old_path = img_path03 + fileName;
+				File file = new File(old_path);
+				if (!file.exists()) {
+					continue;
+				}
+				
+				String ext = "";
+				int point_index = fileName.lastIndexOf(".");
+				if (point_index == -1) {
+					file.delete();
+					fileNamesArray[i] = "-";
+					continue;
+				}
+				
+				ext = fileName.substring(point_index + 1).toLowerCase();
+				if (!(ext.equals("jpg") || ext.equals("jpeg") || ext.equals("gif") || ext.equals("png"))) {
+					file.delete();
+					fileNamesArray[i] = "-";
+					continue;
+				}
+				
+				String uuid = util.createUuid();
+				String newFileName = util.getDateTimeType() + "_" + uuid + "." + ext;
+				File newFile = new File(img_path03 + newFileName);
+				file.renameTo(newFile);   // 파일이동
+				fileNamesArray[i] = fileNamesArray[i] + "|" + newFileName;
+			}
+			
+//			String product_img = "";
+//			for (int i = 0; i < fileNamesArray.length; i++) {
+//				String fileName = fileNamesArray[i];
+//				if (fileName == null) {
+//					fileName = "-";
+//				}
+//				product_img += "," + fileName;
+//			}
+			
 			String product_img = "";
 			for (int i = 0; i < fileNamesArray.length; i++) {
 				String fileName = fileNamesArray[i];
-				if (fileName == null) {
-					fileName = "-";
-				}
 				product_img += "," + fileName;
 			}
-			
+						
 			product_img = product_img.substring(1);
 			
+			dto.setNo(no);
 			dto.setName(name);
 			dto.setPrice(price);
 			dto.setDescription(description);
 			dto.setProduct_img(product_img);
 			
-			int result = dao.setInsert(dto);
+			int result;
+			if (no > 0) {
+				result = dao.setUpdate(dto);
+			} else {
+				result = dao.setInsert(dto);
+			}
+			
+
+		} else if (url.indexOf("view.do") != -1) {
+			dto = dao.getView(no);
+			
+			String temp = dto.getDescription();
+			if (temp != null) {
+				temp = temp.replace("\n", "<br>");				
+			}
+			
+			request.setAttribute("menu_gubun", "product_view");
+			request.setAttribute("dto", dto);
+			
+			page = "/shop/product/view.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("modify.do") != -1) {
+			request.setAttribute("menu_gubun", "product_modify");
+			
+			dto = dao.getView(no);
+			request.setAttribute("dto", dto);
+			
+			page = "/shop/product/modify.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
 		}
 	}
 }
