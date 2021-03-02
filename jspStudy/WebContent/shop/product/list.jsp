@@ -14,19 +14,19 @@ ${allRowsCount }개의 레코드가 있습니다.
 		<td colspan="10" align="center">
 			<select name="search_option" id="search_option">
 				<c:choose>
-					<c:when test="${search_option == 'writer' }">
+					<c:when test="${search_option == 'name' }">
 						<option value="">- 선택 -</option>
 						<option value="name" selected>상품명</option>
 						<option value="description">상품설명</option>
 						<option value="name_description">상품명+상품설명</option>
 					</c:when>
-					<c:when test="${search_option == 'subject' }">
+					<c:when test="${search_option == 'description' }">
 						<option value="">- 선택 -</option>
 						<option value="name">상품명</option>
 						<option value="description" selected>상품설명</option>
 						<option value="name_description">상품명+상품설명</option>
 					</c:when>
-					<c:when test="${search_option == 'content' }">
+					<c:when test="${search_option == 'name_description' }">
 						<option value="">- 선택 -</option>
 						<option value="name">상품명</option>
 						<option value="description">상품설명</option>
@@ -130,7 +130,7 @@ ${allRowsCount }개의 레코드가 있습니다.
 	<tr>
 		<td colspan="10" align="right">
 			<button type="button" onclick="chooseAll()">전체목록</button>&nbsp;
-			<button type="button" onclick="goPage('write', '')">상품등록</button>&nbsp;
+			<button type="button" onclick="goPage('write', '', '')">상품등록</button>&nbsp;
 		</td>
 	</tr>
 </table>
@@ -138,6 +138,20 @@ ${allRowsCount }개의 레코드가 있습니다.
 
 <script>
 
+function search() {
+	$("#span_search_option").text($("#search_option").val());
+	$("#span_search_data").text($("#search_data").val());
+	chooseProc('list', '1', '');
+}
 
+function chooseAll() {
+	$("#span_search_option").text("");
+	$("#span_search_data").text("");
+	chooseProc('list', '1', '');
+}
+
+function choosePage(pageNum) {
+	chooseProc('list', pageNum, '');
+}
 
 </script>

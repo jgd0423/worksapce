@@ -61,6 +61,8 @@ public class ProductController extends HttpServlet {
 		String[] searchArray = util.searchCheck(search_option, search_data);
 		search_option = searchArray[0];
 		search_data = searchArray[1];
+		System.out.println(search_option);
+		System.out.println(search_data);
 
 		String[] sessionArray = util.sessionCheck(request);
 		int cookNo = Integer.parseInt(sessionArray[0]);

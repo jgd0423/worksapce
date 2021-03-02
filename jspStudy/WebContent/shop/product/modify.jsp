@@ -47,9 +47,9 @@
 	<tr>
 		<td style="align: center;">상품이미지</td>
 		<td>
-			<input type="file" name="file" />
-			<input type="file" name="file" />
-			<input type="file" name="file" />
+			<input type="file" name="file" accept='image/*' />
+			<input type="file" name="file" accept='image/*' />
+			<input type="file" name="file" accept='image/*' />
 		</td>
 	</tr>
 	<tr>
