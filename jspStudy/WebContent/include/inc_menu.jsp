@@ -47,6 +47,9 @@
 		<td style="padding: 0px 20px; ${menu_name == 'product' ? 'background-color: silver;' : ''}">
 			<a href="${path }/product_servlet/index.do">Mall(상품관리-ajax)</a>
 		</td>
+		<td style="padding: 0px 20px; ${menu_name == 'mall' ? 'background-color: silver;' : ''}">
+			<a href="${path }/mall_servlet/index.do">Mall(쇼핑몰-ajax)</a>
+		</td>
 		<td style="padding: 0px 20px;">
 			<a href="#">관리자</a>
 		</td>

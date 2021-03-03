@@ -61,8 +61,6 @@ public class ProductController extends HttpServlet {
 		String[] searchArray = util.searchCheck(search_option, search_data);
 		search_option = searchArray[0];
 		search_data = searchArray[1];
-		System.out.println(search_option);
-		System.out.println(search_data);
 
 		String[] sessionArray = util.sessionCheck(request);
 		int cookNo = Integer.parseInt(sessionArray[0]);
@@ -132,7 +130,12 @@ public class ProductController extends HttpServlet {
 			
 			
 		} else if (url.indexOf("writeProc.do") != -1 || url.indexOf("modifyProc.do") != -1) {
-			String img_path01 = request.getSession().getServletContext().getRealPath("/attach/product_img/");	
+			String img_path01 = request.getSession().getServletContext().getRealPath("/attach/product_img/");
+			File isDir = new File(img_path01);
+			if (!isDir.isDirectory()) {
+				System.out.println("디렉토리가 존재하지 않습니다. 디렉토리를 생성합니다.");
+				isDir.mkdir();
+			}
 			String img_path02 = img_path01.replace("\\", "/");
 			String img_path03 = img_path01.replace("\\", "\\\\");
 			final int MAX_SIZE = 10 * 1024 * 1024;
@@ -143,27 +146,27 @@ public class ProductController extends HttpServlet {
 			MultipartRequest multi = new MultipartRequest(request, img_path03, MAX_SIZE, "utf-8", new DefaultFileRenamePolicy());
 			
 			String tempNo = multi.getParameter("no");
-			if (tempNo != null) {
-				no = Integer.parseInt(tempNo);
-			}
+			no = util.numberCheck(tempNo, 0);
 			String name = multi.getParameter("name");
 			String price_ = multi.getParameter("price");
 			int price = Integer.parseInt(price_);
 			String description = multi.getParameter("description");
 
-			String[] fileNamesArray = new String[3];
+			final int LENGTH_OF_ARRAY = 3;
+			String[] fileNamesArray = new String[LENGTH_OF_ARRAY];
 			for (int i = 0; i < fileNamesArray.length; i++) {
 				fileNamesArray[i] = "-";
-			}
-			
-			if (no > 0) {
-				fileNamesArray = dao.getView(no).getProduct_img().split(",");
 			}
 			
 			Enumeration files = multi.getFileNames();
 			while (files.hasMoreElements()) {
 				String formName = (String)files.nextElement();
 				String fileName = multi.getFilesystemName(formName);
+				String fileType = multi.getContentType(formName);
+				
+				if (fileName == null || fileName.trim().equals("")) {
+					fileName = "-";
+				}
 								
 				int fileNamesArrayIndex = Integer.parseInt(formName);
 				fileNamesArray[fileNamesArrayIndex] = fileName;
@@ -181,18 +184,24 @@ public class ProductController extends HttpServlet {
 			for (int i = 0; i < fileNamesArray.length; i++) {
 				// 배열 안에 파일명이 null일 경우
 				String fileName = fileNamesArray[i];
+				
 				if (fileName == null) {
 					continue;
 				}
 				
-				// 실제 경로에 파일이 존재하지 않을 경우
-				String old_path = img_path03 + fileName;
-				File file = new File(old_path);
-				if (!file.exists()) {
+				if (fileName.equals("-")) {
 					continue;
 				}
 				
-				String ext = "";
+				// 실제 경로에 파일이 존재하지 않을 경우
+				String old_path = img_path03 + fileName;   // 원본이 업로드된 절대경로와 파일명
+				File file = new File(old_path);
+				if (!file.exists()) {
+					fileNamesArray[i] = "-";
+					continue;
+				}
+				
+				// 파일명에 dot이 없을 경우
 				int point_index = fileName.lastIndexOf(".");
 				if (point_index == -1) {
 					file.delete();
@@ -200,6 +209,8 @@ public class ProductController extends HttpServlet {
 					continue;
 				}
 				
+				// 확장자가 이미지가 아닐 경우
+				String ext = "";
 				ext = fileName.substring(point_index + 1).toLowerCase();
 				if (!(ext.equals("jpg") || ext.equals("jpeg") || ext.equals("gif") || ext.equals("png"))) {
 					file.delete();
@@ -214,33 +225,56 @@ public class ProductController extends HttpServlet {
 				fileNamesArray[i] = fileNamesArray[i] + "|" + newFileName;
 			}
 			
-//			String product_img = "";
-//			for (int i = 0; i < fileNamesArray.length; i++) {
-//				String fileName = fileNamesArray[i];
-//				if (fileName == null) {
-//					fileName = "-";
-//				}
-//				product_img += "," + fileName;
-//			}
-			
 			String product_img = "";
 			for (int i = 0; i < fileNamesArray.length; i++) {
 				String fileName = fileNamesArray[i];
 				product_img += "," + fileName;
 			}
-						
 			product_img = product_img.substring(1);
 			
 			dto.setNo(no);
 			dto.setName(name);
 			dto.setPrice(price);
 			dto.setDescription(description);
-			dto.setProduct_img(product_img);
 			
+			boolean isModifyProc = no > 0;
+			String temp = "";
 			int result;
-			if (no > 0) {
+			if (isModifyProc) {
+				request.setAttribute("menu_gubun", "product_modifyProc");
+				ProductDTO dbDto = dao.getView(no);
+				String dbProduct_img = dbDto.getProduct_img();
+				dto.setProduct_img(product_img);
+				
+				String deleteFileName = "";
+				if (product_img.trim().equals("-,-,-")) {
+					dto.setProduct_img(dbProduct_img);
+				} else {
+					String[] dbArray = dbProduct_img.split(",");
+					for (int i = 0; i < fileNamesArray.length; i++) {
+						if (fileNamesArray[i].equals("-")) {
+							temp += "," + dbArray[i];
+						} else {
+							temp += "," + fileNamesArray[i];
+							deleteFileName += "," + dbArray[i].substring(dbArray[i].lastIndexOf("|") + 1);
+						}
+					}
+					deleteFileName = deleteFileName.substring(1);
+					temp = temp.substring(1);
+					dto.setProduct_img(temp);
+				}
 				result = dao.setUpdate(dto);
+				
+				String[] arrayDelete = deleteFileName.split(",");
+				for (int i = 0; i < arrayDelete.length; i++) {
+					if (!arrayDelete[i].trim().equals("-")) {
+						File file = new File(img_path03 + arrayDelete[i]);
+						file.delete();
+					}
+				}
 			} else {
+				request.setAttribute("menu_gubun", "product_writeProc");
+				dto.setProduct_img(product_img);
 				result = dao.setInsert(dto);
 			}
 			
@@ -272,6 +306,51 @@ public class ProductController extends HttpServlet {
 			rd.forward(request, response);
 			
 			
+		} else if (url.indexOf("delete.do") != -1) {
+			request.setAttribute("menu_gubun", "product_delete");
+			
+			dto = dao.getView(no);
+			request.setAttribute("dto", dto);
+			
+			page = "/shop/product/delete.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
+		}  else if (url.indexOf("deleteProc.do") != -1) {
+			request.setAttribute("menu_gubun", "product_deleteProc");
+			dto = dao.getView(no);
+			String product_img = dto.getProduct_img();
+			
+			if (!product_img.equals("-,-,-")) {
+				String[] productImgArray = product_img.split(",");
+				String deleteFileName = "";
+				for (int i = 0; i < productImgArray.length; i++) {
+					if (!productImgArray[i].equals("-")) {
+						deleteFileName += "," + productImgArray[i].substring(productImgArray[i].lastIndexOf("|") + 1);
+					}
+				}
+				
+				deleteFileName = deleteFileName.substring(1);
+				String[] arrayDelete = deleteFileName.split(",");
+				
+				String img_path01 = request.getSession().getServletContext().getRealPath("/attach/product_img/");
+				File isDir = new File(img_path01);
+				String img_path02 = img_path01.replace("\\", "/");
+				String img_path03 = img_path01.replace("\\", "\\\\");
+				for (int i = 0; i < arrayDelete.length; i++) {
+					if (!arrayDelete[i].trim().equals("-")) {
+						File file = new File(img_path03 + arrayDelete[i]);
+						file.delete();
+					}
+				}
+			}
+			
+			
+			int result = dao.setDelete(dto);
+
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
 		}
 	}
 }

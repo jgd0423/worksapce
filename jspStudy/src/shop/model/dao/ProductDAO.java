@@ -194,4 +194,20 @@ public class ProductDAO {
 		
 		return result;
 	}
+
+	public int setDelete(ProductDTO dto) {
+		conn = getConn();
+		int result = 0;
+		try {
+			String sql = "DELETE FROM " + PRODUCT + " WHERE no = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, dto.getNo());
+			result = pstmt.executeUpdate();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		return result;
+	}
 }

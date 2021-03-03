@@ -324,3 +324,18 @@ drop table product;
 drop sequence seq_product;
 
 commit;
+
+CREATE TABLE cart (
+    no NUMBER NOT NULL PRIMARY KEY,
+    memberNo NUMBER NOT NULL,
+    productNo NUMBER NOT NULL,
+    amount NUMBER DEFAULT 0,
+    regi_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE SEQUENCE seq_cart START WITH 1 INCREMENT BY 1 NOMAXVALUE NOCACHE;
+
+ALTER TABLE cart ADD CONSTRAINT fk_cart_memberNo FOREIGN KEY(memberNo) REFERENCES member(no);
+ALTER TABLE cart ADD CONSTRAINT fk_cart_productNo FOREIGN KEY(productNo) REFERENCES product(no);
+
+-- ALTER TABLE cart DROP CONSTRAINT fk_cart_memberNo;

@@ -13,7 +13,7 @@ public class UtilProduct extends Util {
 		if (search_option.equals("")) {}
 		else if (search_option.equals("name")) {}
 		else if (search_option.equals("description")) {}
-		else if (search_option.equals("namea_description")) {}
+		else if (search_option.equals("name_description")) {}
 		else { search_option = ""; }
 		
 		if (search_data == null || search_data.trim().equals("")) {
