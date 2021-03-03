@@ -164,6 +164,8 @@ public class ProductController extends HttpServlet {
 				String fileName = multi.getFilesystemName(formName);
 				String fileType = multi.getContentType(formName);
 				
+				System.out.println(fileType);
+				
 				if (fileName == null || fileName.trim().equals("")) {
 					fileName = "-";
 				}
