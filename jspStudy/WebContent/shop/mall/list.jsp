@@ -12,7 +12,7 @@
 				<c:set var="temp3" value="${fn:split(temp1, '|')[1] }"></c:set>
 				<c:choose>
 					<c:when test="${j >= productListSize }">
-						<td align="center">없음</td>
+						<td align="center" style="width:100px; height:100px;">없음</td>
 					</c:when>
 					<c:otherwise>
 						<td>

@@ -152,8 +152,7 @@ public class ProductController extends HttpServlet {
 			int price = Integer.parseInt(price_);
 			String description = multi.getParameter("description");
 
-			final int LENGTH_OF_ARRAY = 3;
-			String[] fileNamesArray = new String[LENGTH_OF_ARRAY];
+			String[] fileNamesArray = new String[3];
 			for (int i = 0; i < fileNamesArray.length; i++) {
 				fileNamesArray[i] = "-";
 			}

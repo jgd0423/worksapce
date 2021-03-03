@@ -7,7 +7,7 @@ pageNumber : <span id="span_pageNumber">${pageNum }</span><br>
 no : <span id="span_no">${no }</span><br>
 search_option : <span id="span_search_option">${search_option }</span><br>
 search_data : <span id="span_search_data">${search_data }</span><br>
-jumun_su : <span id="span_jumun_su"></span>
+jumun_su : <span id="span_jumun_su"></span><br>
 
 <input type="text" name="a" style="display: ;" /><br><!-- ajax 테스트를 위한 것 -->
 
