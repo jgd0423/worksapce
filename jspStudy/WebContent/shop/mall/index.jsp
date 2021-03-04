@@ -17,14 +17,14 @@ jumun_su : <span id="span_jumun_su"></span><br>
 
 $(document).ready(() => {
 	<c:if test="${menu_gubun == 'mall_index'}">
-		chooseProc('list', '1', '');		
+		chooseProc('mall_list', '1', '');		
 	</c:if>
 });
 
 function chooseProc(proc, pageNumber, no) {
-	if (proc === "write") {
-		$("#span_no").text("");		
-	} 
+	if (proc === 'mall_list') {
+		$("#span_no").text("");
+	}
 	if (proc !== '') {
 		$("#span_proc").text(proc);
 	}
@@ -41,11 +41,19 @@ function chooseProc(proc, pageNumber, no) {
 function goPage(proc) {
 	let param = {};
 	const url = `${path}/mall_servlet/\${proc}.do`;
-	
-	if (proc === "write") {
+
+	if (proc === "mall_list") {
 		param = {};
-	} else if (proc === "list") {
 		param.pageNumber = $("#span_pageNumber").text();
+		param.search_option = $("#span_search_option").text();
+		param.search_data = $("#span_search_data").text();
+	} else if (proc === "mall_view") {
+		param = {};
+		param.no = $("#span_no").text();
+	} else if (proc === "cart_add") {
+		param = {};
+		param.no = $("#span_no").text();
+		param.amount = $("#amount").val();
 	}
 	
 	$.ajax({
@@ -53,15 +61,7 @@ function goPage(proc) {
 		data: param,
 		url: url,
 		success: (data) => {
-			if (proc === 'writeProc') {
-				chooseProc('list', '1', '');
-			} else if (proc === 'modifyProc') {
-				chooseProc('view', '', $("#span_no").text());
-			} else if (proc === 'deleteProc') {
-				chooseProc('list', '1', '');
-			} else {
-				$("#result").html(data);				
-			}
+			$("#result").html(data);				
 		}
 	});
 }

@@ -74,8 +74,8 @@ public class MallController extends HttpServlet {
 		request.setAttribute("search_option", search_option);
 		request.setAttribute("search_data", search_data);
 		
-		ProductDAO dao = new ProductDAO();
-		ProductDTO dto = new ProductDTO();
+		ProductDAO productDao = new ProductDAO();
+		ProductDTO productDto = new ProductDTO();
 		
 		CartDAO cartDao = new CartDAO();
 		CartDTO cartDto = new CartDTO();
@@ -88,10 +88,10 @@ public class MallController extends HttpServlet {
 			rd.forward(request, response);
 			
 			
-		} else if (url.indexOf("list.do") != -1) {
+		} else if (url.indexOf("mall_list.do") != -1) {
 			// paging
-			int allRowsCount = dao.getAllRowsCount(search_option, search_data);
-			final int ONE_PAGE_ROWS = 9;
+			int allRowsCount = productDao.getAllRowsCount(search_option, search_data);
+			final int ONE_PAGE_ROWS = 12;
 			final int MAX_PAGING_WIDTH = 10;
 			
 			int[] pagerArr = util.pager(ONE_PAGE_ROWS, MAX_PAGING_WIDTH, allRowsCount, pageNum);
@@ -102,9 +102,9 @@ public class MallController extends HttpServlet {
 			int startNum = pagerArr[4];
 			int endNum = pagerArr[5];
 			
-			ArrayList<ProductDTO> list = dao.getPagingList(startNum, endNum, search_option, search_data);
+			ArrayList<ProductDTO> list = productDao.getPagingList(startNum, endNum, search_option, search_data);
 			
-			request.setAttribute("menu_gubun", "product_list");
+			request.setAttribute("menu_gubun", "mall_list");
 			request.setAttribute("list", list);
 			
 			request.setAttribute("ONE_PAGE_ROWS", ONE_PAGE_ROWS);
@@ -127,7 +127,68 @@ public class MallController extends HttpServlet {
 			request.setAttribute("oneLineSize", oneLineSize);
 			request.setAttribute("loopNumforI", loopNumforI);
 			
-			page = "/shop/mall/list.jsp";
+			page = "/shop/mall/mall_list.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("mall_view.do") != -1) {
+			productDto = productDao.getView(no);
+			
+			String temp = productDto.getDescription();
+			if (temp != null) {
+				temp = temp.replace("\n", "<br>");				
+			}
+			
+			request.setAttribute("menu_gubun", "product_view");
+			request.setAttribute("dto", productDto);
+			
+			page = "/shop/mall/mall_view.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("cart_list.do") != -1 || url.indexOf("cart_add.do") != -1) {
+			if (url.indexOf("cart_add.do") != -1) {
+				String amount_ = request.getParameter("amount");
+				int amount = Integer.parseInt(amount_);
+				cartDto.setMemberNo(1);
+				cartDto.setProductNo(no);
+				cartDto.setAmount(amount);
+				int result = cartDao.setInsert(cartDto);
+			}
+			
+			// paging
+			int allRowsCount = cartDao.getAllRowsCount();
+			final int ONE_PAGE_ROWS = 10;
+			final int MAX_PAGING_WIDTH = 10;
+			
+			int[] pagerArr = util.pager(ONE_PAGE_ROWS, MAX_PAGING_WIDTH, allRowsCount, pageNum);
+			int tableRowNum = pagerArr[0];
+			int pagingStartNum = pagerArr[1];
+			int pagingEndNum = pagerArr[2];
+			int maxPagesCount = pagerArr[3];
+			int startNum = pagerArr[4];
+			int endNum = pagerArr[5];
+			
+			ArrayList<CartDTO> list = cartDao.getPagingList(startNum, endNum);
+			
+			request.setAttribute("menu_gubun", "cart_list");
+			request.setAttribute("list", list);
+			
+			request.setAttribute("ONE_PAGE_ROWS", ONE_PAGE_ROWS);
+			request.setAttribute("MAX_PAGING_WIDTH", MAX_PAGING_WIDTH);
+			request.setAttribute("allRowsCount", allRowsCount);
+			request.setAttribute("tableRowNum", tableRowNum);
+			
+			request.setAttribute("pagingStartNum", pagingStartNum);
+			request.setAttribute("pagingEndNum", pagingEndNum);
+			
+			request.setAttribute("maxPagesCount", maxPagesCount);
+			request.setAttribute("pagingStartNum", pagingStartNum);
+			request.setAttribute("pagingEndNum", pagingEndNum);
+			
+			page = "/shop/mall/cart_list.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			

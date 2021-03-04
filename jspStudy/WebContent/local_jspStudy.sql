@@ -339,3 +339,10 @@ ALTER TABLE cart ADD CONSTRAINT fk_cart_memberNo FOREIGN KEY(memberNo) REFERENCE
 ALTER TABLE cart ADD CONSTRAINT fk_cart_productNo FOREIGN KEY(productNo) REFERENCES product(no);
 
 -- ALTER TABLE cart DROP CONSTRAINT fk_cart_memberNo;
+
+DESC cart;
+SELECT * FROM cart;
+
+select product.product_img, product.name, product.price, cart.amount, (product.price * cart.amount) buy_money, cart.regi_date
+from cart left outer join product
+on cart.productNo = product.no;
