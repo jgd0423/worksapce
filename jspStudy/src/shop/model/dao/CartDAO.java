@@ -52,7 +52,10 @@ public class CartDAO {
 		ArrayList<CartDTO> list = new ArrayList<>();
 		try {
 			String basic_sql = "";
-			basic_sql += "SELECT cart.no, product.product_img, product.name, product.price, cart.amount, (product.price * cart.amount) buy_money, cart.regi_date FROM " + CART + " LEFT OUTER JOIN " + PRODUCT + " ON cart.productNo = product.no ";
+			basic_sql += "SELECT cart.no, product.product_img, "
+					+ "product.name, product.price, cart.amount, "
+					+ "(product.price * cart.amount) buy_money, cart.regi_date "
+					+ "FROM " + CART + " LEFT OUTER JOIN " + PRODUCT + " ON cart.productNo = product.no ";
 			basic_sql += "ORDER BY no DESC";
 			
 			String sql = "";
