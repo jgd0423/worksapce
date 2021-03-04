@@ -342,7 +342,14 @@ ALTER TABLE cart ADD CONSTRAINT fk_cart_productNo FOREIGN KEY(productNo) REFEREN
 
 DESC cart;
 SELECT * FROM cart;
+SELECT * FROM product;
 
 select product.product_img, product.name, product.price, cart.amount, (product.price * cart.amount) buy_money, cart.regi_date
 from cart left outer join product
 on cart.productNo = product.no;
+
+select count(*)
+from cart left outer join product
+on cart.productNo = product.no;
+
+SELECT cart.no, product.product_img, product.name, product.price, cart.amount, (product.price * cart.amount) buy_money, cart.regi_date FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no ORDER BY no DESC;
