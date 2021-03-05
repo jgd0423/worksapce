@@ -53,7 +53,7 @@
 	</tr>
 	<tr>
 		<td>장바구니수량 : </td>
-		<td><fmt:formatNumber type="number" maxFractionDigits="3" value=""/></td>
+		<td><fmt:formatNumber type="number" maxFractionDigits="3" value="${dto.amount }"/></td>
 	</tr>
 	<tr>
 		<td colspan="2">

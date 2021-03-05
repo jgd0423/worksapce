@@ -18,6 +18,7 @@ public class ProductDAO {
 	ResultSet rs = null;
 	
 	final String PRODUCT = "product";
+	final String CART = "cart";
 	
 	// Method
 	public Connection getConn() {
@@ -93,13 +94,15 @@ public class ProductDAO {
 		ArrayList<ProductDTO> list = new ArrayList<>();
 		try {
 			String basic_sql = "";
-			basic_sql += "SELECT * FROM " + PRODUCT + " WHERE no > 0 ";
+			basic_sql += "SELECT product.*, "
+					+ "(SELECT SUM(amount) FROM " + CART + " WHERE cart.productNo = product.no) amount "
+					+ "FROM " + PRODUCT + " WHERE product.no > 0 ";
 			
 			if (search_option.length() > 0 && search_data.length() > 0) {
 				if (search_option.equals("name") || search_option.equals("description")) {
 					basic_sql += " AND " + search_option + " LIKE ? ";
 				} else if (search_option.equals("name_description")) {
-					basic_sql += " and (name LIKE ? OR description LIKE ?) ";
+					basic_sql += " AND (name LIKE ? OR description LIKE ?) ";
 				}
 			}
 			
@@ -132,6 +135,7 @@ public class ProductDAO {
 				dto.setPrice(rs.getInt("price"));
 				dto.setProduct_img(rs.getString("product_img"));
 				dto.setRegi_date(rs.getTimestamp("regi_date"));
+				dto.setAmount(rs.getInt("amount"));
 				list.add(dto);
 			}
 			
@@ -148,7 +152,9 @@ public class ProductDAO {
 		conn = getConn();
 		ProductDTO dto = new ProductDTO();
 		try {
-			String sql = "SELECT * FROM "+ PRODUCT +" WHERE no = ?";
+			String sql = "SELECT product.*, "
+					+ "(SELECT SUM(amount) FROM " + CART + " WHERE cart.productNo = product.no) amount "
+					+ "FROM " + PRODUCT + " WHERE product.no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, no);
 			rs = pstmt.executeQuery();
@@ -159,6 +165,7 @@ public class ProductDAO {
 				dto.setDescription(rs.getString("description"));
 				dto.setProduct_img(rs.getString("product_img"));
 				dto.setRegi_date(rs.getTimestamp("regi_date"));
+				dto.setAmount(rs.getInt("amount"));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();

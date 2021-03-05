@@ -344,12 +344,25 @@ DESC cart;
 SELECT * FROM cart;
 SELECT * FROM product;
 
-select product.product_img, product.name, product.price, cart.amount, (product.price * cart.amount) buy_money, cart.regi_date
-from cart left outer join product
-on cart.productNo = product.no;
+SELECT SUM(amount) FROM cart WHERE productNo = 14;
 
-select count(*)
-from cart left outer join product
-on cart.productNo = product.no;
+SELECT product.product_img, product.name, product.price, cart.amount, (product.price * cart.amount) buy_money, cart.regi_date
+FROM cart LEFT OUTER JOIN product
+ON cart.productNo = product.no;
 
-SELECT cart.no, product.product_img, product.name, product.price, cart.amount, (product.price * cart.amount) buy_money, cart.regi_date FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no ORDER BY no DESC;
+SELECT COUNT(*)
+FROM cart LEFT OUTER JOIN product
+ON cart.productNo = product.no;
+
+SELECT 
+    cart.no cart_no, 
+    product.no productNo, 
+    product.product_img, 
+    product.name, 
+    product.price, 
+    cart.amount, 
+    (product.price * cart.amount) buy_money, 
+    cart.regi_date 
+FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no ORDER BY cart_no DESC;
+
+SELECT product.*, (SELECT SUM(amount) FROM cart WHERE cart.productNo = product.no) amount FROM product Where product.no = 14;

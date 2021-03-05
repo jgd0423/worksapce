@@ -120,13 +120,16 @@ public class MallController extends HttpServlet {
 			request.setAttribute("pagingEndNum", pagingEndNum);
 			
 			int productListSize = list.size();
-			int oneLineSize = 3;
-			int loopNumforI = (int) Math.ceil((double) (productListSize / oneLineSize));
+			int oneLineSize = 4;
+			int loopNumforI = (int) Math.ceil((double) (productListSize / oneLineSize)) - 1;
+			if (loopNumforI < 0) {
+				loopNumforI = 0;
+			}
 			
 			request.setAttribute("productListSize", productListSize);
 			request.setAttribute("oneLineSize", oneLineSize);
 			request.setAttribute("loopNumforI", loopNumforI);
-			
+
 			page = "/shop/mall/mall_list.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
@@ -151,8 +154,9 @@ public class MallController extends HttpServlet {
 		} else if (url.indexOf("cart_list.do") != -1 || url.indexOf("cart_add.do") != -1) {
 			if (url.indexOf("cart_add.do") != -1) {
 				String amount_ = request.getParameter("amount");
-				int amount = Integer.parseInt(amount_);
-				cartDto.setMemberNo(1);
+				int amount = util.numberCheck(amount_, 1);
+
+				cartDto.setMemberNo(1);   // cookNo로 수정할 것
 				cartDto.setProductNo(no);
 				cartDto.setAmount(amount);
 				int result = cartDao.setInsert(cartDto);
@@ -193,6 +197,11 @@ public class MallController extends HttpServlet {
 			rd.forward(request, response);
 			
 			
+		} else if (url.indexOf("cart_clear.do") != -1) {
+			String chkNos = request.getParameter("chkNo");
+			chkNos = chkNos.substring(1);
+			String[] chkNoArray = chkNos.split(",");
+			boolean result = cartDao.setDeleteBatch(chkNoArray);
 		}
 	}
 

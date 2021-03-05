@@ -89,7 +89,7 @@ ${allRowsCount }개의 레코드가 있습니다.
 				</td>
 				<td><fmt:formatNumber type="number" maxFractionDigits="3" value="${dto.price }"/></td>
 				<td>${dto.product_img }</td>
-				<td><fmt:formatNumber type="number" maxFractionDigits="3" value="0"/></td>
+				<td><fmt:formatNumber type="number" maxFractionDigits="3" value="${dto.amount }"/></td>
 				<td>${dto.regi_date }</td>
 			</tr>
 			<c:set var="tableRowNum" value="${tableRowNum = tableRowNum - 1 }"/>

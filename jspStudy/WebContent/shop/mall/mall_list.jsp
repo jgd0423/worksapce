@@ -56,7 +56,6 @@
 			<tr>
 				<c:forEach var="j" begin="${i * oneLineSize}" end="${(i * oneLineSize) + oneLineSize - 1 }" step="1" >
 					<c:set var="dto" value="${list[j] }"></c:set>
-
 					<c:choose>
 						<c:when test="${j >= productListSize }">
 							<td align="center" style="width:150px; height:200px;">없음</td>
@@ -134,7 +133,7 @@
 	</tr>
 	<tr>
 		<td colspan="10" align="right">
-			<button type="button" onclick="chooseProc('mall_list', '1', '')">상품목록</button>&nbsp;
+			<button type="button" onclick="chooseAll()">상품목록</button>&nbsp;
 			<button type="button" onclick="chooseProc('cart_list', '1', '')">장바구니</button>&nbsp;
 		</td>
 	</tr>
@@ -148,6 +147,12 @@ function search() {
 
 function choosePage(pageNum) {
 	chooseProc('mall_list', pageNum, '');
+}
+
+function chooseAll() {
+	$("#span_search_option").text("");
+	$("#span_search_data").text("");
+	chooseProc('mall_list', '1', '');
 }
 
 </script>

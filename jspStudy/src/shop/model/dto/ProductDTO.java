@@ -9,6 +9,7 @@ public class ProductDTO {
 	private int price;
 	private String description;
 	private String product_img;
+	private int amount;
 	private Timestamp regi_date;
 	
 	// Constructor
@@ -50,5 +51,13 @@ public class ProductDTO {
 	}
 	public void setRegi_date(Timestamp regi_date) {
 		this.regi_date = regi_date;
+	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 }
