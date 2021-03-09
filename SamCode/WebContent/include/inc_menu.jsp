@@ -44,17 +44,11 @@
 		<td id="board2" style="padding: 0px 20px; ${menu_name == 'board2' ? 'background-color: silver;' : ''}">
 			<a href="${path }/board2_servlet/list.do">게시판</a>
 		</td>
-		<td id="product" style="padding: 0px 20px; ${menu_name == 'product' ? 'background-color: silver;' : ''}">
+		<td style="padding: 0px 20px; ${menu_name == 'product' ? 'background-color: silver;' : ''}">
 			<a href="${path }/product_servlet/index.do">Mall(상품관리-ajax)</a>
 		</td>
-		<td id="mall" style="padding: 0px 20px; ${menu_name == 'mall' ? 'background-color: silver;' : ''}">
+		<td style="padding: 0px 20px; ${menu_name == 'mall' ? 'background-color: silver;' : ''}">
 			<a href="${path }/mall_servlet/index.do">Mall(쇼핑몰-ajax)</a>
-		</td>
-		<td id="chart" style="padding: 0px 20px; ${menu_name == 'chart' ? 'background-color: silver;' : ''}">
-			<a href="${path }/chart_servlet/index.do">Chart</a>
-		</td>
-		<td id="smtpEmail" style="padding: 0px 20px; ${menu_name == 'email' ? 'background-color: silver;' : ''}">
-			<a href="${path }/email_servlet/index.do">Email</a>
 		</td>
 		<td style="padding: 0px 20px;">
 			<a href="#">관리자</a>

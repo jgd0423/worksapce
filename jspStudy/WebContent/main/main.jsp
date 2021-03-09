@@ -95,6 +95,12 @@
 				<c:when test="${menu_gubun == 'mall_index' }">
 					<jsp:include page="../shop/mall/index.jsp" />
 				</c:when>
+				<c:when test="${menu_gubun == 'chart_index' }">
+					<jsp:include page="../chart/index.jsp" />
+				</c:when>
+				<c:when test="${menu_gubun == 'email_index' }">
+					<jsp:include page="../email/index.jsp" />
+				</c:when>
 			</c:choose>
 			<!-- section -->
 		</td>

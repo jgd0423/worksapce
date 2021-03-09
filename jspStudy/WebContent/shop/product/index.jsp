@@ -10,7 +10,7 @@ search_data : <span id="span_search_data">${search_data }</span><br>
 
 <input type="text" name="a" style="display: ;" /><br><!-- ajax 테스트를 위한 것 -->
 
-<div id="result" style="height: 100%;"></div>
+<div id="result" style="height: 100%; position: relative"></div>
 
 <script>
 
