@@ -46,7 +46,7 @@ function chooseProc(proc, pageNumber, no) {
 		if (confirm('제품상세보기 페이지로 이동하시겠습니까?')) {
 			proc = 'mall_view';
 			$("#span_proc").text(proc);
-			$("#span_no").text("");
+			$("#span_no").text(no);
 		} else {
 			return;
 		}

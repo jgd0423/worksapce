@@ -52,7 +52,7 @@ ${allRowsCount }개의 레코드가 있습니다.
 					</c:if>
 				</td>
 				<td>
-					<a href="#" onclick="chooseProc('view', '', '${dto.no }')">${dto.product_name }</a>
+					<a href="#" onclick="chooseProc('cart_view', '', '${dto.productNo }')">${dto.product_name }</a>
 				</td>
 				<td><fmt:formatNumber type="number" maxFractionDigits="3" value="${dto.product_price }"/></td>
 				<td><fmt:formatNumber type="number" maxFractionDigits="3" value="${dto.amount }"/></td>
