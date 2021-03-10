@@ -1,7 +1,4 @@
-/**
- * 
- */
-
+<script>
 	window.onload = function(){
 		//alert('aaa1');
 		sijak();
@@ -124,4 +121,4 @@
 			}
 		}
 	}	
-	
+</script>

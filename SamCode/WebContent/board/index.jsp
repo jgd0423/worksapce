@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 
 <%@ include file="../include/inc_header.jsp" %> 
+<%@ include file="./_board.jsp" %> 
 
 <!-- 
 menu_gubun : ${menu_gubun}<br>
@@ -15,7 +16,7 @@ pageNumber : <span id="span_pageNumber">${pageNumber }</span><br>
 no : <span id="span_no">${no }</span><br>
 search_option : <span id="span_search_option">${search_option }</span><br>
 search_data : <span id="span_search_data">${search_data }</span><br>
-${path }
+${path }<br>
 
 
 passwd : <span id="span_passwd"></span><br>
@@ -25,5 +26,3 @@ passwd : <span id="span_passwd"></span><br>
 
 
 <div id="result" style="border: 1px solid red; position: relative;"></div>
-
-<script type="text/javascript" src="${path }/board/_board.js"></script>
