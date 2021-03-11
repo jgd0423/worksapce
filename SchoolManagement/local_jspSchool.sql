@@ -14,9 +14,11 @@ CREATE TABLE student (
 
 CREATE SEQUENCE seq_student START WITH 1 INCREMENT BY 1 MINVALUE 1;
 
-drop table student;
-
 SELECT * FROM student;
+
+select classes from student where grade = '1';
+
+select id, name from student where grade = '1' and classes = '1';
 
 CREATE TABLE exam (
     no NUMBER NOT NULL,
