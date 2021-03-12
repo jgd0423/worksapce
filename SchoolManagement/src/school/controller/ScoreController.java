@@ -99,35 +99,36 @@ public class ScoreController extends HttpServlet {
 			
 			
 		} else if (url.indexOf("writeProc.do") != -1) {
-			String studentId = request.getParameter("studentId");
+			String[] studentId = request.getParameterValues("studentId");
+			String[] korean_ = request.getParameterValues("korean");
+			String[] english_ = request.getParameterValues("english");
+			String[] math_ = request.getParameterValues("math");
+			String[] science_ = request.getParameterValues("science");
+			String[] history_ = request.getParameterValues("history");
 			String examId_ = request.getParameter("examId");
-			String korean_ = request.getParameter("korean");
-			String english_ = request.getParameter("english");
-			String math_ = request.getParameter("math");
-			String science_ = request.getParameter("science");
-			String history_ = request.getParameter("history");
 			int examId = Integer.parseInt(examId_);
-			int korean = Integer.parseInt(korean_);
-			int english = Integer.parseInt(english_);
-			int math = Integer.parseInt(math_);
-			int science = Integer.parseInt(science_);
-			int history = Integer.parseInt(history_);
 			
-			dto.setStudentId(studentId);
-			dto.setExamId(examId);
-			dto.setKorean(korean);
-			dto.setEnglish(english);
-			dto.setMath(math);
-			dto.setScience(science);
-			dto.setHistory(history);
+			for (int i = 0; i < studentId.length; i ++) {
+				int korean = Integer.parseInt(korean_[i]);
+				int english = Integer.parseInt(english_[i]);
+				int math = Integer.parseInt(math_[i]);
+				int science = Integer.parseInt(science_[i]);
+				int history = Integer.parseInt(history_[i]);
+				
+				dto.setStudentId(studentId[i]);
+				dto.setExamId(examId);
+				dto.setKorean(korean);
+				dto.setEnglish(english);
+				dto.setMath(math);
+				dto.setScience(science);
+				dto.setHistory(history);
+				
+				int result = dao.setInsert(dto);
+			}
 			
 			String temp;
-			int result = dao.setInsert(dto);
-			if (result > 0) {
-				temp = path + "/score_servlet/list.do";
-			} else {
-				temp = path + "/score_servlet/write.do";
-			}
+		
+			temp = path + "/score_servlet/list.do";
 			response.sendRedirect(temp);
 			
 			

@@ -135,6 +135,8 @@ public class ScoreDAO {
 				dto.setNo(rs.getInt("no"));
 				dto.setStudentId(rs.getString("studentId"));
 				dto.setStudentName(rs.getString("studentName"));
+				dto.setGrade(rs.getString("grade"));
+				dto.setClasses(rs.getString("classes"));
 				dto.setExamId(rs.getInt("examId"));
 				dto.setExamName(rs.getString("examName"));
 				dto.setKorean(rs.getInt("korean"));

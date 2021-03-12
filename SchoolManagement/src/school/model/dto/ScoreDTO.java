@@ -7,6 +7,8 @@ public class ScoreDTO {
 	private int no;
 	private String studentId;
 	private String studentName;
+	private String grade;
+	private String classes;
 	private int examId;
 	private String examName;
 	private int korean;
@@ -124,5 +126,21 @@ public class ScoreDTO {
 
 	public void setAverageScore(double averageScore) {
 		this.averageScore = averageScore;
+	}
+
+	public String getGrade() {
+		return grade;
+	}
+
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+
+	public String getClasses() {
+		return classes;
+	}
+
+	public void setClasses(String classes) {
+		this.classes = classes;
 	}
 }

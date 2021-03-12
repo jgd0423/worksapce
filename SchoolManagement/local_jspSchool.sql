@@ -75,6 +75,8 @@ as
 select 
     score.no no, 
     student.name studentName,
+    student.grade grade,
+    student.classes classes,
     score.studentid studentId,
     exam.name examName,
     exam.no examId,

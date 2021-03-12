@@ -51,6 +51,8 @@ ${allRowsCount }개의 레코드가 있습니다.
 			<td>번호</td>
 			<td>성적리스트 id</td>
 			<td>학생이름</td>
+			<td>반</td>
+			<td>번호</td>
 			<td>시험이름</td>
 			<td>국어</td>
 			<td>영어</td>
@@ -74,6 +76,8 @@ ${allRowsCount }개의 레코드가 있습니다.
 					<td>${tableRowNum }</td>
 					<td>${dto.no }</td>
 					<td>${dto.studentName }</td>
+					<td>${dto.grade }</td>
+					<td>${dto.classes }</td>
 					<td>${dto.examName }</td>
 					<td>${dto.korean }</td>
 					<td>${dto.english }</td>
@@ -134,8 +138,8 @@ ${allRowsCount }개의 레코드가 있습니다.
 function choosePage(pageNumber) {
 	let url = '';
 	url += `${path}/score_servlet/list.do?pageNumber=\${pageNumber}`;
-	url += `&search_option=\${search_option}`;
-	url += `&search_data=\${search_data}`;
+	url += "&search_option=" + "${search_option}";
+	url += "&search_data=" + "${search_data}";
 	location.href = url;
 }
 
