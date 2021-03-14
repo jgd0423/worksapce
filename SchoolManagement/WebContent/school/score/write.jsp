@@ -11,13 +11,13 @@
 			<td style="align: center;">학년, 반, 시험종류</td>
 			<td>
 				<select name="grade" id="grade" style="width: 80px;">
-					<option value="">- 반 -</option>
+					<option value="">- 학년 -</option>
 					<option value="1">1</option>
     			<option value="2">2</option>
     			<option value="3">3</option>
 				</select>
 				<select name="classes" id="classes" style="width: 80px;">
-					<option value="">- 번호 -</option>
+					<option value="">- 반 -</option>
 					<c:forEach var="classes" items="${classesList }">
 						<option value="${classes }">${classes }</option>
 					</c:forEach>
@@ -32,7 +32,7 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<table border="1">
+				<table border="1" width="1000px">
 					<tr>
 						<td>학생이름</td>
 						<td>국어</td>

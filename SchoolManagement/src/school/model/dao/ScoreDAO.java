@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import db.DbExample;
 import school.model.dto.ExamDTO;
@@ -55,30 +56,39 @@ public class ScoreDAO {
 		return result;
 	}
 
-	public int getAllRowsCount(String search_option, String search_data) {
+	public int getAllRowsCount(String grade, String classes, String examId, String studentName) {
 		conn = getConn();
 		int allRowsCount = 0;
 		try {
 			String sql = "SELECT COUNT(*) FROM scoreView WHERE no > 0 ";
 			
-			if (search_option.length() > 0 && search_data.length() > 0) {
-				if (search_option.equals("studentName") || search_option.equals("examName")) {
-					sql += " AND " + search_option + " LIKE ? ";
-				} else if (search_option.equals("studentName_examName")) {
-					sql += " and (studentName LIKE ? OR examName LIKE ?) ";
-				}
+			if (grade.length() > 0) {
+				sql += " AND grade = ? ";
+			}
+			if (classes.length() > 0) {
+				sql += " AND classes = ? ";
+			}
+			if (examId.length() > 0) {
+				sql += " AND examId = ? ";
+			}
+			if (studentName.length() > 0) {
+				sql += " AND studentName LIKE ? ";
 			}
 			
 			int pstmtNum = 0;
 			pstmt = conn.prepareStatement(sql);
 			
-			if (search_option.length() > 0 && search_data.length() > 0) {
-				if (search_option.equals("studentName") || search_option.equals("examName")) {
-					pstmt.setString(++pstmtNum, '%' + search_data + '%');
-				} else if (search_option.equals("studentName_examName")) {
-					pstmt.setString(++pstmtNum, '%' + search_data + '%');
-					pstmt.setString(++pstmtNum, '%' + search_data + '%');
-				}
+			if (grade.length() > 0) {
+				pstmt.setString(++pstmtNum, grade);
+			}
+			if (classes.length() > 0) {
+				pstmt.setString(++pstmtNum, classes);
+			}
+			if (examId.length() > 0) {
+				pstmt.setString(++pstmtNum, examId);
+			}
+			if (studentName.length() > 0) {
+				pstmt.setString(++pstmtNum, '%' + studentName + '%');
 			}
 			
 			rs = pstmt.executeQuery();
@@ -94,18 +104,23 @@ public class ScoreDAO {
 		return allRowsCount;
 	}
 
-	public ArrayList<ScoreDTO> getPagingList(int startNum, int endNum, String search_option, String search_data) {
+	public ArrayList<ScoreDTO> getPagingList(int startNum, int endNum, String grade, String classes, String examId, String studentName) {
 		conn = getConn();
 		ArrayList<ScoreDTO> list = new ArrayList<>();
 		try {
 			String basic_sql = "SELECT * FROM scoreView WHERE no > 0 ";	
 			
-			if (search_option.length() > 0 && search_data.length() > 0) {
-				if (search_option.equals("studentName") || search_option.equals("examName")) {
-					basic_sql += " AND " + search_option + " LIKE ? ";
-				} else if (search_option.equals("studentName_examName")) {
-					basic_sql += " and (studentName LIKE ? OR examName LIKE ?) ";
-				}
+			if (grade.length() > 0) {
+				basic_sql += " AND grade = ? ";
+			}
+			if (classes.length() > 0) {
+				basic_sql += " AND classes = ? ";
+			}
+			if (examId.length() > 0) {
+				basic_sql += " AND examId = ? ";
+			}
+			if (studentName.length() > 0) {
+				basic_sql += " AND studentName LIKE ? ";
 			}
 			
 			basic_sql += " ORDER BY no DESC";
@@ -117,13 +132,17 @@ public class ScoreDAO {
 			int pstmtNum = 0;
 			pstmt = conn.prepareStatement(sql);		
 			
-			if (search_option.length() > 0 && search_data.length() > 0) {
-				if (search_option.equals("studentName") || search_option.equals("examName")) {
-					pstmt.setString(++pstmtNum, '%' + search_data + '%');
-				} else if (search_option.equals("studentName_examName")) {
-					pstmt.setString(++pstmtNum, '%' + search_data + '%');
-					pstmt.setString(++pstmtNum, '%' + search_data + '%');
-				}
+			if (grade.length() > 0) {
+				pstmt.setString(++pstmtNum, grade);
+			}
+			if (classes.length() > 0) {
+				pstmt.setString(++pstmtNum, classes);
+			}
+			if (examId.length() > 0) {
+				pstmt.setString(++pstmtNum, examId);
+			}
+			if (studentName.length() > 0) {
+				pstmt.setString(++pstmtNum, '%' + studentName + '%');
 			}
 			
 			pstmt.setInt(++pstmtNum, startNum);
@@ -221,5 +240,30 @@ public class ScoreDAO {
 			getConnClose(rs, pstmt, conn);
 		}
 		return examList;
+	}
+
+	public HashMap<String, ArrayList<String>> getClassesMap() {
+		conn = getConn();
+		HashMap<String, ArrayList<String>> classesMap = new HashMap<>();
+		
+		try {
+			for (int i = 0; i <= 3; i++) {
+				String sql = "select distinct(classes) from student where grade = ? order by classes asc";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, Integer.toString(i));
+				rs = pstmt.executeQuery();
+				ArrayList<String> classesList = new ArrayList<>();
+				while (rs.next()) {
+					classesList.add(rs.getString(1));
+				}
+				classesMap.put(Integer.toString(i), classesList);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
+		return classesMap;
 	}
 }

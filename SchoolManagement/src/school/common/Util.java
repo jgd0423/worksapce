@@ -62,32 +62,33 @@ public class Util {
 		return list_gubun;
 	}
 
-	public String[] searchCheck(String search_option, String search_data) {
+	public String[] searchCheck(String grade, String classes, String examId, String studentName) {
 		String[] result = new String[5];
 		
-		if (search_option == null || search_option.trim().equals("")) {
-			search_option = "";
+		if (grade == null || grade.trim().equals("")) {
+			grade = "";
 		}
-		search_option = search_option.trim();
+		grade = grade.trim();
 		
-		if (search_option.equals("")) {}
-		else if (search_option.equals("studentName")) {}
-		else if (search_option.equals("examName")) {}
-		else if (search_option.equals("studentName_examName")) {}
-		else { search_option = ""; }
-		
-		if (search_data == null || search_data.trim().equals("")) {
-			search_data = "";
+		if (classes == null || classes.trim().equals("")) {
+			classes = "";
 		}
-		search_data = search_data.trim();
+		classes = classes.trim();
 		
-		if (search_option.equals("") || search_data.equals("")) {
-			search_option = "";
-			search_data = "";
+		if (examId == null || examId.trim().equals("")) {
+			examId = "";
 		}
+		examId = examId.trim();
 		
-		result[0] = search_option;
-		result[1] = search_data;
+		if (studentName == null || studentName.trim().equals("")) {
+			studentName = "";
+		}
+		studentName = studentName.trim();
+		
+		result[0] = grade;
+		result[1] = classes;
+		result[2] = examId;
+		result[3] = studentName;
 		
 		return result;
 	}

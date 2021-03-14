@@ -13,36 +13,25 @@ ${allRowsCount }개의 레코드가 있습니다.
 		</tr>
 		<tr>
 			<td colspan="20" align="center">
-				<select name="search_option" id="search_option">
-					<c:choose>
-						<c:when test="${search_option == 'studentName' }">
-							<option value="">- 선택 -</option>
-							<option value="studentName" selected>학생이름</option>
-							<option value="examName">시험이름</option>
-							<option value="studentName_examName">학생이름+시험이름</option>
-						</c:when>
-						<c:when test="${search_option == 'examName' }">
-							<option value="">- 선택 -</option>
-							<option value="studentName">학생이름</option>
-							<option value="examName" selected>시험이름</option>
-							<option value="studentName_examName">학생이름+시험이름</option>
-						</c:when>
-						<c:when test="${search_option == 'studentName_examName' }">
-							<option value="">- 선택 -</option>
-							<option value="studentName">학생이름</option>
-							<option value="examName">시험이름</option>
-							<option value="studentName_examName" selected>학생이름+시험이름</option>
-						</c:when>
-						<c:otherwise>
-							<option value="" selected>- 선택 -</option>
-							<option value="studentName">학생이름</option>
-							<option value="examName">시험이름</option>
-							<option value="studentName_examName">학생이름+시험이름</option>
-						</c:otherwise>
-					</c:choose>
+				<select name="grade" id="grade">
+					<option value="">- 학년 전체 -</option>
+					<option value="1">1</option>
+    			<option value="2">2</option>
+    			<option value="3">3</option>
 				</select>
-				
-				<input type="text" name="search_data" id="search_data" value="${search_data }" style="width: 150px;" />
+				<select name="classes" id="classes">
+					<option value="">- 반 전체 -</option>
+					<c:forEach var="classes" items="${classesList }">
+						<option value="${classes }">${classes }</option>
+					</c:forEach>
+				</select>
+				<select name="examId" id="examId">
+					<option value="">- 시험 전체 -</option>
+					<c:forEach var="dto" items="${examList }">
+						<option value="${dto.no }">${dto.name }</option>
+					</c:forEach>
+				</select>
+				<input type="text" name="studentName" id="studentName" style="width: 150px;" />
 				&nbsp;
 				<input type="button" value="검색" onclick="search();" />		
 			</td>
@@ -51,8 +40,8 @@ ${allRowsCount }개의 레코드가 있습니다.
 			<td>번호</td>
 			<td>성적리스트 id</td>
 			<td>학생이름</td>
+			<td>학년</td>
 			<td>반</td>
-			<td>번호</td>
 			<td>시험이름</td>
 			<td>국어</td>
 			<td>영어</td>
@@ -96,10 +85,10 @@ ${allRowsCount }개의 레코드가 있습니다.
 				<a href="#" onclick="choosePage(1)"><<</a>
 				<c:choose>
 					<c:when test="${pageNum - 1 <= 0 }">
-						<a href="#" onclick="choosePage(${pageNum}, '${search_option }', '${search_data }')"><</a>
+						<a href="#" onclick="choosePage(${pageNum}, '${grade }', '${classes }', '${examId }', '${studentName }')"><</a>
 					</c:when>
 					<c:otherwise>
-						<a href="#" onclick="choosePage(${pageNum - 1 }, '${search_option }', '${search_data }')"><</a>
+						<a href="#" onclick="choosePage(${pageNum - 1 }, '${grade }', '${classes }', '${examId }', '${studentName }')"><</a>
 					</c:otherwise>
 				</c:choose>
 				<c:forEach var="i" begin="${pagingStartNum }" end="${pagingEndNum }" step="1" >
@@ -108,19 +97,19 @@ ${allRowsCount }개의 레코드가 있습니다.
 							<b>[${i }]</b>
 						</c:when>
 						<c:otherwise>
-							<a href="#" onclick="choosePage(${i }, '${search_option }', '${search_data }')">${i }</a>
+							<a href="#" onclick="choosePage(${i }, '${grade }', '${classes }', '${examId }', '${studentName }')">${i }</a>
 						</c:otherwise>
 					</c:choose>
 				</c:forEach>
 				<c:choose>
 					<c:when test="${pageNum + 1 >= maxPagesCount }">
-						<a href="#" onclick="choosePage(${maxPagesCount }, '${search_option }', '${search_data }')">></a>
+						<a href="#" onclick="choosePage(${maxPagesCount }, '${grade }', '${classes }', '${examId }', '${studentName }')">></a>
 					</c:when>
 					<c:otherwise>
-						<a href="#" onclick="choosePage(${pageNum + 1 }, '${search_option }', '${search_data }')">></a>
+						<a href="#" onclick="choosePage(${pageNum + 1 }, '${grade }', '${classes }', '${examId }', '${studentName }')">></a>
 					</c:otherwise>
 				</c:choose>
-				<a href="#" onclick="choosePage(${maxPagesCount }, '${search_option }', '${search_data }')">>></a>
+				<a href="#" onclick="choosePage(${maxPagesCount }, '${grade }', '${classes }', '${examId }', '${studentName }')">>></a>
 			</td>
 		</tr>
 		<tr>
@@ -135,11 +124,63 @@ ${allRowsCount }개의 레코드가 있습니다.
 
 <script>
 
+const classesSelectTag = document.querySelector('#classes');
+const gradeSelectTag = document.querySelector('#grade');
+const examIdSelectTag = document.querySelector('#examId');
+
+const grade = '${grade}';
+if (grade) {
+	for (let i = 0; i < gradeSelectTag.length; i++) {
+		if (gradeSelectTag[i].value === grade) {
+			gradeSelectTag[i].selected = true;
+		}
+	}
+}
+
+gradeSelectTag.addEventListener('change', (e) => {
+	classesSelectTag.value = '';
+	document.listForm.method = 'post';
+	document.listForm.action = '${path}/score_servlet/list.do';
+	document.listForm.submit();
+});
+
+const classes = '${classes}';
+if (classes) {
+	for (let i = 0; i < classesSelectTag.length; i++) {
+		if (classesSelectTag[i].value === classes) {
+			classesSelectTag[i].selected = true;
+		}
+	}
+}
+
+classesSelectTag.addEventListener('change', (e) => {
+	document.listForm.method = 'post';
+	document.listForm.action = '${path}/score_servlet/list.do';
+	document.listForm.submit();
+});
+
+const examId = '${examId}';
+if (examId) {
+	for (let i = 0; i < examIdSelectTag.length; i++) {
+		if (examIdSelectTag[i].value === examId) {
+			examIdSelectTag[i].selected = true;
+		}
+	}
+}
+
+examIdSelectTag.addEventListener('change', (e) => {
+	document.listForm.method = 'post';
+	document.listForm.action = '${path}/score_servlet/list.do';
+	document.listForm.submit();
+});
+
 function choosePage(pageNumber) {
 	let url = '';
 	url += `${path}/score_servlet/list.do?pageNumber=\${pageNumber}`;
-	url += "&search_option=" + "${search_option}";
-	url += "&search_data=" + "${search_data}";
+	url += "&grade=" + "${grade}";
+	url += "&classes=" + "${classes}";
+	url += "&examId=" + "${examId}";
+	url += "&studentName=" + "${studentName}";
 	location.href = url;
 }
 

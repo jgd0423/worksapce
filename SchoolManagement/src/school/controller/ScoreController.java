@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import oracle.net.aso.s;
 import school.common.Util;
 import school.model.dao.ScoreDAO;
 import school.model.dto.ExamDTO;
@@ -53,18 +54,10 @@ public class ScoreController extends HttpServlet {
 		String no_ = request.getParameter("no");
 		int no = util.numberCheck(no_, 0);
 		
-		String search_option = request.getParameter("search_option");
-		String search_data = request.getParameter("search_data");
-		String[] searchArray = util.searchCheck(search_option, search_data);
-		search_option = searchArray[0];
-		search_data = searchArray[1];
-		
 		request.setAttribute("yearMonthDayMap", yearMonthDayMap);
 		request.setAttribute("ip", ip);
 		request.setAttribute("pageNum", pageNum);
 		request.setAttribute("no", no);
-		request.setAttribute("search_option", search_option);
-		request.setAttribute("search_data", search_data);
 		
 		ScoreDAO dao = new ScoreDAO();
 		ScoreDTO dto = new ScoreDTO();
@@ -132,9 +125,29 @@ public class ScoreController extends HttpServlet {
 			response.sendRedirect(temp);
 			
 			
-		} else if (url.indexOf("list.do") != -1) {	
+		} else if (url.indexOf("list.do") != -1) {				
+			HashMap<String, ArrayList<String>> classesMap = dao.getClassesMap();
+			String grade = request.getParameter("grade");
+			String classes = request.getParameter("classes");
+			String examId = request.getParameter("examId");
+			String studentName = request.getParameter("studentName");
+			String[] searchCheck = util.searchCheck(grade, classes, examId, studentName);
+			grade = searchCheck[0];
+			classes = searchCheck[1];
+			examId = searchCheck[2];
+			studentName = searchCheck[3];
+			
+			ArrayList<String> classesList = new ArrayList<>();
+			
+			if (grade != "") {
+				classesList = classesMap.get(grade);
+			}
+			
+			ArrayList<ExamDTO> examList = new ArrayList<>();
+			examList = dao.getExamList();
+			
 			// paging
-			int allRowsCount = dao.getAllRowsCount(search_option, search_data);
+			int allRowsCount = dao.getAllRowsCount(grade, classes, examId, studentName);
 			final int ONE_PAGE_ROWS = 10;
 			final int MAX_PAGING_WIDTH = 10;
 			
@@ -146,7 +159,7 @@ public class ScoreController extends HttpServlet {
 			int startNum = pagerArr[4];
 			int endNum = pagerArr[5];
 			
-			ArrayList<ScoreDTO> list = dao.getPagingList(startNum, endNum, search_option, search_data);
+			ArrayList<ScoreDTO> list = dao.getPagingList(startNum, endNum, grade, classes, examId, studentName);
 			
 			request.setAttribute("menu_gubun", "score_list");
 			request.setAttribute("list", list);
@@ -161,7 +174,12 @@ public class ScoreController extends HttpServlet {
 			
 			request.setAttribute("maxPagesCount", maxPagesCount);
 			request.setAttribute("pagingStartNum", pagingStartNum);
-			request.setAttribute("pagingEndNum", pagingEndNum);			
+			request.setAttribute("pagingEndNum", pagingEndNum);
+			request.setAttribute("classesList", classesList);
+			request.setAttribute("grade", grade);
+			request.setAttribute("classes", classes);
+			request.setAttribute("examId", examId);
+			request.setAttribute("examList", examList);
 			
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);

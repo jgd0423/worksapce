@@ -16,7 +16,7 @@ CREATE SEQUENCE seq_student START WITH 1 INCREMENT BY 1 MINVALUE 1;
 
 SELECT * FROM student;
 
-select classes from student where grade = '1';
+select distinct(classes) from student where grade = '3' order by classes asc;
 
 select id, name from student where grade = '1' and classes = '1';
 
@@ -94,3 +94,6 @@ select * from scoreView;
 
 
 select score.no no, student.name studentName, exam.name examName, score.korean korean, score.english english, score.math math, score.science science, score.history history, score.regiDate regiDate from score inner join student on score.studentId = student.id inner join exam on score.examId = exam.no;
+
+
+
