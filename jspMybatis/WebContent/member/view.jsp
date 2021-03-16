@@ -61,25 +61,17 @@
 	</tr>
 	<tr>
 		<td colspan="2" height="50" align="center">
-			<button type="button" onclick="goPage('member_list', '', '')">목록으로</button>
+			<button type="button" onclick="chooseProc('list', '1', '')">목록으로</button>
 			&nbsp;&nbsp;&nbsp;
-			<button type="button" onclick="goPage('member_modify', '', ${dto.no })">수정하기</button>
+			<button type="button" onclick="chooseProc('modify', '1', ${dto.no })">수정하기</button>
 			&nbsp;&nbsp;&nbsp;
-			<button type="button" onclick="goPage('member_delete', '', ${dto.no })">삭제하기</button>
+			<button type="button" onclick="chooseProc('delete', '1', ${dto.no })">삭제하기</button>
 		</td>
 	</tr>
 </table>
 
 <script>
 
-function goPage(value1, value2, value3) {
-	if (value1 === 'member_list') {
-		location.href = '${path}/member_servlet/list.do';
-	} else if (value1 === 'member_modify') {
-		location.href = '${path}/member_servlet/modify.do?pageNumber=' + value2 + '&no=' + value3;
-	} else if (value1 === 'member_delete') {
-		location.href = '${path}/member_servlet/delete.do?pageNumber=' + value2 + '&no=' + value3;
-	}
-}
+
 
 </script>

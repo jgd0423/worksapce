@@ -20,7 +20,7 @@
 		</tr>
 		<tr>
 			<td>비밀번호</td>
-			<td><input type="text" name="passwd"></td>
+			<td><input id="passwd" type="text" name="passwd"></td>
 		</tr>
 		<tr>
 			<td>이름</td>
@@ -63,7 +63,7 @@
 	</tr>
 		<tr>
 			<td colspan="2" height="50" align="center">
-				<button type="button" onclick="modifyInfo('${dto.no }')">삭제하기</button>
+				<button type="button" onclick="chooseProc('deleteProc', '1', '${dto.no }')">삭제하기</button>
 			</td>
 		</tr>
 	</table>
@@ -71,12 +71,6 @@
 
 <script>
 
-function modifyInfo(no) {
-	if (confirm("삭제하시겠습니까?")) {
-		document.deleteForm.method = 'post';
-		document.deleteForm.action = '${path}/member_servlet/deleteProc.do';
-		document.deleteForm.submit();
-	}
-}
+
 
 </script>

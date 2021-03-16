@@ -103,10 +103,10 @@ public class MemberController extends HttpServlet {
 			String gender = request.getParameter("gender");
 			String bornYear_ = request.getParameter("bornYear");
 			int bornYear = Integer.parseInt(bornYear_);
-			String postcode = request.getParameter("postcode");
-			String address = request.getParameter("address");
-			String detailAddress = request.getParameter("detailAddress");
-			String extraAddress = request.getParameter("extraAddress");
+			String postcode = request.getParameter("sample6_postcode");
+			String address = request.getParameter("sample6_address");
+			String detailAddress = request.getParameter("sample6_detailAddress");
+			String extraAddress = request.getParameter("sample6_extraAddress");
 			
 			// validation
 			id = id.replace("<", "&lt;");
@@ -148,6 +148,7 @@ public class MemberController extends HttpServlet {
 			
 		} else if (url.indexOf("login.do") != -1) {
 			request.setAttribute("menu_gubun", "member_login");
+			page = "/member/login.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
@@ -242,6 +243,7 @@ public class MemberController extends HttpServlet {
 			
 			dto = dao.getSelectOne(no);
 			
+			page = "/member/view.jsp";
 			request.setAttribute("menu_gubun", "member_view");
 			request.setAttribute("dto", dto);
 			
@@ -273,6 +275,7 @@ public class MemberController extends HttpServlet {
 			request.setAttribute("menu_gubun", "member_modify");
 			request.setAttribute("dto", dto);
 			
+			page = "/member/modify.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
@@ -281,39 +284,33 @@ public class MemberController extends HttpServlet {
 			String passwd = request.getParameter("passwd");
 			String bornYear_ = request.getParameter("bornYear");
 			int bornYear = Integer.parseInt(bornYear_);
-			String postcode = request.getParameter("postcode");
-			String address = request.getParameter("address");
-			String detailAddress = request.getParameter("detailAddress");
-			String extraAddress = request.getParameter("extraAddress");
+			String postcode = request.getParameter("sample6_postcode");
+			String address = request.getParameter("sample6_address");
+			String detailAddress = request.getParameter("sample6_detailAddress");
+			String extraAddress = request.getParameter("sample6_extraAddress");
 
 			// 비밀번호 체크
 			MemberDTO dbDto = dao.getSelectOne(no);
-			if (!passwd.equals(dbDto.getPasswd())) {
-				response.setContentType("text/html; charset=utf-8");
-				PrintWriter out = response.getWriter();
-				out.println("<script>");
-				out.println("alert('비밀번호가 틀렸습니다.');");
-				out.println("history.back();");
-				out.println("</script>");
-				return;
-			}
+			String dbPasswd = dbDto.getPasswd();
+			boolean isSamePasswd = (passwd.equals(dbPasswd));
 
-			dto.setNo(no);
-			dto.setBornYear(bornYear);
-			dto.setPostcode(postcode);
-			dto.setAddress(address);
-			dto.setDetailAddress(detailAddress);
-			dto.setExtraAddress(extraAddress);
-			
-			int result = dao.setUpdate(dto);
-			
-			String temp;
-			if (result > 0) { // 성공
-				temp = path + "/member_servlet/view.do?pageNumber=&no=" + no;
-			} else { // 실패
-				temp = path + "/member_servlet/modify.do?pageNumber=&no=" + no;
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			if (isSamePasswd) {
+				dto.setNo(no);
+				dto.setBornYear(bornYear);
+				dto.setPostcode(postcode);
+				dto.setAddress(address);
+				dto.setDetailAddress(detailAddress);
+				dto.setExtraAddress(extraAddress);
+				
+				int result = dao.setUpdate(dto);
+				out.println("<script>alert('수정완료'); chooseProc('view', '1', '" + no + "');</script>");
+			} else {
+				out.println("<script>alert('비밀번호오류'); chooseProc('view', '1', '" + no + "');</script>");
 			}
-			response.sendRedirect(temp);
+			out.flush();
+			out.close(); 
 			
 			
 		} else if (url.indexOf("delete.do") != -1) {
@@ -340,38 +337,32 @@ public class MemberController extends HttpServlet {
 			request.setAttribute("menu_gubun", "member_delete");
 			request.setAttribute("dto", dto);
 			
+			page = "/member/delete.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
 			
 		} else if (url.indexOf("deleteProc.do") != -1) {
 			String passwd = request.getParameter("passwd");
-			
 			// 비밀번호 체크
 			MemberDTO dbDto = dao.getSelectOne(no);
-			if (!passwd.equals(dbDto.getPasswd())) {
-				response.setContentType("text/html; charset=utf-8");
-				PrintWriter out = response.getWriter();
-				out.println("<script>");
-				out.println("alert('비밀번호가 틀렸습니다.');");
-				out.println("history.back();");
-				out.println("</script>");
-				return;
-			}
-			
-			dto.setNo(no);
-			
-			int result = dao.setDelete(dto);
-			
-			String temp;
-			if (result > 0) { // 성공
+			String dbPasswd = dbDto.getPasswd();
+			boolean isSamePasswd = (passwd.equals(dbPasswd));
+
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			if (isSamePasswd) {
+				dto.setNo(no);
+				
+				int result = dao.setDelete(dto);
 				HttpSession session = request.getSession();
 				session.invalidate();
-				temp = path + "/member_servlet/list.do";
-			} else { // 실패
-				temp = path + "/member_servlet/delete.do?pageNumber=&no=" + no;
+				out.println("<script>alert('삭제완료'); chooseProc('list', '1', '');</script>");
+			} else {
+				out.println("<script>alert('비밀번호오류'); chooseProc('view', '1', '" + no + "');</script>");
 			}
-			response.sendRedirect(temp);
+			out.flush();
+			out.close(); 
 			
 			
 		} else if (url.indexOf("id_check.do") != -1) {
@@ -397,10 +388,7 @@ public class MemberController extends HttpServlet {
 			
 		} else if (url.indexOf("id_check_win_open_Proc.do") != -1) {
 			String id = request.getParameter("id");
-			System.out.println("id: " + id);
-			
 			String result = dao.getIdCheckWin(id);   // db 아이디 리턴
-			System.out.println("result: " + result);
 			if (result == null || result.equals("")) {
 				result = id;
 			} else {

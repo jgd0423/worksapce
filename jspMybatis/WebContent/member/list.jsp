@@ -75,7 +75,7 @@ ${allRowsCount }개의 레코드가 있습니다.
 		<c:forEach var="dto" items="${list }">
 			<tr>
 				<td>${tableRowNum }</td>
-				<td><a href="#" onclick="goPage('member_view', '', '${dto.no }')">${dto.id }</a></td>
+				<td><a href="#" onclick="chooseProc('view', '1', '${dto.no }')">${dto.id }</a></td>
 				<td>${dto.passwd }</td>
 				<td>${dto.name }</td>
 				<td>${dto.gender }</td>

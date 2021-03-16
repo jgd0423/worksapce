@@ -4,22 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.ibatis.session.SqlSession;
 
 import db.DbExample;
 import member.model.dto.MemberDTO;
-import sqlmap.MybatisManager;
 
-public class MemberDAO {
+public class _MemberDAO {
 	// Field
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
-	final String MEMBER = "member";
 	
 	// Method
 	public Connection getConn() {
@@ -185,50 +178,142 @@ public class MemberDAO {
 	}
 
 	public int getIdCheck(String id) {
-		Map<String, String> map = new HashMap<>();
-		map.put("id", id);
-		map.put("MEMBER", MEMBER);
+		conn = getConn();
+		int result = 0;
+		try {
+			String sql = "SELECT COUNT(*) FROM member WHERE id = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			System.out.println("-- 오라클 접속 실패 --");
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
 		
-		SqlSession session = MybatisManager.getInstance().openSession();
-		int result = session.selectOne("member.getIdCheck", map);   // namespace.id, 변수가 담긴 map
-		session.close();
-		return result;
-	}
-	
-	public int getAllRowsCount(String search_option, String search_data) {
-		Map<String, String> map = new HashMap<>();
-		map.put("search_option", search_option);
-		map.put("search_data", search_data);
-		map.put("MEMBER", MEMBER);
-		
-		SqlSession session = MybatisManager.getInstance().openSession();
-		int result = session.selectOne("member.getAllRowsCount", map);
-		session.close();
 		return result;
 	}
 
-	public List<MemberDTO> getPagingList(int startNum, int endNum, String search_option, String search_data) {
-		Map<String, String> map = new HashMap<>();
-		map.put("startNum", startNum + "");
-		map.put("endNum", endNum + "");
-		map.put("search_option", search_option);
-		map.put("search_data", search_data);
-		map.put("MEMBER", MEMBER);
+	public int getAllRowsCount(String search_option, String search_data) {
+		conn = getConn();
+		int allRowsCount = 0;
+		try {
+			String sql = "SELECT COUNT(*) FROM member WHERE no > 0";
+			
+			if (search_option.length() > 0 && search_data.length() > 0) {
+				if (search_option.equals("id") || search_option.equals("name") || search_option.equals("gender")) {
+					sql += " AND " + search_option + " LIKE ? ";
+				} else if (search_option.equals("id_name_gender")) {
+					sql += " and (id LIKE ? OR name LIKE ? OR gender LIKE ?) ";
+				}
+			}
+			
+			int pstmtNum = 0;
+			pstmt = conn.prepareStatement(sql);
+			
+			if (search_option.length() > 0 && search_data.length() > 0) {
+				if (search_option.equals("id") || search_option.equals("name") || search_option.equals("gender")) {
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+				} else if (search_option.equals("id_name_gender")) {
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+				}
+			}
+			
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				allRowsCount = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
 		
-		SqlSession session = MybatisManager.getInstance().openSession();
-		List<MemberDTO> list = session.selectList("member.getPagingList", map);
-		session.close();
+		return allRowsCount;
+	}
+
+	public ArrayList<MemberDTO> getPagingList(int startNum, int endNum, String search_option, String search_data) {
+		conn = getConn();
+		ArrayList<MemberDTO> list = new ArrayList<>();
+		try {
+			String basic_sql = ""; 
+			basic_sql += "SELECT * FROM member WHERE no > 0";	
+			
+			if (search_option.length() > 0 && search_data.length() > 0) {
+				if (search_option.equals("id") || search_option.equals("name") || search_option.equals("gender")) {
+					basic_sql += " AND " + search_option + " LIKE ? ";
+				} else if (search_option.equals("id_name_gender")) {
+					basic_sql += " and (id LIKE ? OR name LIKE ? OR gender LIKE ?) ";
+				}
+			}
+			
+			basic_sql += " ORDER BY no DESC";
+			
+			String sql = "";
+			sql += "SELECT * FROM ";
+			sql += "(SELECT ROWNUM Rnum, a.* FROM ";
+			sql += "(" + basic_sql + ") a) ";
+			sql += "WHERE Rnum >= ? AND Rnum <= ?";
+			
+			int pstmtNum = 0;
+			pstmt = conn.prepareStatement(sql);
+			
+			if (search_option.length() > 0 && search_data.length() > 0) {
+				if (search_option.equals("id") || search_option.equals("name") || search_option.equals("gender")) {
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+				} else if (search_option.equals("id_name_gender")) {
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+					pstmt.setString(++pstmtNum, '%' + search_data + '%');
+				}
+			}
+			
+			pstmt.setInt(++pstmtNum, startNum);
+			pstmt.setInt(++pstmtNum, endNum);
+			
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				MemberDTO dto = new MemberDTO();
+				dto.setNo(rs.getInt("no"));
+				dto.setId(rs.getString("id"));
+				dto.setPasswd(rs.getString("passwd"));
+				dto.setName(rs.getString("name"));
+				dto.setGender(rs.getString("gender"));
+				dto.setBornYear(rs.getInt("bornYear"));
+				dto.setRegiDate(rs.getTimestamp("regiDate"));
+				list.add(dto);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		
 		return list;
 	}
 
 	public String getIdCheckWin(String id) {
-		Map<String, String> map = new HashMap<>();
-		map.put("id", id);
-		map.put("MEMBER", MEMBER);
+		String result = "";
+		conn = getConn();
+		try {
+			String sql = "SELECT id FROM member WHERE id = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				result = rs.getString(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		SqlSession session = MybatisManager.getInstance().openSession();
-		String result = session.selectOne("member.getIdCheckWin", map);
-		session.close();
 		return result;
 	}
 }

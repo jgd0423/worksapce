@@ -368,3 +368,5 @@ FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no ORDER BY cart_n
 SELECT product.*, (SELECT SUM(amount) FROM cart WHERE cart.productNo = product.no) amount FROM product Where product.no = 14;
 
 SELECT p.name product_name, SUM(c.amount * p.price) buy_money FROM cart c INNER JOIN product p ON c.productNo = p.no GROUP BY p.name ORDER BY product_name ASC;
+
+select count(*) from member where 1=1;

@@ -19,15 +19,15 @@
 		</tr>
 		<tr>
 			<td>비밀번호</td>
-			<td><input type="password" name="passwd" /></td>
+			<td><input type="password" name="passwd" id="passwd" /></td>
 		</tr>
 		<tr>
 			<td>비밀번호확인</td>
-			<td><input type="password" name="passwdChk" /></td>
+			<td><input type="password" name="passwdChk" id="passwdChk" /></td>
 		</tr>
 		<tr>
 			<td>이름</td>
-			<td><input type="text" name="name" /></td>
+			<td><input type="text" name="name" id="name" /></td>
 		</tr>
 		<tr>
 			<td>성별</td>
@@ -41,7 +41,7 @@
 		</tr>
 		<tr>
 			<td>출생년도</td>
-			<td><input type="text" name="bornYear" value="1990" /></td>
+			<td><input type="text" name="bornYear" id="bornYear" value="1990" /></td>
 		</tr>
 		<tr>
 			<td>주소</td>

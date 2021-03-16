@@ -65,14 +65,3 @@
 
 ==> ${menu_gubun } / ${under_bar_index} / ${menu_name}<br>
 
-<%-- <c:choose> --%>
-<%-- 	<c:when test="${menu_name == 'index' }"> --%>
-<!-- 		<script>$("#home").css("background-color", "silver");</script> -->
-<%-- 	</c:when> --%>
-<%-- 	<c:when test="${menu_name == 'member' }"> --%>
-<!-- 		<script>$("#member").css("background-color", "silver");</script> -->
-<%-- 	</c:when> --%>
-<%-- 	<c:when test="${menu_name == 'memo' }"> --%>
-<!-- 		<script>$("#memo").css("background-color", "silver");</script> -->
-<%-- 	</c:when> --%>
-<%-- </c:choose> --%>

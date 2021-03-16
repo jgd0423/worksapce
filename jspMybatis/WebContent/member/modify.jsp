@@ -3,7 +3,7 @@
 <%@ include file="../include/inc_header.jsp" %>
 
 <form name="modifyForm">
-	<input type="hidden" name="no" value="${dto.no }" />
+	<input type="hidden" name="no" id="id" value="${dto.no }" />
 	<table border="1" align="center" width="80%">
 		<tr>
 			<td colspan="2" align="center">
@@ -20,7 +20,7 @@
 		</tr>
 		<tr>
 			<td>비밀번호</td>
-			<td><input type="text" name="passwd"></td>
+			<td><input id="passwd" type="text" name="passwd"></td>
 		</tr>
 		<tr>
 			<td>이름</td>
@@ -32,7 +32,7 @@
 		</tr>
 		<tr>
 			<td>출생년도</td>
-			<td><input type="text" name="bornYear" value="${dto.bornYear }"></td>
+			<td><input id="bornYear" type="text" name="bornYear" value="${dto.bornYear }"></td>
 		</tr>
 		<tr>
 			<td>가입일시</td>
@@ -64,7 +64,7 @@
 	</tr>
 		<tr>
 			<td colspan="2" height="50" align="center">
-				<button type="button" onclick="modifyInfo('${dto.no }')">수정하기</button>
+				<button type="button" onclick="chooseProc('modifyProc', '1', '${dto.no }')">수정하기</button>
 			</td>
 		</tr>
 	</table>
@@ -72,14 +72,6 @@
 
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
-
-function modifyInfo(no) {
-	if (confirm("수정하시겠습니까?")) {
-		document.modifyForm.method = 'post';
-		document.modifyForm.action = '${path}/member_servlet/modifyProc.do';
-		document.modifyForm.submit();
-	}
-}
 
 function sample6_execDaumPostcode() {
 	new daum.Postcode({
