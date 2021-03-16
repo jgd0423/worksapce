@@ -77,7 +77,7 @@ local.properties
 *.class
 <<<<<<< HEAD
 .classpath
-*.xml
+
 =======
 >>>>>>> 8ff3b2a1193b28a335665299d3ebf6d29a1320fb
 
