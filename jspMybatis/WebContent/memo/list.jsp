@@ -25,22 +25,26 @@ ${allRowsCount }개의 레코드가 있습니다.
 		<c:forEach var="dto" items="${list }">
 			<tr>
 				<td>${tableRowNum }</td>
-				<td>${dto.writer }</td>
-				<td>${dto.content }</td>
-				<td>${dto.regiDate }<button type="button" onclick="deleteInfo('${dto.no}', '${pageNum }')" >삭제</button></td>
+				<td id="n_${dto.no }">${dto.writer }</td>
+				<td id="s_${dto.no }">${dto.content }</td>
+				<td>
+					${dto.regiDate }
+					<button type="button" onclick="modifyMemo('${dto.no}')" >수정</button>
+					<button type="button" onclick="chooseProc('deleteProc', '0', '${dto.no}')" >삭제</button>
+				</td>
 			</tr>
 			<c:set var="tableRowNum" value="${tableRowNum = tableRowNum - 1 }"/>
 		</c:forEach>
 	</c:if>
 	<tr>
 		<td colspan="7" height="50" align="center">
-			<a href="#" onclick="goPage('memo_list', '1', '')"><<</a>
+			<a href="#" onclick="choosePage(1)"><<</a>
 			<c:choose>
 				<c:when test="${pageNum - 1 <= 0 }">
-					<a href="#" onclick="goPage('memo_list', '${pageNum }', '')"><</a>
+					<a href="#" onclick="choosePage(${pageNum })"><</a>
 				</c:when>
 				<c:otherwise>
-					<a href="#" onclick="goPage('memo_list', '${pageNum - 1 }', '')"><</a>
+					<a href="#" onclick="choosePage(${pageNum - 1 })"><</a>
 				</c:otherwise>
 			</c:choose>
 			<c:forEach var="i" begin="${pagingStartNum }" end="${pagingEndNum }" step="1" >
@@ -49,55 +53,36 @@ ${allRowsCount }개의 레코드가 있습니다.
 						<b>[${i }]</b>
 					</c:when>
 					<c:otherwise>
-						<a href="#" onclick="goPage('memo_list', '${i }', '')">${i }</a>
+						<a href="#" onclick="choosePage(${i })">${i }</a>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
 			<c:choose>
 				<c:when test="${pageNum + 1 >= maxPagesCount }">
-					<a href="#" onclick="goPage('memo_list', '${maxPagesCount }', '')">></a>
+					<a href="#" onclick="choosePage(${maxPagesCount })">></a>
 				</c:when>
 				<c:otherwise>
-					<a href="#" onclick="goPage('memo_list', '${pageNum + 1 }', '')">></a>
+					<a href="#" onclick="choosePage(${pageNum + 1 })">></a>
 				</c:otherwise>
 			</c:choose>
-			<a href="#" onclick="goPage('memo_list', '${maxPagesCount }', '')">>></a>
+			<a href="#" onclick="choosePage(${maxPagesCount })">>></a>
 		</td>
 	</tr>
 </table>
 
 <script>
 
-// write.jsp에 list()함수가 있으므로 중복해서 적을 필요 없음
-
-function deleteInfo(no, pageNum) {
-	if (${list.size()} === 1) {
-		pageNum = pageNum - 1;
-	}
-	let param = "no=" + no;
-	$.ajax({
-		type: "post",
-		data: param,
-		url: "${path}/memo_servlet/deleteInfo.do",
-		success: () => {
-			list(pageNum);
-		}
-	});
+function modifyMemo(no) {
+	$("#span_no").text(no);
+	$("#writer").val($("#n_" + no).text());
+	$("#content").val($("#s_" + no).text());
+	$("#btnWrite").text("수정");
 }
 
-function goPage(value1, value2, value3) {
-	if (value1 === 'memo_list') {
-		let param = "page=" + value2;
-		$.ajax({
-			type: "post",
-			data: param,
-			url: "${path}/memo_servlet/list.do",
-			success: () => {
-				list(value2);
-			}
-		});
-	} 
+function choosePage(pageNum) {
+	chooseProc('list', pageNum, '');
 }
 
 </script>
+
 

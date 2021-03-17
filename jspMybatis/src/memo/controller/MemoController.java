@@ -38,8 +38,8 @@ public class MemoController extends HttpServlet {
 		String path = serverInfo[1];
 		String url = serverInfo[2];
 		
-		if (url.indexOf("write.do") != -1) {
-			request.setAttribute("menu_gubun", "memo_write");
+		if (url.indexOf("index.do") != -1) {
+			request.setAttribute("menu_gubun", "memo_index");
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
@@ -47,6 +47,10 @@ public class MemoController extends HttpServlet {
 		} else if (url.indexOf("writeProc.do") != -1) {
 			String writer = request.getParameter("writer");
 			String content = request.getParameter("content");
+			String no_ = request.getParameter("no");
+			
+			System.out.println(writer);
+			System.out.println(content);
 			
 			MemoDTO dto = new MemoDTO();
 			dto.setWriter(writer);
@@ -54,13 +58,13 @@ public class MemoController extends HttpServlet {
 			
 			MemoDAO dao = new MemoDAO();
 			String temp;
-			dao.setInsert(dto);
+			//dao.setInsert(dto);
 			
 			
 		} else if (url.indexOf("list.do") != -1) {
 			MemoDAO dao = new MemoDAO();
 			
-			String pageNum_ = request.getParameter("page");
+			String pageNum_ = request.getParameter("pageNumber");
 
 			// validation. charAt을 이용하거나 정규표현식을 이용해 숫자만 남기고 걸러야함
 			int pageNum = util.numberCheck(pageNum_, 1);
@@ -94,7 +98,7 @@ public class MemoController extends HttpServlet {
 			rd.forward(request, response);
 			
 			
-		} else if (url.indexOf("deleteInfo.do") != -1) {
+		} else if (url.indexOf("deleteProc.do") != -1) {
 			String no_ = request.getParameter("no");
 			int no = Integer.parseInt(no_);
 			

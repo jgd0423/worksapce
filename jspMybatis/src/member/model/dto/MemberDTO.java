@@ -17,6 +17,11 @@ public class MemberDTO {
 	private String extraAddress;
 	private Timestamp regiDate;
 	
+	private int preNo;
+	private String preId;
+	private int nxtNo;
+	private String nxtId;
+	
 	// Constructor
 	public MemberDTO() {}
 	
@@ -115,5 +120,37 @@ public class MemberDTO {
 
 	public void setExtraAddress(String extraAddress) {
 		this.extraAddress = extraAddress;
+	}
+
+	public int getPreNo() {
+		return preNo;
+	}
+
+	public void setPreNo(int preNo) {
+		this.preNo = preNo;
+	}
+
+	public String getPreId() {
+		return preId;
+	}
+
+	public void setPreId(String preId) {
+		this.preId = preId;
+	}
+
+	public int getNxtNo() {
+		return nxtNo;
+	}
+
+	public void setNxtNo(int nxtNo) {
+		this.nxtNo = nxtNo;
+	}
+
+	public String getNxtId() {
+		return nxtId;
+	}
+
+	public void setNxtId(String nxtId) {
+		this.nxtId = nxtId;
 	}
 }

@@ -135,4 +135,26 @@ public class MemoDAO {
 		
 		return list;
 	}
+
+	public MemoDTO getSelectOne(int no) {
+		conn = getConn();
+		MemoDTO dto = new MemoDTO();
+		try {
+			String sql = "SELECT * FROM memo WHERE no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				dto.setNo(rs.getInt("no"));
+				dto.setWriter(rs.getString("writer"));
+				dto.setContent(rs.getString("content"));
+				dto.setRegiDate(rs.getTimestamp("regiDate"));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			getConnClose(rs, pstmt, conn);
+		}
+		return dto;
+	}
 }

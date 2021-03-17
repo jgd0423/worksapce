@@ -148,7 +148,7 @@ public class MemberController extends HttpServlet {
 			
 		} else if (url.indexOf("login.do") != -1) {
 			request.setAttribute("menu_gubun", "member_login");
-			page = "/member/login.jsp";
+			
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
@@ -298,6 +298,7 @@ public class MemberController extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			if (isSamePasswd) {
 				dto.setNo(no);
+				dto.setPasswd(passwd);
 				dto.setBornYear(bornYear);
 				dto.setPostcode(postcode);
 				dto.setAddress(address);
@@ -353,6 +354,7 @@ public class MemberController extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			if (isSamePasswd) {
 				dto.setNo(no);
+				dto.setPasswd(passwd);
 				
 				int result = dao.setDelete(dto);
 				HttpSession session = request.getSession();

@@ -18,6 +18,62 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 		</choose>
 	</sql>
 	
+	<select id="getLogin" resultType="member.model.dto.MemberDTO">
+		SELECT * FROM ${MEMBER} WHERE id = #{dto.id} AND passwd = #{dto.passwd}
+	</select>
+	
+	<select id="getSelectOne" resultType="member.model.dto.MemberDTO">
+		SELECT * FROM
+		(
+			SELECT m.*,
+			LAG(no) OVER (ORDER BY no desc) preNo,
+			LAG(id) OVER (ORDER BY no desc) preId,
+			LEAD(no) OVER (ORDER BY no desc) nxtNo,
+			LEAD(id) OVER (ORDER BY no desc) nxtId
+			FROM member m WHERE 1=1
+			<!-- <include refid="search"></include> -->
+			ORDER BY no DESC
+		) WHERE no = #{no}
+	</select>
+	
+	<update id="setDelete">
+		DELETE FROM ${MEMBER} WHERE no = #{dto.no} and passwd = #{dto.passwd}
+	</update>
+	
+	<update id="setUpdate">
+		UPDATE ${MEMBER} 
+		SET 
+			bornYear = #{dto.bornYear}, 
+			postcode = #{dto.postcode}, 
+			address = #{dto.address}, 
+			detailAddress = #{dto.detailAddress}, 
+			extraAddress = #{dto.extraAddress} 
+		WHERE no = #{dto.no} and passwd = #{dto.passwd}
+	</update>
+	
+	<insert id="setInsert">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT seq_member.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO ${MEMBER} (
+			no, id, passwd, name, gender, bornYear, 
+			postcode, address, detailAddress, extraAddress, regiDate
+		)
+		VALUES (
+			#{no}, 
+			#{dto.id}, 
+			#{dto.passwd}, 
+			#{dto.name}, 
+			#{dto.gender}, 
+			#{dto.bornYear}, 
+			#{dto.postcode}, 
+			#{dto.address}, 
+			#{dto.detailAddress}, 
+			#{dto.extraAddress}, 
+			CURRENT_TIMESTAMP
+		)
+	</insert>
+	
 	<select id="getAllRowsCount" resultType="int">
 		SELECT COUNT(*) FROM ${MEMBER} WHERE 1=1
 		<include refid="search"></include>

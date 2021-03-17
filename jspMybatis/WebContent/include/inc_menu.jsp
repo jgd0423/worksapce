@@ -27,7 +27,7 @@
 			<a href="${path }/member_servlet/index.do">회원관리</a>
 		</td>
 		<td id="memo" style="padding: 0px 20px; ${menu_name == 'memo' ? 'background-color: silver;' : ''}">
-			<a href="${path }/memo_servlet/write.do">메모장</a>
+			<a href="${path }/memo_servlet/index.do">메모장</a>
 		</td>
 		<td id="guestbook" style="padding: 0px 20px; ${menu_name == 'guestbook' ? 'background-color: silver;' : ''}">
 			<a href="${path }/guestbook_servlet/list.do">방명록</a>
