@@ -1,36 +1,16 @@
 package memo.model.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
-import db.DbExample;
-import member.model.dto.MemberDTO;
 import memo.model.dto.MemoDTO;
 import sqlmap.MybatisManager;
 
 public class MemoDAO {
-	// Field
-	Connection conn = null;
-	PreparedStatement pstmt = null;
-	ResultSet rs = null;
-	
 	// Method
-	public Connection getConn() {
-		conn = DbExample.getConn();
-		return conn;
-	}
-	
-	public void getConnClose(ResultSet rs, PreparedStatement pstmt, Connection conn) {
-		DbExample.getConnClose(rs, pstmt, conn);
-	}
-	
 	public int setInsert(MemoDTO dto) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("dto", dto);
