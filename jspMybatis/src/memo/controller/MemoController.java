@@ -2,6 +2,7 @@ package memo.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -49,16 +50,18 @@ public class MemoController extends HttpServlet {
 			String content = request.getParameter("content");
 			String no_ = request.getParameter("no");
 			
-			System.out.println(writer);
-			System.out.println(content);
-			
 			MemoDTO dto = new MemoDTO();
+			MemoDAO dao = new MemoDAO();
 			dto.setWriter(writer);
 			dto.setContent(content);
-			
-			MemoDAO dao = new MemoDAO();
-			String temp;
-			//dao.setInsert(dto);
+
+			if (no_ != "") {
+				int no = Integer.parseInt(no_);
+				dto.setNo(no);
+				dao.setUpdate(dto);
+			} else {
+				dao.setInsert(dto);				
+			}
 			
 			
 		} else if (url.indexOf("list.do") != -1) {
@@ -82,7 +85,7 @@ public class MemoController extends HttpServlet {
 			int startNum = pagerArr[4];
 			int endNum = pagerArr[5];	
 			
-			ArrayList<MemoDTO> list = dao.getPagingList(startNum, endNum);
+			List<MemoDTO> list = dao.getPagingList(startNum, endNum);
 			
 			request.setAttribute("list", list);
 			request.setAttribute("allRowsCount", allRowsCount);

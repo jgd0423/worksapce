@@ -1,9 +1,11 @@
 $(document).ready(() => {
 	chooseProc("list", "1", "");
 	$("#btnWrite").click(() => {
-		chooseProc('writeProc', '1', '');
+		chooseProc('writeProc', '1', '0');
 	});
 });
+
+console.log("aaa");
 
 function chooseProc(proc, pageNumber, no) {
 	$("#span_proc").text(proc);
@@ -28,7 +30,6 @@ function goPage(proc) {
 			"pageNumber": $("#span_pageNumber").text(),
 		};
 	} else if (proc === "writeProc") {
-		console.log($("#span_no").text())
 		param = {
 			"no": $("#span_no").text(),
 			"writer": $("#writer").val(),
@@ -48,9 +49,10 @@ function goPage(proc) {
 			if (proc === "list") {
 				$("#result").html(data);
 			} else if (proc === "writeProc") {
-				chooseProc("list", "1", "");
 				$("#writer").val("");
 				$("#content").val("");
+				$("#btnWrite").text("확인");
+				chooseProc("list", "1", "");
 			} else if (proc === "deleteProc") {
 				chooseProc("list", "1", "");
 			}

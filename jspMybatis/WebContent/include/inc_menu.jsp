@@ -30,7 +30,7 @@
 			<a href="${path }/memo_servlet/index.do">메모장</a>
 		</td>
 		<td id="guestbook" style="padding: 0px 20px; ${menu_name == 'guestbook' ? 'background-color: silver;' : ''}">
-			<a href="${path }/guestbook_servlet/list.do">방명록</a>
+			<a href="${path }/guestbook_servlet/index.do">방명록</a>
 		</td>
 		<td id="survey" style="padding: 0px 20px; ${menu_name == 'survey' ? 'background-color: silver;' : ''}">
 			<a href="${path }/survey_servlet/index.do">설문조사(ajax)</a>

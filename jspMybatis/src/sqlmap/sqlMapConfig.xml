@@ -21,5 +21,7 @@ PUBLIC "-//mybatis.org//DTO Config 3.0//EN"
 
 	<mappers>
 		<mapper resource="member/mapper/memberMapper.xml" />
+		<mapper resource="memo/mapper/memoMapper.xml" />
+		<mapper resource="guestbook/mapper/guestbookMapper.xml" />
 	</mappers>
 </configuration>

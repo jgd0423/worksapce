@@ -138,12 +138,6 @@ public class MemberController extends HttpServlet {
 			
 			String temp;
 			int result = dao.setInsert(dto);
-			if (result > 0) {
-				temp = path + "/member_servlet/login.do";
-			} else {
-				temp = path + "/member_servlet/write.do";
-			}
-			response.sendRedirect(temp);
 			
 			
 		} else if (url.indexOf("login.do") != -1) {

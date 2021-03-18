@@ -38,6 +38,9 @@
 				<c:when test="${menu_gubun == 'member_login' }">
 					<jsp:include page="../member/login.jsp" />
 				</c:when>
+				<c:when test="${menu_gubun == 'guestbook_index' }">
+					<jsp:include page="../guestbook/index.jsp" />
+				</c:when>
 			</c:choose>
 			<!-- section -->
 		</td>

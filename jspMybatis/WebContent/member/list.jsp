@@ -124,6 +124,12 @@ ${allRowsCount }개의 레코드가 있습니다.
 
 <script>
 
+function chooseAll() {
+	$("#span_search_option").text("");
+	$("#span_search_data").text("");
+	chooseProc('list', '1', '');
+}
+
 function search() {
 	$("#span_search_option").text($("#search_option").val());
 	$("#span_search_data").text($("#search_data").val());

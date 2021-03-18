@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="guestbook">
+		<sql id="search">
+		<choose>
+			<when test="search_option == 'name_content' ">
+				AND (name LIKE '%' || #{search_data} || '%' OR content LIKE '%' || #{search_data} || '%')
+			</when>
+			<when test="search_option != null and search_option != '' and search_data != null and search_data != '' ">
+				AND (${search_option} LIKE '%' || #{search_data} || '%')
+			</when>
+			<otherwise>
+				AND no > '0'
+			</otherwise>
+		</choose>
+	</sql>
+
+	<insert id="setInsert">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT seq_guestbook.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO guestbook (
+			no, name, email, passwd, content, regiDate
+		)
+		VALUES (
+			#{no}, 
+			#{dto.name}, 
+			#{dto.email}, 
+			#{dto.passwd}, 
+			#{dto.content}, 
+			SYSDATE
+		)
+	</insert>
+	
+	<select id="getAllRowsCount" resultType="int">
+		SELECT COUNT(*) FROM guestbook WHERE 1=1
+		<include refid="search"></include>
+	</select>
+	
+	<select id="getPagingList" resultType="guestbook.model.dto.GuestbookDTO">
+		SELECT * FROM (SELECT A.*, Rownum Rnum from (
+		SELECT * FROM guestbook WHERE 1=1
+		<include refid="search"></include>
+		ORDER BY no DESC
+		<![CDATA[
+		) A) WHERE Rnum >= #{startNum} AND Rnum <= #{endNum}
+		]]>
+	</select>
+	
+	<select id="getView" resultType="guestbook.model.dto.GuestbookDTO">
+		SELECT * FROM guestbook WHERE no = #{no}
+	</select>
+	
+	<update id="setUpdate">
+		UPDATE guestbook 
+		SET 
+			email = #{dto.email}, 
+			content = #{dto.content}
+		WHERE no = #{dto.no}
+	</update>
+	
+	<update id="setDelete">
+		DELETE FROM guestbook WHERE no = #{dto.no}
+	</update>
+</mapper>
