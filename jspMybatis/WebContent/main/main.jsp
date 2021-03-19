@@ -41,6 +41,12 @@
 				<c:when test="${menu_gubun == 'guestbook_index' }">
 					<jsp:include page="../guestbook/index.jsp" />
 				</c:when>
+				<c:when test="${menu_gubun == 'survey_index' }">
+					<jsp:include page="../survey/index.jsp" />
+				</c:when>
+				<c:when test="${menu_gubun == 'questionBank_index' }">
+					<jsp:include page="../questionBank/index.jsp" />
+				</c:when>
 			</c:choose>
 			<!-- section -->
 		</td>

@@ -33,10 +33,10 @@
 			<a href="${path }/guestbook_servlet/index.do">방명록</a>
 		</td>
 		<td id="survey" style="padding: 0px 20px; ${menu_name == 'survey' ? 'background-color: silver;' : ''}">
-			<a href="${path }/survey_servlet/index.do">설문조사(ajax)</a>
+			<a href="${path }/survey_servlet/index.do">설문조사</a>
 		</td>
-		<td id="survey2" style="padding: 0px 20px; ${menu_name == 'survey2' ? 'background-color: silver;' : ''}">
-			<a href="${path }/survey2_servlet/list.do">설문조사</a>
+		<td id="survey" style="padding: 0px 20px; ${menu_name == 'questionBank' ? 'background-color: silver;' : ''}">
+			<a href="${path }/questionBank_servlet/index.do">문제은행</a>
 		</td>
 		<td id="board" style="padding: 0px 20px; ${menu_name == 'board' ? 'background-color: silver;' : ''}">
 			<a href="${path }/board_servlet/index.do">게시판(ajax)</a>

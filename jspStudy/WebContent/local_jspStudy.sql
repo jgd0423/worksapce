@@ -101,6 +101,8 @@ CREATE SEQUENCE seq_survey_answer START WITH 1 INCREMENT BY 1 NOMAXVALUE NOCACHE
 
 SELECT * FROM survey ORDER BY no;
 
+commit;
+
 SELECT * FROM survey_answer ORDER BY no;
 
 DESC survey_answer;

@@ -136,7 +136,6 @@ public class MemberController extends HttpServlet {
 			dto.setDetailAddress(detailAddress);
 			dto.setExtraAddress(extraAddress);
 			
-			String temp;
 			int result = dao.setInsert(dto);
 			
 			
