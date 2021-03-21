@@ -24,7 +24,7 @@ path : <span id="span_path">${path }</span><br>
 		</tr>
 		<tr>
 			<td colspan="2" align="center" style="height: 50px;">
-				<button type="button" id="btnWrite">확인</button>
+				<button type="button" id="btnWrite" onclick="chooseProc('writeProc', '1', '0')">확인</button>
 			</td>
 		</tr>
 	</table>

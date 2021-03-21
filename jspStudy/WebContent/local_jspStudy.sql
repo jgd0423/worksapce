@@ -92,7 +92,7 @@ CREATE SEQUENCE seq_survey START WITH 1 INCREMENT BY 1 NOMAXVALUE NOCACHE;
 
 CREATE TABLE survey_answer (
     answer_no NUMBER NOT NULL PRIMARY KEY,
-    no NUMBER NOT NULL REFERENCES survey(no),
+    no NUMBER NOT NULL,
     answer NUMBER NOT NULL,
     regi_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -138,11 +138,11 @@ SELECT no, (SELECT COUNT(*) FROM survey_answer WHERE survey.no = no) survey_coun
 
 
 SELECT no, 
-(SELECT COUNT(answer) FROM survey_answer WHERE no = 15 AND answer = '1') count_of_1, 
-(SELECT COUNT(answer) FROM survey_answer WHERE no = 15 AND answer = '2') count_of_2, 
-(SELECT COUNT(answer) FROM survey_answer WHERE no = 15 AND answer = '3') count_of_3, 
-(SELECT COUNT(answer) FROM survey_answer WHERE no = 15 AND answer = '4') count_of_4 
-FROM survey_answer WHERE no = 15 GROUP BY no;
+(SELECT COUNT(answer) FROM survey_answer WHERE no = 1 AND answer = '1') count_of_1, 
+(SELECT COUNT(answer) FROM survey_answer WHERE no = 1 AND answer = '2') count_of_2, 
+(SELECT COUNT(answer) FROM survey_answer WHERE no = 1 AND answer = '3') count_of_3, 
+(SELECT COUNT(answer) FROM survey_answer WHERE no = 1 AND answer = '4') count_of_4 
+FROM survey_answer WHERE no = 1 GROUP BY no;
 
 
 SELECT * FROM v_total_answers ORDER BY no;
@@ -191,6 +191,22 @@ SELECT * FROM v_responses_by_question;
 SELECT * FROM survey;
 SELECT * FROM survey_answer;
 SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = 1;
+
+select * from all_constraints where table_name = 'survey_answer';
+
+drop table survey_answer;
+
+ALTER TABLE survey_answer 
+ADD CONSTRAINT fk_survey_answer_no
+    FOREIGN KEY (no)
+    REFERENCES survey(no)
+    ON DELETE CASCADE;
+    
+commit;
+
+delete from survey where no = 7;
+
+
 
 SELECT * 
 FROM 

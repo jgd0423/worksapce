@@ -36,9 +36,9 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 		) WHERE no = #{no}
 	</select>
 	
-	<update id="setDelete">
+	<delete id="setDelete">
 		DELETE FROM ${MEMBER} WHERE no = #{dto.no} and passwd = #{dto.passwd}
-	</update>
+	</delete>
 	
 	<update id="setUpdate">
 		UPDATE ${MEMBER} 

@@ -72,12 +72,10 @@ function goPage(proc) {
 			} else if (proc === "modify") {
 				$("#result").html(data);
 			} else if (proc === "modifyProc") {
-				//chooseProc("view", "0", $("#span_no").text());   // 비밀번호 체크때문에 바꿈
 				$("#result").html(data);
 			} else if (proc === "delete") {
 				$("#result").html(data);
 			} else if (proc === "deleteProc") {
-				//chooseProc("list", "1", "");   // 비밀번호 체크때문에 바꿈
 				$("#result").html(data);
 			} else {
 				$("#result").html(data);

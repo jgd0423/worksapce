@@ -1,11 +1,6 @@
 $(document).ready(() => {
 	chooseProc("list", "1", "");
-	$("#btnWrite").click(() => {
-		chooseProc('writeProc', '1', '0');
-	});
 });
-
-console.log("aaa");
 
 function chooseProc(proc, pageNumber, no) {
 	$("#span_proc").text(proc);

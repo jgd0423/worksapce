@@ -35,7 +35,7 @@ public class SurveyDAO {
 			String sql = "INSERT INTO " + tableName01
 					+ " VALUES ((SELECT NVL(MAX(no), 0) + 1 FROM " + tableName01 + "), "
 					+ "?, ?, ?, ?, ?, "
-					+ "?, ?, TO_TIMESTAMP(?), CURRENT_TIMESTAMP)";
+					+ "?, ?, ?, CURRENT_TIMESTAMP)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getQuestion());
 			pstmt.setString(2, dto.getAns1());

@@ -23,9 +23,9 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 		SELECT * FROM memo ORDER BY no DESC
 	</select>
 	
-	<update id="setDelete">
+	<delete id="setDelete">
 		DELETE FROM memo WHERE no = #{dto.no}
-	</update>
+	</delete>
 	
 	<select id="getAllRowsCount" resultType="int">
 		SELECT COUNT(*) FROM memo WHERE no > 0

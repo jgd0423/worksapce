@@ -1,11 +1,15 @@
 package survey.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import common.Util;
 import survey.model.dao.SurveyDAO;
@@ -161,7 +166,7 @@ public class SurveyController extends HttpServlet {
 			int startNum = pagerArr[4];
 			int endNum = pagerArr[5];	
 			
-			ArrayList<SurveyDTO> list = dao.getPagingList(startNum, endNum, list_gubun, search_option, search_data, search_date_start, search_date_end, search_date_check);
+			List<SurveyDTO> list = dao.getPagingList(startNum, endNum, list_gubun, search_option, search_data, search_date_start, search_date_end, search_date_check);
 			
 			request.setAttribute("list", list);
 			request.setAttribute("allRowsCount", allRowsCount);
@@ -202,21 +207,40 @@ public class SurveyController extends HttpServlet {
 			
 		} else if (url.indexOf("result.do") != -1) {
 			dto = dao.getSelectOne(no);
-			ArrayList<Integer> surveyNoAnswers = dao.getSurveyNoAnswers(no);
-			int totalAnswerCount = 0;
-			for (int i = 0; i < surveyNoAnswers.size(); i++) {
-				totalAnswerCount += surveyNoAnswers.get(i);
-			}
-			
+			Map<String, Object> surveyNoAnswers = dao.getSurveyNoAnswers(no);
+			ArrayList<Integer> answersList = new ArrayList<>();
 			ArrayList<String> answersResponseRate = new ArrayList<>();
 			
-			for (int i = 0; i < surveyNoAnswers.size(); i++) {
-				String responseRate = String.format("%.2f", (double)surveyNoAnswers.get(i) / totalAnswerCount * 100);
-				answersResponseRate.add(responseRate);
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			
+			if (surveyNoAnswers == null) {
+				out.println("<script>alert('자료가 없습니다'); chooseProc('view', '1', '" + no + "');</script>");
+				out.flush();
+				out.close();
+				return;
+			}
+			
+			if (surveyNoAnswers != null) {
+				answersList.add(((BigDecimal)surveyNoAnswers.get("COUNT_OF_1")).intValue());
+				answersList.add(((BigDecimal)surveyNoAnswers.get("COUNT_OF_2")).intValue());
+				answersList.add(((BigDecimal)surveyNoAnswers.get("COUNT_OF_3")).intValue());
+				answersList.add(((BigDecimal)surveyNoAnswers.get("COUNT_OF_4")).intValue());
+				
+				int totalAnswerCount = 0;
+				totalAnswerCount += ((BigDecimal)surveyNoAnswers.get("COUNT_OF_1")).intValue();
+				totalAnswerCount += ((BigDecimal)surveyNoAnswers.get("COUNT_OF_2")).intValue();
+				totalAnswerCount += ((BigDecimal)surveyNoAnswers.get("COUNT_OF_3")).intValue();
+				totalAnswerCount += ((BigDecimal)surveyNoAnswers.get("COUNT_OF_4")).intValue();
+				
+				for (int i = 0; i < answersList.size(); i++) {
+					String responseRate = String.format("%.2f", (double)answersList.get(i) / totalAnswerCount * 100);
+					answersResponseRate.add(responseRate);
+				}				
 			}
 			
 			request.setAttribute("dto", dto);
-			request.setAttribute("surveyNoAnswers", surveyNoAnswers);
+			request.setAttribute("answersList", answersList);
 			request.setAttribute("answersResponseRate", answersResponseRate);
 			
 			page = "/survey/result.jsp";
@@ -303,8 +327,28 @@ public class SurveyController extends HttpServlet {
 			dto.setStatus(status);
 			dto.setStart_date(start_date);
 			dto.setLast_date(last_date);
+			dto.setNo(no);
 			
 			int result = dao.setUpdateQuestion(dto);
+			
+			
+		} else if (url.indexOf("delete.do") != -1) {
+			dto = dao.getSelectOne(no);
+			
+			request.setAttribute("menu_gubun", "survey_delete");
+			request.setAttribute("dto", dto);
+			
+			page = "/survey/delete.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
+		} else if (url.indexOf("deleteProc.do") != -1) {
+			dto.setNo(no);
+			
+			int result = dao.setDeleteQuestion(dto);
+			
+			
 		}
 	}
 }

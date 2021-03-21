@@ -39,7 +39,7 @@ span_answer: <span id="span_answer"></span>
 		</td>
 	</tr>
 	<tr>
-		<td>상태: ${dto.status }</td>
+		<td>상태: ${dto.status == '1' ? '진행중' : '종료'}</td>
 	</tr>
 	<tr>
 		<td>기간: ${dto.start_date } ~ ${dto.last_date }</td>

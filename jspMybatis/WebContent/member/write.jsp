@@ -55,8 +55,8 @@
 		</tr>
 		<tr>
 			<td colspan="2" align="center" style="height: 50px;">
-				<button type="button" id="btnWrite">JOIN</button>
-				<button type="button" id="btnList">목록으로</button>
+				<button type="button" id="btnWrite" onclick="chooseProc('writeProc', '1', '')">JOIN</button>
+				<button type="button" id="btnList" onclick="chooseProc('list', '1', '')">목록으로</button>
 			</td>
 		</tr>
 	</table>
@@ -66,15 +66,6 @@
 <script>
 
 $(document).ready(() => {
-	$("#id").focus();
-	$("#btnWrite").click(() => {
-		chooseProc('writeProc', '1', '');
-	});
-	
-	$("#btnList").click(() => {
-		chooseProc('list', '1', '');
-	});
-	
 	$("#id_check").click(() => {
 		id_check();
 	});

@@ -80,7 +80,6 @@ public class MemberController extends HttpServlet {
 		String page = "/main/main.jsp";
 		
 		
-		
 		if (url.indexOf("index.do") != -1) {
 			request.setAttribute("menu_gubun", "member_index");
 			RequestDispatcher rd = request.getRequestDispatcher(page);

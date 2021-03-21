@@ -30,8 +30,14 @@
 		<tr>
 			<td>status</td>
 			<td>
-				<input type="radio" name="statusRadio" id="statusTrue" checked onclick="chooseStatus('1')" /> 진행중
-				<input type="radio" name="statusRadio" id="statusFalse" onclick="chooseStatus('0')" /> 종료
+				<c:if test="${dto.status == '1' }">
+					<input type="radio" name="statusRadio" id="statusTrue" checked onclick="chooseStatus('1')" /> 진행중
+					<input type="radio" name="statusRadio" id="statusFalse" onclick="chooseStatus('0')" /> 종료
+				</c:if>
+				<c:if test="${dto.status == '0' }">
+					<input type="radio" name="statusRadio" id="statusTrue" onclick="chooseStatus('1')" /> 진행중
+					<input type="radio" name="statusRadio" id="statusFalse" checked onclick="chooseStatus('0')" /> 종료
+				</c:if>
 				<input type="hidden" name="status" id="status" value="${dto.status }" />
 			</td>
 		</tr>
@@ -153,7 +159,7 @@
 		</tr>
 		<tr>
 			<td colspan="2" align="center" style="height: 50px;">
-				<button type="button" id="btnModify" onclick="chooseProc('modifyProc', '1', '')">수정하기</button>
+				<button type="button" id="btnModify" onclick="chooseProc('modifyProc', '1', '0')">수정하기</button>
 				<button type="button" id="btnList" onclick="chooseProc('list', '1', '')">목록으로</button>
 			</td>
 		</tr>

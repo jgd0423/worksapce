@@ -87,6 +87,11 @@ function goPage(proc) {
 		success: (data) => {
 			if (proc === "list") {
 				$("#result").html(data);
+				if ($("#span_search_date_check").text() === "O") {
+					$("input[id=search_date_check]:checkbox").prop("checked", true);
+				} else {
+					$("input[id=search_date_check]:checkbox").prop("checked", false);
+				}
 			} else if (proc === "view") {
 				$("#result").html(data);
 			} else if (proc === "write") {
@@ -96,11 +101,11 @@ function goPage(proc) {
 			} else if (proc === "modify") {
 				$("#result").html(data);
 			} else if (proc === "modifyProc") {
-				$("#result").html(data);
+				chooseProc("view", "1", "0");
 			} else if (proc === "delete") {
 				$("#result").html(data);
 			} else if (proc === "deleteProc") {
-				$("#result").html(data);
+				chooseProc("list", "1", "");
 			} else if (proc === "viewProc") {
 				chooseProc("list", "1", "");
 			} else if (proc === "result") {
