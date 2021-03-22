@@ -2,14 +2,41 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
 
-span_list_size : <span id="span_list_size" style="display: ;">${tableRowNum }</span><br>
-span_answer_total : <span id="span_answer_total" style="display: ;"></span><br>
+
+span_list_size : <span id="span_list_size" style="display: ;">${allRowsCount }</span><br>
+<%-- span_answer_total : <span id="span_answer_total" style="display: ;"></span><br>--%>
 ${allRowsCount }개의 레코드가 있습니다.<br>
 
-<table>
+<table border="1" align="center" width="80%">
 	<tr>
 		<td colspan="5" align="center">
 			<h2>문제은행</h2>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="5" align="center">
+			<select name="search_option" id="search_option">
+				<c:choose>
+					<c:when test="${search_option == 'question' }">
+						<option value="">- 선택 -</option>
+						<option value="question" selected>질문내용</option>
+					</c:when>
+					<c:otherwise>
+						<option value="" selected>- 선택 -</option>
+						<option value="question">질문내용</option>
+					</c:otherwise>
+				</c:choose>
+			</select>
+			
+			<input type="text" name="search_data" id="search_data" value="${search_data }" style="width: 150px;" />
+			&nbsp;
+			<input type="date" id="search_date_start" value="${search_date_start }" />
+			~
+			<input type="date" id="search_date_end" value="${search_date_end }" />
+			<br>
+			<input type="checkbox" id="search_date_check" value="O" onclick="checkboxChk()" /><span style="color: blue; font-size: 9px;">(날짜 검색시 체크)</span>
+			&nbsp;
+			<input type="button" value="검색" onclick="search();" />		
 		</td>
 	</tr>
 </table>
@@ -26,7 +53,7 @@ ${allRowsCount }개의 레코드가 있습니다.<br>
 			<a named="a_${tableRowNum }"></a>
 			q_${tableRowNum } : <span id="q_${tableRowNum}">${dto.no }</span><br>
 			span_answer_${tableRowNum } : <span id="span_answer_${tableRowNum }" style="display: ;"></span><br>
-			<table border="1" width="100%">
+			<table border="1" width="80%">
 				<tr>
 					<td>Q) ${dto.question }</td>
 				</tr>
@@ -103,6 +130,28 @@ ${allRowsCount }개의 레코드가 있습니다.<br>
 </table>
 
 <script>
+
+function search() {
+	$("#span_search_option").text($("#search_option").val());
+	$("#span_search_data").text($("#search_data").val());
+	$("#span_search_date_start").text($("#search_date_start").val());
+	$("#span_search_date_end").text($("#search_date_end").val());
+	chooseProc('detailedList', '1', '');
+}
+
+function checkboxChk() {
+	if ($("input:checkbox[id=search_date_check]").is(":checked") === true) {
+		$("#span_search_date_check").text($("#search_date_check").val());
+		$("#span_search_date_start").text($("#search_date_start").val());
+		$("#span_search_date_end").text($("#search_date_end").val());
+	} else {
+		$("#span_search_date_check").text("");
+		$("#span_search_date_start").text("");
+		$("#span_search_date_end").text("");
+		$("#search_date_start").val("");
+		$("#search_date_end").val("");
+	}
+}
 
 function choosePage(pageNum) {
 	chooseProc('detailedList', pageNum, '');

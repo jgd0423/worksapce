@@ -21,7 +21,7 @@ function chooseProc(proc, pageNumber, no) {
 }
 
 function goPage(proc) {
-	var param = {};
+	let param = {};
 	var url = "/jspMybatis/survey_servlet/" + proc + ".do";
 	
 	if (proc === "saveProc") {
@@ -30,7 +30,13 @@ function goPage(proc) {
 		}
 	} else if (proc === "detailedList") {
 		param = {
-			"pageNumber": $("#span_pageNumber").text()
+			"pageNumber": $("#span_pageNumber").text(),
+			"search_option": $("#span_search_option").text(),
+			"search_data": $("#span_search_data").text(),
+			"search_date_check": $("#span_search_date_check").text(),
+			"search_date_start": $("#span_search_date_start").text(),
+			"search_date_end": $("#span_search_date_end").text(),
+			"list_gubun": $("#span_list_gubun").text()
 		};
 	}
 	

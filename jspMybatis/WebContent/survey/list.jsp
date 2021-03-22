@@ -138,42 +138,4 @@ function checkboxChk() {
 	}
 }
 
-/*
-
-
-
-
-function goView(no) {
-	$("#span_no").text(no);
-	let param = {
-			"no": $("#span_no").text()
-	};
-	
-	$.ajax({
-		type: "post",
-		data: param,
-		url: "${path}/survey_servlet/view.do",
-		success: (result) => {
-			$("#result").html(result);
-		}
-	});
-}
-
-function goViewProc() {
-	let param = {
-			"no": $("#span_no").text(),
-			"answer": $("#span_answer").text()
-	};
-	
-	$.ajax({
-		type: "post",
-		data: param,
-		url: "${path}/survey_servlet/viewProc.do",
-		success: (data) => {
-			goList();
-		}
-	});
-}
-*/
-
 </script>

@@ -138,11 +138,11 @@ SELECT no, (SELECT COUNT(*) FROM survey_answer WHERE survey.no = no) survey_coun
 
 
 SELECT no, 
-(SELECT COUNT(answer) FROM survey_answer WHERE no = 1 AND answer = '1') count_of_1, 
-(SELECT COUNT(answer) FROM survey_answer WHERE no = 1 AND answer = '2') count_of_2, 
-(SELECT COUNT(answer) FROM survey_answer WHERE no = 1 AND answer = '3') count_of_3, 
-(SELECT COUNT(answer) FROM survey_answer WHERE no = 1 AND answer = '4') count_of_4 
-FROM survey_answer WHERE no = 1 GROUP BY no;
+(SELECT COUNT(answer) FROM survey_answer WHERE no = 19 AND answer = '1') count_of_1, 
+(SELECT COUNT(answer) FROM survey_answer WHERE no = 19 AND answer = '2') count_of_2, 
+(SELECT COUNT(answer) FROM survey_answer WHERE no = 19 AND answer = '3') count_of_3, 
+(SELECT COUNT(answer) FROM survey_answer WHERE no = 19 AND answer = '4') count_of_4 
+FROM survey_answer WHERE no = 19 GROUP BY no;
 
 
 SELECT * FROM v_total_answers ORDER BY no;
