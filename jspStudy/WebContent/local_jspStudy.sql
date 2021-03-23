@@ -194,7 +194,6 @@ SELECT COUNT(*) FROM survey_answer WHERE survey_answer.no = 1;
 
 select * from all_constraints where table_name = 'survey_answer';
 
-drop table survey_answer;
 
 ALTER TABLE survey_answer 
 ADD CONSTRAINT fk_survey_answer_no
@@ -203,8 +202,6 @@ ADD CONSTRAINT fk_survey_answer_no
     ON DELETE CASCADE;
     
 commit;
-
-delete from survey where no = 7;
 
 
 
@@ -306,14 +303,15 @@ CREATE TABLE boardChk (
     UNIQUE(tbl),
     UNIQUE(tblName)
 );
-drop table boardChk;
+
 CREATE SEQUENCE seq_boardChk START WITH 1 INCREMENT BY 1 NOMAXVALUE NOCACHE;
 
 INSERT INTO boardChk VALUES (seq_boardChk.NEXTVAL, 'freeboard', '자유게시판', 'T', SYSDATE);
 INSERT INTO boardChk VALUES (seq_boardChk.NEXTVAL, 'funnyboard', '유머게시판', 'T', SYSDATE);
 INSERT INTO boardChk VALUES (seq_boardChk.NEXTVAL, 'memberboard', '회원전용게시판', 'F', SYSDATE);
 INSERT INTO boardChk VALUES (seq_boardChk.NEXTVAL, 'javaboard', '자바게시판', 'T', SYSDATE);
-
+INSERT INTO boardChk VALUES (seq_boardChk.NEXTVAL, 'codingboard', '코딩게시판', 'T', SYSDATE);
+commit;
 SELECT * FROM boardChk;
 
 SELECT * FROM board ORDER BY noticeNo DESC, refNo DESC, levelNo ASC;
@@ -335,11 +333,6 @@ CREATE SEQUENCE seq_product START WITH 1 INCREMENT BY 1 NOMAXVALUE NOCACHE;
 DESC product;
 
 SELECT * FROM product WHERE no > 0;
-
-delete from product where no = 2;
-
-drop table product;
-drop sequence seq_product;
 
 commit;
 

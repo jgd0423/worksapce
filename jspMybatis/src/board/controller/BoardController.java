@@ -88,7 +88,12 @@ public class BoardController extends HttpServlet {
 		
 		
 		if (url.indexOf("index.do") != -1) {
-			request.setAttribute("menu_gubun", "board_index");
+			String boardName = tbl.substring(0, tbl.length() - 5);
+			String boardLoc = "board_index";
+			if (!boardName.equals("free")) {
+				boardLoc = boardName + boardLoc;
+			}
+			request.setAttribute("menu_gubun", boardLoc);
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
@@ -135,8 +140,8 @@ public class BoardController extends HttpServlet {
 				secretGubun = "T";
 			}
 			
-			int num = dao.getMaxNum() + 1;
-			int refNo = dao.getMaxRefNo() + 1;   // 글 그룹을 의미, 쿼리를 실행시켜서 가장 큰 ref 값을 가져온 후 + 1
+			int num = dao.getMaxNum(tbl) + 1;
+			int refNo = dao.getMaxRefNo(tbl) + 1;   // 글 그룹을 의미, 쿼리를 실행시켜서 가장 큰 ref 값을 가져온 후 + 1
 			int stepNo = 1;
 			int levelNo = 1;
 			int parentNo = 0;
@@ -270,7 +275,7 @@ public class BoardController extends HttpServlet {
 			dto = dao.getView(no);
 			int noticeNo = dto.getNoticeNo();
 			if (noticeNo > 0 && (noticeGubun == null || noticeGubun.trim().equals("") || !noticeGubun.equals("T"))) {
-				dao.setNoticeNoLargerThenCurrentNoticeNo(no);
+				dao.setNoticeNoLargerThenCurrentNoticeNo(no, tbl);
 				noticeNo = 0;
 			} else if (noticeNo == 0 && noticeGubun.equals("T")) {
 				noticeNo = dao.getMaxNoticeNo(tbl) + 1;

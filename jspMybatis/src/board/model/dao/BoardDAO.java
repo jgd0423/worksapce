@@ -48,16 +48,22 @@ public class BoardDAO {
 		return result;
 	}
 
-	public int getMaxNum() {
+	public int getMaxNum(String tbl) {
+		Map<String, String> map = new HashMap<>();
+		map.put("tbl", tbl);
+		
 		SqlSession session = MybatisManager.getInstance().openSession();
-		int result = session.selectOne("board.getMaxNum");
+		int result = session.selectOne("board.getMaxNum", map);
 		session.close();
 		return result;
 	}
 	
-	public int getMaxRefNo() {
+	public int getMaxRefNo(String tbl) {
+		Map<String, String> map = new HashMap<>();
+		map.put("tbl", tbl);
+		
 		SqlSession session = MybatisManager.getInstance().openSession();
-		int result = session.selectOne("board.getMaxRefNo");
+		int result = session.selectOne("board.getMaxRefNo", map);
 		session.close();
 		return result;
 	}
@@ -146,9 +152,10 @@ public class BoardDAO {
 		return result;
 	}
 
-	public void setNoticeNoLargerThenCurrentNoticeNo(int no) {
-		Map<String, Integer> map = new HashMap<>();
+	public void setNoticeNoLargerThenCurrentNoticeNo(int no, String tbl) {
+		Map<String, Object> map = new HashMap<>();
 		map.put("no", no);
+		map.put("tbl", tbl);
 		
 		SqlSession session = MybatisManager.getInstance().openSession();
 		int result = session.update("board.setNoticeNoLargerThenCurrentNoticeNo", map);
@@ -208,6 +215,13 @@ public class BoardDAO {
 		
 		SqlSession session = MybatisManager.getInstance().openSession();
 		Map<String, Object> tblStatusMap = session.selectOne("board.isUsingTable", map);
+		
+		if (tblStatusMap == null) {
+			tblStatusMap = new HashMap<>();
+			tblStatusMap.put("SERVICEGUBUN", "F");
+			tblStatusMap.put("TBLNAME", "none");
+		}
+		
 		session.close();
 		return tblStatusMap;
 	}

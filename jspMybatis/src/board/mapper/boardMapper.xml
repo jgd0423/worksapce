@@ -50,11 +50,11 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 	</insert>
 	
 	<select id="getMaxNum" resultType="int">
-		SELECT NVL(MAX(num), 0) FROM board
+		SELECT NVL(MAX(num), 0) FROM board WHERE tbl = #{tbl}
 	</select>
 	
 	<select id="getMaxRefNo" resultType="int">
-		SELECT NVL(MAX(refNo), 0) FROM board
+		SELECT NVL(MAX(refNo), 0) FROM board WHERE tbl = #{tbl}
 	</select>
 	
 	<select id="getMaxNoticeNo" resultType="int">
@@ -111,8 +111,8 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 	<update id="setNoticeNoLargerThenCurrentNoticeNo">
 		UPDATE board SET 
 		noticeNo = (noticeNo - 1) 
-		WHERE noticeNo > 
-		(SELECT noticeNo FROM board WHERE no = #{no})
+		WHERE tbl = #{tbl} AND noticeNo > 
+		(SELECT noticeNo FROM board WHERE no = #{no} AND tbl = #{tbl})
 	</update>
 	
 	<delete id="setDelete">
