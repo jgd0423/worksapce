@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<sql id="search">
+		<choose>
+			<when test="search_option == 'writer_subject_content' ">
+				AND (writer LIKE '%' || #{search_data} || '%' OR subject LIKE '%' || #{search_data} || '%' OR content LIKE '%' || #{search_data} || '%')
+			</when>
+			<when test="search_option != null and search_option != '' and search_data != null and search_data != '' ">
+				AND (${search_option} LIKE '%' || #{search_data} || '%')
+			</when>
+			<otherwise>
+				AND no > '0'
+			</otherwise>
+		</choose>
+	</sql>
+
+	<insert id="setInsert">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT seq_board.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO board (
+			no, num, tbl, writer, subject, content, email, passwd, 
+			refNo, stepNo, levelNo, parentNo, hit, ip, memberNo,
+			noticeNo, secretGubun, regiDate
+		) 
+		VALUES (
+			#{no}, 
+			#{dto.num}, 
+			#{dto.tbl}, 
+			#{dto.writer}, 
+			#{dto.subject}, 
+			#{dto.content}, 
+			#{dto.email}, 
+			#{dto.passwd}, 
+			#{dto.refNo}, 
+			#{dto.stepNo},
+			#{dto.levelNo}, 
+			#{dto.parentNo}, 
+			#{dto.hit},
+			#{dto.ip}, 
+			#{dto.memberNo}, 
+			#{dto.noticeNo}, 
+			#{dto.secretGubun},   
+			SYSDATE
+		)
+	</insert>
+	
+	<select id="getMaxNum" resultType="int">
+		SELECT NVL(MAX(num), 0) FROM board
+	</select>
+	
+	<select id="getMaxRefNo" resultType="int">
+		SELECT NVL(MAX(refNo), 0) FROM board
+	</select>
+	
+	<select id="getMaxNoticeNo" resultType="int">
+		SELECT NVL(MAX(noticeNo), 0) FROM board WHERE tbl = #{tbl}
+	</select>
+	
+	<select id="getAllRowsCount" resultType="int">
+		SELECT COUNT(*) FROM board WHERE tbl = #{tbl}
+		<include refid="search"></include>
+	</select>
+	
+	<select id="getPagingList" resultType="board.model.dto.BoardDTO">
+		SELECT * FROM (SELECT A.*, Rownum Rnum FROM (
+		SELECT t1.*, 
+		(SELECT COUNT(*) FROM board t2 WHERE t2.parentNo = t1.no) child_counter 
+		FROM board t1 WHERE tbl = #{tbl} 
+		<include refid="search"></include>
+		ORDER BY noticeNo DESC, refNo DESC, levelNo ASC
+		<![CDATA[
+		) A) WHERE Rnum >= #{startNum} AND Rnum <= #{endNum}
+		]]>
+	</select>
+	
+	<update id="setUpdateHit">
+		UPDATE board SET hit = (hit + 1) WHERE no = #{no}
+	</update>
+	
+	<select id="getView" resultType="board.model.dto.BoardDTO">
+		SELECT * FROM
+		(
+			SELECT b.*, 
+			(SELECT COUNT(*) FROM board WHERE refNo = b.refNo AND stepNo = (b.stepNo + 1) AND levelNo = (b.levelNo + 1)) child_counter, 
+			LAG(no) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) preNo, 
+			LAG(subject) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) preSubject, 
+			LEAD(no) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) nxtNo, 
+			LEAD(subject) OVER (ORDER BY noticeNo DESC, refNo DESC, levelNo ASC) nxtSubject 
+			FROM board b ORDER BY noticeNo DESC, refNo DESC, levelNo ASC
+		) WHERE no = #{no}
+	</select>
+	
+	<update id="setUpdate">
+		UPDATE board 
+		SET 
+			writer = #{dto.writer}, 
+			email = #{dto.email}, 
+			subject = #{dto.subject}, 
+			content = #{dto.content}, 
+			memberNo = #{dto.memberNo}, 
+			noticeNo = #{dto.noticeNo}, 
+			secretGubun = #{dto.secretGubun}
+		WHERE no = #{dto.no}
+	</update>
+	
+	<update id="setNoticeNoLargerThenCurrentNoticeNo">
+		UPDATE board SET 
+		noticeNo = (noticeNo - 1) 
+		WHERE noticeNo > 
+		(SELECT noticeNo FROM board WHERE no = #{no})
+	</update>
+	
+	<delete id="setDelete">
+		DELETE FROM board WHERE no = #{dto.no}
+	</delete>
+	
+	<insert id="setInsertComment">
+		<selectKey keyProperty="comment_no" resultType="int" order="BEFORE">
+			SELECT seq_board_comment.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO board_comment (
+			comment_no, board_no, writer, content, 
+			passwd, memberNo, ip, regiDate
+		) 
+		VALUES (
+			#{comment_no}, 
+			#{dto.board_no}, 
+			#{dto.writer}, 
+			#{dto.content}, 
+			#{dto.passwd}, 
+			#{dto.memberNo}, 
+			#{dto.ip},
+			SYSDATE
+		)
+	</insert>
+	
+	<select id="getAllCommentRowsCount" resultType="int">
+		SELECT COUNT(*) FROM board_comment WHERE board_no = #{no}
+	</select>
+	
+	<select id="getCommentPagingList" resultType="board.model.dto.CommentDTO">
+		SELECT * FROM 
+		(SELECT ROWNUM Rnum, a.* FROM (
+		SELECT * FROM board_comment WHERE board_no = #{no} 
+		ORDER BY comment_no DESC
+		<![CDATA[
+		) a) WHERE Rnum >= #{startNum} AND Rnum <= #{endNum}
+		]]>
+	</select>
+	
+	<select id="isUsingTable" resultType="map">
+		SELECT tblName, serviceGubun FROM boardChk WHERE tbl = #{tbl}
+	</select>
+	
+	<update id="setUpdateComment">
+		UPDATE board_comment 
+		SET 
+			writer = #{dto.writer}, 
+			content = #{dto.content}
+		WHERE comment_no = #{dto.comment_no} AND passwd = #{dto.passwd}
+	</update>
+	
+	<delete id="setDeleteComment">
+		DELETE FROM board_comment WHERE comment_no = #{comment_no} AND passwd = #{passwd}
+	</delete>
+</mapper>

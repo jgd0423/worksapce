@@ -318,7 +318,7 @@ SELECT * FROM boardChk;
 
 SELECT * FROM board ORDER BY noticeNo DESC, refNo DESC, levelNo ASC;
 
-SELECT tblName, serviceGubun FROM boardChk WHERE tbl = 'dsfdfds';
+SELECT tblName, serviceGubun FROM boardChk WHERE tbl = 'freeboard';
 
 CREATE TABLE product (
     no NUMBER NOT NULL,
