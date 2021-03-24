@@ -1,5 +1,6 @@
 package shop.model.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,5 +61,38 @@ public class CartDAO {
 //		int result = session.delete("cart.setDeleteBatch", map);
 //		session.commit();
 //		session.close();
+	}
+	
+	public List<CartDTO> getListCartProductGroup() {
+		SqlSession session = MybatisManager.getInstance().openSession();
+		List<CartDTO> list = session.selectList("mall.getListCartProductGroup");
+		session.close();
+		return list;
+		
+//		List<CartDTO> list = new ArrayList<>();
+		
+		
+//		conn = getConn();
+//		try {
+//			String sql = "";
+//			sql += "SELECT p.name product_name, SUM(c.amount * p.price) buy_money ";
+//			sql += "FROM cart c INNER JOIN product p ON c.productNo = p.no ";
+//			sql += "GROUP BY p.name ";
+//			sql += "ORDER BY product_name ASC";
+//			
+//			pstmt = conn.prepareStatement(sql);
+//			rs = pstmt.executeQuery();
+//			while (rs.next()) {
+//				CartDTO dto = new CartDTO();
+//				dto.setProduct_name(rs.getString("product_name"));
+//				dto.setBuy_money(rs.getInt("buy_money"));
+//				list.add(dto);
+//			}
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			getConnClose(rs, pstmt, conn);
+//		}
+//		return list;
 	}
 }
