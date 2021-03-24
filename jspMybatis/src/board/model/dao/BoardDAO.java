@@ -1,9 +1,5 @@
 package board.model.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,30 +8,10 @@ import org.apache.ibatis.session.SqlSession;
 
 import board.model.dto.BoardDTO;
 import board.model.dto.CommentDTO;
-import db.DbExample;
-import member.model.dto.MemberDTO;
 import sqlmap.MybatisManager;
 
 public class BoardDAO {
-	// Field
-	Connection conn = null;
-	PreparedStatement pstmt = null;
-	ResultSet rs = null;
-	
-	final String BOARD = "board";
-	final String BOARD_COMMENT = "board_comment";
-	
 	// Method
-	public Connection getConn(String methodName) {
-		conn = DbExample.getConn();
-		System.out.println("methodName: " + methodName);
-		return conn;
-	}
-	
-	public void getConnClose(ResultSet rs, PreparedStatement pstmt, Connection conn) {
-		DbExample.getConnClose(rs, pstmt, conn);
-	}
-	
 	public int setInsert(BoardDTO dto) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("dto", dto);
@@ -125,19 +101,13 @@ public class BoardDAO {
 	}
 
 	public void setUpdateReLevel(BoardDTO dto) {
-		conn = getConn("setUpdateReLevel");
-		try {
-			String sql = "UPDATE " + BOARD + " SET levelNo = (levelNo + 1) WHERE refNo = ? AND levelNo > ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, dto.getRefNo());
-			pstmt.setInt(2, dto.getLevelNo());
-			pstmt.executeUpdate();
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			getConnClose(rs, pstmt, conn);
-		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("dto", dto);
 		
+		SqlSession session = MybatisManager.getInstance().openSession();
+		int result = session.update("board.setUpdateReLevel", map);
+		session.commit();
+		session.close();
 	}
 
 	public int setUpdate(BoardDTO dto) {

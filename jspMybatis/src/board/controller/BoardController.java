@@ -88,12 +88,8 @@ public class BoardController extends HttpServlet {
 		
 		
 		if (url.indexOf("index.do") != -1) {
-			String boardName = tbl.substring(0, tbl.length() - 5);
-			String boardLoc = "board_index";
-			if (!boardName.equals("free")) {
-				boardLoc = boardName + boardLoc;
-			}
-			request.setAttribute("menu_gubun", boardLoc);
+			request.setAttribute("menu_gubun", "board_index");
+			request.setAttribute("menu_gubun_sub", tbl);
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			

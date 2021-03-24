@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mall">
+	<select id="getAllRowsCount" resultType="int">
+		SELECT COUNT(*) FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no
+	</select>
+	
+	<select id="getPagingList" resultType="shop.model.dto.CartDTO">
+		SELECT * FROM (SELECT A.*, Rownum Rnum FROM (
+		SELECT 
+			cart.no no, 
+			product.no productNo, 
+			product.product_img, 
+			product.name product_name, 
+			product.price product_price, 
+			cart.amount, 
+			(product.price * cart.amount) buy_money, 
+			cart.regi_date 
+		FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no 
+		ORDER BY no DESC
+		<![CDATA[
+		) A) WHERE Rnum >= #{startNum} AND Rnum <= #{endNum}
+		]]>
+	</select>
+	
+	<insert id="setInsert">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT seq_cart.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO cart (
+			no, memberNo, productNo, amount, regi_date
+		) 
+		VALUES (
+			#{no}, 
+			#{dto.memberNo}, 
+			#{dto.productNo}, 
+			#{dto.amount}, 
+			CURRENT_TIMESTAMP
+		)
+	</insert>
+	
+	<delete id="setDeleteBatch" parameterType="map">
+		DELETE FROM cart
+		WHERE no IN (
+			<foreach collection="array" index="index" item="item" open="" close="" separator=",">
+				#{item}
+			</foreach>
+		)
+	</delete>
+	
+	<!--  
+	<delete id="setDeleteBatch" parameterType="map">
+		DELETE FROM cart
+		WHERE
+		<foreach collection="list" index="index" item="item" open="" close="" separator="or">
+			no = #{item}
+		</foreach>
+	</delete>
+	-->
+</mapper>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="product">
+	<sql id="search">
+		<choose>
+			<when test="search_option == 'name_description' ">
+				AND (name LIKE '%' || #{search_data} || '%' OR description LIKE '%' || #{search_data} || '%')
+			</when>
+			<when test="search_option != null and search_option != '' and search_data != null and search_data != '' ">
+				AND (${search_option} LIKE '%' || #{search_data} || '%')
+			</when>
+			<otherwise>
+				AND no > '0'
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<insert id="setInsert">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT seq_product.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO product (
+			no, name, price, description, product_img, regi_date
+		) 
+		VALUES (
+			#{no}, 
+			#{dto.name}, 
+			#{dto.price}, 
+			#{dto.description}, 
+			#{dto.product_img}, 
+			CURRENT_TIMESTAMP
+		)
+	</insert>
+	
+	<select id="getAllRowsCount" resultType="int">
+		SELECT COUNT(*) FROM product WHERE no > 0
+		<include refid="search"></include>
+	</select>
+	
+	<select id="getPagingList" resultType="shop.model.dto.ProductDTO">
+		SELECT * FROM (SELECT A.*, Rownum Rnum FROM (
+		SELECT product.*, 
+		(SELECT SUM(amount) FROM cart WHERE cart.productNo = product.no) amount 
+		FROM product WHERE product.no > 0 
+		<include refid="search"></include>
+		ORDER BY no DESC
+		<![CDATA[
+		) A) WHERE Rnum >= #{startNum} AND Rnum <= #{endNum}
+		]]>
+	</select>
+	
+	<select id="getView" resultType="shop.model.dto.ProductDTO">
+		SELECT product.*, 
+		(SELECT SUM(amount) FROM cart WHERE cart.productNo = product.no) amount 
+		FROM product WHERE product.no = #{no}
+	</select>
+	
+	<update id="setUpdate">
+		UPDATE product 
+		SET 
+			name = #{dto.name}, 
+			price = #{dto.price}, 
+			description = #{dto.description}, 
+			product_img = #{dto.product_img}
+		WHERE no = #{dto.no}
+	</update>
+	
+	<delete id="setDelete">
+		DELETE FROM product WHERE no = #{dto.no}
+	</delete>
+</mapper>

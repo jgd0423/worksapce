@@ -355,6 +355,7 @@ DESC cart;
 SELECT * FROM cart;
 SELECT * FROM product;
 
+
 SELECT SUM(amount) FROM cart WHERE productNo = 14;
 
 SELECT product.product_img, product.name, product.price, cart.amount, (product.price * cart.amount) buy_money, cart.regi_date
@@ -366,11 +367,11 @@ FROM cart LEFT OUTER JOIN product
 ON cart.productNo = product.no;
 
 SELECT 
-    cart.no cart_no, 
+    cart.no no, 
     product.no productNo, 
     product.product_img, 
-    product.name, 
-    product.price, 
+    product.name product_name, 
+    product.price product_price, 
     cart.amount, 
     (product.price * cart.amount) buy_money, 
     cart.regi_date 

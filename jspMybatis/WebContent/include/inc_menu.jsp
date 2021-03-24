@@ -3,6 +3,7 @@
 <%@ include file="../include/inc_header.jsp" %>
 <c:set var="under_bar_index" value="${fn:indexOf(menu_gubun, '_')}"></c:set>
 <c:set var="menu_name" value="${fn:substring(menu_gubun, 0, under_bar_index)}"></c:set>
+<c:set var="menu_name_sub" value="${fn:substring(menu_gubun_sub, 0, fn:length(menu_gubun_sub) - 5)}"></c:set>
 
 <table border="0" align="center">
 	<tr>
@@ -38,17 +39,17 @@
 		<td id="survey" style="padding: 0px 20px; ${menu_name == 'questionBank' ? 'background-color: silver;' : ''}">
 			<a href="${path }/questionBank_servlet/index.do">문제은행</a>
 		</td>
-		<td id="board" style="padding: 0px 20px; ${menu_name == 'board' ? 'background-color: silver;' : ''}">
+		<td id="board" style="padding: 0px 20px; ${menu_name_sub == 'free' ? 'background-color: silver;' : ''}">
 			<a href="${path }/board_servlet/index.do">자유게시판</a>
 		</td>
-		<td id="codingboard" style="padding: 0px 20px; ${menu_name == 'codingboard' ? 'background-color: silver;' : ''}">
+		<td id="codingboard" style="padding: 0px 20px; ${menu_name_sub == 'coding' ? 'background-color: silver;' : ''}">
 			<a href="${path }/board_servlet/index.do?tbl=codingboard">코딩게시판</a>
 		</td>
 		<td id="product" style="padding: 0px 20px; ${menu_name == 'product' ? 'background-color: silver;' : ''}">
-			<a href="${path }/product_servlet/index.do">Mall(상품관리-ajax)</a>
+			<a href="${path }/product_servlet/index.do">Mall(상품관리)</a>
 		</td>
 		<td id="mall" style="padding: 0px 20px; ${menu_name == 'mall' ? 'background-color: silver;' : ''}">
-			<a href="${path }/mall_servlet/index.do">Mall(쇼핑몰-ajax)</a>
+			<a href="${path }/mall_servlet/index.do">Mall(쇼핑몰)</a>
 		</td>
 		<td id="chart" style="padding: 0px 20px; ${menu_name == 'chart' ? 'background-color: silver;' : ''}">
 			<a href="${path }/chart_servlet/index.do">Chart</a>

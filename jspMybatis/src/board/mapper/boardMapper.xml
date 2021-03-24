@@ -95,6 +95,10 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 		) WHERE no = #{no}
 	</select>
 	
+	<update id="setUpdateReLevel">
+		UPDATE board SET levelNo = (levelNo + 1) WHERE refNo = #{dto.refNo} AND levelNo > #{dto.levelNo}
+	</update>
+	
 	<update id="setUpdate">
 		UPDATE board 
 		SET 
