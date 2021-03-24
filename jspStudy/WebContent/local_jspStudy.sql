@@ -375,7 +375,7 @@ SELECT
     cart.amount, 
     (product.price * cart.amount) buy_money, 
     cart.regi_date 
-FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no ORDER BY cart_no DESC;
+FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no ORDER BY no DESC;
 
 SELECT product.*, (SELECT SUM(amount) FROM cart WHERE cart.productNo = product.no) amount FROM product Where product.no = 14;
 
