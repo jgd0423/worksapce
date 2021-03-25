@@ -1,5 +1,13 @@
 $(document).ready(function() {
-	chooseProc("list", "1", "");
+	if ($("#span_menu_gubun").text() == "member_login") {
+		chooseProc("login", "1", "");
+	} else if ($("#span_menu_gubun").text() == "member_modify") {
+		chooseProc("modify", "1", "0");
+	} else if ($("#span_menu_gubun").text() == "member_delete") {
+		chooseProc("delete", "1", "0");
+	} else {
+		chooseProc("list", "1", "");
+	}
 });
 
 function chooseProc(proc, pageNumber, no) {
@@ -54,6 +62,8 @@ function goPage(proc) {
 			"search_option": $("#span_search_option").text(),
 			"search_data": $("#span_search_data").text()
 		};
+	} else if (proc === "login") {
+		param = {};
 	}
 	
 	$.ajax({
@@ -76,6 +86,10 @@ function goPage(proc) {
 			} else if (proc === "delete") {
 				$("#result").html(data);
 			} else if (proc === "deleteProc") {
+				$("#result").html(data);
+			} else if (proc === "login") {
+				$("#result").html(data);
+			} else if (proc === "showLogin") {
 				$("#result").html(data);
 			} else {
 				$("#result").html(data);

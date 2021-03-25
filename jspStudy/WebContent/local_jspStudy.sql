@@ -351,12 +351,47 @@ ALTER TABLE cart ADD CONSTRAINT fk_cart_productNo FOREIGN KEY(productNo) REFEREN
 
 -- ALTER TABLE cart DROP CONSTRAINT fk_cart_memberNo;
 
+CREATE TABLE nonMemberCart (
+    no NUMBER NOT NULL PRIMARY KEY,
+    sessionId VARCHAR2(50) NOT NULL,
+    productNo NUMBER NOT NULL,
+    amount NUMBER DEFAULT 0,
+    regi_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE nonMemberCart ADD CONSTRAINT fk_nonMemberCart_productNo FOREIGN KEY(productNo) REFERENCES product(no);
+CREATE SEQUENCE seq_nonMemberCart START WITH 1 INCREMENT BY 1 NOMAXVALUE NOCACHE;
+SELECT * FROM nonMemberCart;
+
+commit;
+
 DESC cart;
 SELECT * FROM cart;
 SELECT * FROM product;
 
+SELECT COUNT(*) FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no WHERE memberNo = 1;
+
+SELECT COUNT(*) 
+		FROM nonMemberCart LEFT OUTER JOIN product ON nonMemberCart.productNo = product.no 
+		WHERE sessionId = '429C07ED1C5A1E202F5AF94D5E2F91BE';
 
 SELECT SUM(amount) FROM cart WHERE productNo = 14;
+
+
+SELECT 
+    nonMemberCart.no no, 
+    nonMemberCart.sessionId,
+    product.no productNo, 
+    product.product_img, 
+    product.name product_name, 
+    product.price product_price, 
+    nonMemberCart.amount, 
+    (product.price * nonMemberCart.amount) buy_money, 
+    nonMemberCart.regi_date 
+FROM nonMemberCart LEFT OUTER JOIN product ON nonMemberCart.productNo = product.no 
+WHERE sessionId = '429C07ED1C5A1E202F5AF94D5E2F91BE'
+ORDER BY no DESC;
+
 
 SELECT product.product_img, product.name, product.price, cart.amount, (product.price * cart.amount) buy_money, cart.regi_date
 FROM cart LEFT OUTER JOIN product
@@ -368,6 +403,7 @@ ON cart.productNo = product.no;
 
 SELECT 
     cart.no no, 
+    cart.memberNo, 
     product.no productNo, 
     product.product_img, 
     product.name product_name, 
@@ -375,7 +411,9 @@ SELECT
     cart.amount, 
     (product.price * cart.amount) buy_money, 
     cart.regi_date 
-FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no ORDER BY no DESC;
+FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no
+WHERE memberNo = 1
+ORDER BY no DESC;
 
 SELECT product.*, (SELECT SUM(amount) FROM cart WHERE cart.productNo = product.no) amount FROM product Where product.no = 14;
 

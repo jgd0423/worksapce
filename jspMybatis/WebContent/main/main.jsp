@@ -36,7 +36,13 @@
 					<jsp:include page="../memo/index.jsp" />
 				</c:when>
 				<c:when test="${menu_gubun == 'member_login' }">
-					<jsp:include page="../member/login.jsp" />
+					<jsp:include page="../member/index.jsp" />
+				</c:when>
+				<c:when test="${menu_gubun == 'member_modify' }">
+					<jsp:include page="../member/index.jsp" />
+				</c:when>
+				<c:when test="${menu_gubun == 'member_delete' }">
+					<jsp:include page="../member/index.jsp" />
 				</c:when>
 				<c:when test="${menu_gubun == 'guestbook_index' }">
 					<jsp:include page="../guestbook/index.jsp" />

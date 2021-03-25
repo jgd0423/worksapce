@@ -1,6 +1,5 @@
 package shop.model.dao;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,22 +11,47 @@ import sqlmap.MybatisManager;
 
 public class CartDAO {
 	// Method
-	public int getAllRowsCount() {
+	public int getAllRowsCount(int cookNo) {
 		Map<String, String> map = new HashMap<>();
+		map.put("cookNo", cookNo + "");
 		
 		SqlSession session = MybatisManager.getInstance().openSession();
 		int result = session.selectOne("mall.getAllRowsCount", map);
 		session.close();
 		return result;
 	}
+	
+	public int getAllRowsCount(String sessionId) {
+		Map<String, String> map = new HashMap<>();
+		map.put("sessionId", sessionId);
+		
+		SqlSession session = MybatisManager.getInstance().openSession();
+		int result = session.selectOne("mall.getAllRowsCountNonMember", map);
+		session.close();
+		return result;
+	}
 
-	public List<CartDTO> getPagingList(int startNum, int endNum) {
+	public List<CartDTO> getPagingList(int startNum, int endNum, int cookNo) {
 		Map<String, String> map = new HashMap<>();
 		map.put("startNum", startNum + "");
 		map.put("endNum", endNum + "");
+		map.put("cookNo", cookNo + "");
 		
 		SqlSession session = MybatisManager.getInstance().openSession();
 		List<CartDTO> list = session.selectList("mall.getPagingList", map);
+		session.close();
+		return list;
+	}
+	
+
+	public List<CartDTO> getPagingList(int startNum, int endNum, String sessionId) {
+		Map<String, String> map = new HashMap<>();
+		map.put("startNum", startNum + "");
+		map.put("endNum", endNum + "");
+		map.put("sessionId", sessionId);
+		
+		SqlSession session = MybatisManager.getInstance().openSession();
+		List<CartDTO> list = session.selectList("mall.getPagingListNonMember", map);
 		session.close();
 		return list;
 	}
@@ -68,31 +92,17 @@ public class CartDAO {
 		List<CartDTO> list = session.selectList("mall.getListCartProductGroup");
 		session.close();
 		return list;
+	}
+
+	public int setInsertNonMember(CartDTO dto) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("dto", dto);
 		
-//		List<CartDTO> list = new ArrayList<>();
+		SqlSession session = MybatisManager.getInstance().openSession();
+		int result = session.insert("mall.setInsertNonMember", map);
+		session.commit();
+		session.close();
 		
-		
-//		conn = getConn();
-//		try {
-//			String sql = "";
-//			sql += "SELECT p.name product_name, SUM(c.amount * p.price) buy_money ";
-//			sql += "FROM cart c INNER JOIN product p ON c.productNo = p.no ";
-//			sql += "GROUP BY p.name ";
-//			sql += "ORDER BY product_name ASC";
-//			
-//			pstmt = conn.prepareStatement(sql);
-//			rs = pstmt.executeQuery();
-//			while (rs.next()) {
-//				CartDTO dto = new CartDTO();
-//				dto.setProduct_name(rs.getString("product_name"));
-//				dto.setBuy_money(rs.getInt("buy_money"));
-//				list.add(dto);
-//			}
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			getConnClose(rs, pstmt, conn);
-//		}
-//		return list;
+		return result;
 	}
 }

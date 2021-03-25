@@ -8,6 +8,7 @@ no : <span id="span_no">${no }</span><br>
 search_option : <span id="span_search_option">${search_option }</span><br>
 search_data : <span id="span_search_data">${search_data }</span><br>
 path : <span id="span_path">${path }</span><br>
+menu_gubun : <span id="span_menu_gubun">${menu_gubun }</span><br>
 
 <input type="text" name="a" style="display: ;" /><br><!-- ajax 테스트를 위한 것 -->
 

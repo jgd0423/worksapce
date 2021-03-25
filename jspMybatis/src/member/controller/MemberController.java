@@ -138,9 +138,17 @@ public class MemberController extends HttpServlet {
 			int result = dao.setInsert(dto);
 			
 			
+		} else if (url.indexOf("goLogin.do") != -1) {
+			request.setAttribute("menu_gubun", "member_login");
+			
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
 		} else if (url.indexOf("login.do") != -1) {
 			request.setAttribute("menu_gubun", "member_login");
 			
+			page = "/member/login.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
@@ -155,11 +163,15 @@ public class MemberController extends HttpServlet {
 			MemberDTO resultDto = dao.getLogin(dto);
 			
 			String temp;
-			if (resultDto.getNo() == 0) { // 실패
+			
+			if (resultDto == null) {
+				temp = path + "/member_servlet/login.do";
+			} else if (resultDto.getNo() == 0) { // 실패
 				temp = path + "/member_servlet/login.do";
 			} else { // 성공
 				// 세션 등록
 				HttpSession session = request.getSession();
+				
 				session.setAttribute("cookNo", resultDto.getNo());
 				session.setAttribute("cookId", resultDto.getId());
 				session.setAttribute("cookName", resultDto.getName());
@@ -243,6 +255,13 @@ public class MemberController extends HttpServlet {
 			rd.forward(request, response);
 			
 			
+		} else if (url.indexOf("goModify.do") != -1) {
+			request.setAttribute("menu_gubun", "member_modify");
+			
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
+			
+			
 		} else if (url.indexOf("modify.do") != -1) {
 			// 세션 없으면 로그인 페이지로
 			HttpSession session = request.getSession();
@@ -304,6 +323,13 @@ public class MemberController extends HttpServlet {
 			}
 			out.flush();
 			out.close(); 
+			
+			
+		} else if (url.indexOf("goDelete.do") != -1) {
+			request.setAttribute("menu_gubun", "member_delete");
+			
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
 			
 			
 		} else if (url.indexOf("delete.do") != -1) {

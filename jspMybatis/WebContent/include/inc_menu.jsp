@@ -9,13 +9,13 @@
 	<tr>
 		<td colspan="15" align="right" style="padding: 5px 20px 10px;">
 			<c:if test="${sessionScope.cookNo == null || sessionScope.cookNo == 0 }">
-				<a href="${path }/member_servlet/login.do">로그인</a>
+				<a href="${path }/member_servlet/goLogin.do">로그인</a>
 			</c:if>
 
 			<c:if test="${sessionScope.cookNo != null && sessionScope.cookNo > 0 }">
 				${sessionScope.cookName }님 환영합니다.
-				<a href="${path }/member_servlet/modify.do?no=${sessionScope.cookNo}">[회원정보수정]</a>
-				<a href="${path }/member_servlet/delete.do?no=${sessionScope.cookNo}">[회원탈퇴]</a>
+				<a href="${path }/member_servlet/goModify.do?no=${sessionScope.cookNo}">[회원정보수정]</a>
+				<a href="${path }/member_servlet/goDelete.do?no=${sessionScope.cookNo}">[회원탈퇴]</a>
 				<a href="${path }/member_servlet/logout.do">[로그아웃]</a>
 			</c:if>
 		</td>

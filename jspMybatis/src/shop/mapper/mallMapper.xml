@@ -5,21 +5,51 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 
 <mapper namespace="mall">
 	<select id="getAllRowsCount" resultType="int">
-		SELECT COUNT(*) FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no
+		SELECT COUNT(*) 
+		FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no 
+		WHERE memberNo = #{cookNo}
+	</select>
+	
+	<select id="getAllRowsCountNonMember" resultType="int">
+		SELECT COUNT(*) 
+		FROM nonMemberCart LEFT OUTER JOIN product ON nonMemberCart.productNo = product.no 
+		WHERE sessionId = #{sessionId}
 	</select>
 	
 	<select id="getPagingList" resultType="shop.model.dto.CartDTO">
 		SELECT * FROM (SELECT A.*, Rownum Rnum FROM (
-		SELECT 
-			cart.no no, 
-			product.no productNo, 
-			product.product_img, 
-			product.name product_name, 
-			product.price product_price, 
-			cart.amount, 
-			(product.price * cart.amount) buy_money, 
-			cart.regi_date 
-		FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no 
+			SELECT 
+				cart.no no, 
+				cart.memberNo,
+				product.no productNo, 
+				product.product_img, 
+				product.name product_name, 
+				product.price product_price, 
+				cart.amount, 
+				(product.price * cart.amount) buy_money, 
+				cart.regi_date 
+			FROM cart LEFT OUTER JOIN product ON cart.productNo = product.no 
+			WHERE memberNo = #{cookNo}
+		ORDER BY no DESC
+		<![CDATA[
+		) A) WHERE Rnum >= #{startNum} AND Rnum <= #{endNum}
+		]]>
+	</select>
+	
+	<select id="getPagingListNonMember" resultType="shop.model.dto.CartDTO">
+		SELECT * FROM (SELECT A.*, Rownum Rnum FROM (
+			SELECT 
+				nonMemberCart.no no, 
+				nonMemberCart.sessionId, 
+				product.no productNo, 
+				product.product_img, 
+				product.name product_name, 
+				product.price product_price, 
+				nonMemberCart.amount, 
+				(product.price * nonMemberCart.amount) buy_money, 
+				nonMemberCart.regi_date 
+			FROM nonMemberCart LEFT OUTER JOIN product ON nonMemberCart.productNo = product.no 
+			WHERE sessionId = #{sessionId}
 		ORDER BY no DESC
 		<![CDATA[
 		) A) WHERE Rnum >= #{startNum} AND Rnum <= #{endNum}
@@ -67,4 +97,20 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 		GROUP BY p.name 
 		ORDER BY product_name ASC
 	</select>
+	
+		<insert id="setInsertNonMember">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT seq_nonMemberCart.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO nonMemberCart (
+			no, sessionId, productNo, amount, regi_date
+		) 
+		VALUES (
+			#{no}, 
+			#{dto.sessionId}, 
+			#{dto.productNo}, 
+			#{dto.amount}, 
+			CURRENT_TIMESTAMP
+		)
+	</insert>
 </mapper>

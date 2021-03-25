@@ -14,6 +14,7 @@ public class CartDTO {
 	private String product_description;
 	private String product_img;
 	private int buy_money;
+	private String sessionId;
 	
 	// Constructor
 	public CartDTO() {}
@@ -97,5 +98,13 @@ public class CartDTO {
 
 	public void setBuy_money(int buy_money) {
 		this.buy_money = buy_money;
+	}
+
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
 	}
 }

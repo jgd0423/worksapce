@@ -158,10 +158,11 @@ public class Util {
 			cookName = (String)session.getAttribute("cookName");
 		}
 		
-		String[] result = new String[3];
+		String[] result = new String[4];
 		result[0] = cookNo + "";
 		result[1] = cookId;
 		result[2] = cookName;
+		result[3] = session.getId();
 		
 		return result;
 	}

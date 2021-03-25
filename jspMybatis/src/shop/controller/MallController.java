@@ -64,6 +64,7 @@ public class MallController extends HttpServlet {
 		int cookNo = Integer.parseInt(sessionArray[0]);
 		String cookId = sessionArray[1];
 		String cookName = sessionArray[2];
+		String sessionId = sessionArray[3];
 		
 		request.setAttribute("yearMonthDayMap", yearMonthDayMap);
 		request.setAttribute("ip", ip);
@@ -71,6 +72,7 @@ public class MallController extends HttpServlet {
 		request.setAttribute("no", no);
 		request.setAttribute("search_option", search_option);
 		request.setAttribute("search_data", search_data);
+		request.setAttribute("sessionId", sessionId);
 		
 		ProductDAO productDao = new ProductDAO();
 		ProductDTO productDto = new ProductDTO();
@@ -153,15 +155,27 @@ public class MallController extends HttpServlet {
 			if (url.indexOf("cart_add.do") != -1) {
 				String amount_ = request.getParameter("amount");
 				int amount = util.numberCheck(amount_, 1);
-
-				cartDto.setMemberNo(1);   // cookNo로 수정할 것
 				cartDto.setProductNo(no);
 				cartDto.setAmount(amount);
-				int result = cartDao.setInsert(cartDto);
+				
+				// cookNo가 0이면 비회원이므로 세션을 받는 다른 테이블에 저장해야한다
+				if (cookNo > 0) {
+					cartDto.setMemberNo(cookNo);
+					int result = cartDao.setInsert(cartDto);
+				} else {
+					cartDto.setSessionId(sessionId);
+					int result = cartDao.setInsertNonMember(cartDto);
+				}
+				
 			}
 			
 			// paging
-			int allRowsCount = cartDao.getAllRowsCount();
+			int allRowsCount = 0;
+			if (cookNo > 0) {
+				allRowsCount = cartDao.getAllRowsCount(cookNo);				
+			} else {
+				allRowsCount = cartDao.getAllRowsCount(sessionId);
+			}
 			final int ONE_PAGE_ROWS = 10;
 			final int MAX_PAGING_WIDTH = 10;
 			
@@ -173,7 +187,13 @@ public class MallController extends HttpServlet {
 			int startNum = pagerArr[4];
 			int endNum = pagerArr[5];
 			
-			List<CartDTO> list = cartDao.getPagingList(startNum, endNum);
+			List<CartDTO> list = new ArrayList<>();
+			if (cookNo > 0) {
+				list = cartDao.getPagingList(startNum, endNum, cookNo);
+			} else {
+				list = cartDao.getPagingList(startNum, endNum, sessionId);
+			}
+			
 			
 			request.setAttribute("menu_gubun", "cart_list");
 			request.setAttribute("list", list);
