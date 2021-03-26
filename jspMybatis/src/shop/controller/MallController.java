@@ -219,7 +219,9 @@ public class MallController extends HttpServlet {
 			String chkNos = request.getParameter("chkNo");
 			chkNos = chkNos.substring(1);
 			String[] chkNoArray = chkNos.split(",");
-			int result = cartDao.setDeleteBatch(chkNoArray);
+			
+			int result = cartDao.setDeleteBatch(chkNoArray, no);
+
 		}
 	}
 

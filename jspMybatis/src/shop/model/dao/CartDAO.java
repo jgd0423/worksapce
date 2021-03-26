@@ -68,12 +68,17 @@ public class CartDAO {
 		return result;
 	}
 
-	public int setDeleteBatch(String[] chkNoArray) {
+	public int setDeleteBatch(String[] chkNoArray, int no) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("array", chkNoArray);
 		
 		SqlSession session = MybatisManager.getInstance().openSession();
-		int result = session.delete("mall.setDeleteBatch", map);
+		int result = 0;
+		if (no > 0) {
+			result = session.delete("mall.setDeleteBatch", map);			
+		} else {
+			result = session.delete("mall.setDeleteBatchNonMember", map);
+		}
 		session.commit();
 		session.close();
 		return result;
@@ -105,4 +110,5 @@ public class CartDAO {
 		
 		return result;
 	}
+
 }

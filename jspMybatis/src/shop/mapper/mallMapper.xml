@@ -81,6 +81,15 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 		)
 	</delete>
 	
+		<delete id="setDeleteBatchNonMember" parameterType="map">
+		DELETE FROM nonMemberCart
+		WHERE no IN (
+			<foreach collection="array" index="index" item="item" open="" close="" separator=",">
+				#{item}
+			</foreach>
+		)
+	</delete>
+	
 	<!--  
 	<delete id="setDeleteBatch" parameterType="map">
 		DELETE FROM cart
