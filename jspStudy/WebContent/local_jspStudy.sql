@@ -420,3 +420,62 @@ SELECT product.*, (SELECT SUM(amount) FROM cart WHERE cart.productNo = product.n
 SELECT p.name product_name, SUM(c.amount * p.price) buy_money FROM cart c INNER JOIN product p ON c.productNo = p.no GROUP BY p.name ORDER BY product_name ASC;
 
 select count(*) from member where 1=1;
+
+CREATE OR REPLACE VIEW v_totalTablesCount AS
+select 
+    member.member, 
+    memo.memo,
+    guestbook.guestbook,
+    survey.survey,
+    freeboard.freeboard,
+    codingboard.codingboard,
+    product.product,
+    cart.cart,
+    nonMemberCart.nonMemberCart
+from
+    (select count(*) member from member) member,
+    (select count(*) memo from memo) memo,
+    (select count(*) guestbook from guestbook) guestbook,
+    (select count(*) survey from survey) survey,
+    (select count(*) freeboard from board where tbl = 'freeboard') freeboard,
+    (select count(*) codingboard from board where tbl = 'codingboard') codingboard,
+    (select count(*) product from product) product,
+    (select count(*) cart from cart) cart,
+    (select count(*) nonMemberCart from nonMemberCart) nonMemberCart;
+    
+commit;
+
+select * from v_totalTablesCount;
+
+SELECT p.name product_name, SUM(c.amount * p.price) buy_money 
+FROM cart c INNER JOIN product p ON c.productNo = p.no 
+GROUP BY p.name 
+ORDER BY product_name ASC;
+        
+SELECT p.name product_name, c.amount * p.price buy_money 
+FROM cart c INNER JOIN product p ON c.productNo = p.no 
+ORDER BY product_name ASC;
+        
+select * from product;
+select * from cart;
+select * from nonMemberCart;
+
+select productNo, amount from cart
+union all
+select productNo, amount from nonMemberCart;
+
+SELECT 
+    p.name product_name, 
+    SUM(c.amount * p.price) buy_money 
+FROM 
+    (select 
+        productNo, 
+        amount 
+    from cart
+    union all
+    select 
+        productNo, 
+        amount 
+    from nonMemberCart) c INNER JOIN product p ON c.productNo = p.no 
+GROUP BY p.name 
+ORDER BY product_name ASC;

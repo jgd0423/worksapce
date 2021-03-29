@@ -96,4 +96,8 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 	<select id="getIdCheckWin" resultType="String">
 		SELECT id FROM ${MEMBER} WHERE id = #{id}
 	</select>
+	
+	<select id="getTotalTablesCount" resultType="map">
+		SELECT * FROM v_totalTablesCount
+	</select>
 </mapper>

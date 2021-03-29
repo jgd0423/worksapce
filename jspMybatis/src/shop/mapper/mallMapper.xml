@@ -101,13 +101,24 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 	-->
 	
 	<select id="getListCartProductGroup" resultType="shop.model.dto.CartDTO">
-		SELECT p.name product_name, SUM(c.amount * p.price) buy_money 
-		FROM cart c INNER JOIN product p ON c.productNo = p.no 
+		SELECT 
+		  p.name product_name, 
+		  SUM(c.amount * p.price) buy_money 
+		FROM 
+		  (select 
+		  	productNo, 
+		    amount 
+		  from cart
+		  union all
+		  select 
+		  	productNo, 
+		    amount 
+		  from nonMemberCart) c INNER JOIN product p ON c.productNo = p.no 
 		GROUP BY p.name 
 		ORDER BY product_name ASC
 	</select>
 	
-		<insert id="setInsertNonMember">
+	<insert id="setInsertNonMember">
 		<selectKey keyProperty="no" resultType="int" order="BEFORE">
 			SELECT seq_nonMemberCart.NEXTVAL FROM dual
 		</selectKey>

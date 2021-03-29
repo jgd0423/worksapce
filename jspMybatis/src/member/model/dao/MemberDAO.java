@@ -122,4 +122,13 @@ public class MemberDAO {
 		session.close();
 		return result;
 	}
+	
+	public Map<String, Object> getTotalTablesCount() {
+		Map<String, Object> map = new HashMap<>();
+		
+		SqlSession session = MybatisManager.getInstance().openSession();
+		Map<String, Object> totalTablesCountMap = session.selectOne("member.getTotalTablesCount", map);
+		session.close();
+		return totalTablesCountMap;
+	}
 }

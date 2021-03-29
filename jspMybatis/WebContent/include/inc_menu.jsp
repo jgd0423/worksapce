@@ -52,7 +52,7 @@
 			<a href="${path }/mall_servlet/index.do">Mall(쇼핑몰)</a>
 		</td>
 		<td id="chart" style="padding: 0px 20px; ${menu_name == 'chart' ? 'background-color: silver;' : ''}">
-			<a href="${path }/chart_servlet/index.do">Chart</a>
+			<a href="${path }/chart_servlet/index.do">Cart Chart</a>
 		</td>
 		<td id="smtpEmail" style="padding: 0px 20px; ${menu_name == 'email' ? 'background-color: silver;' : ''}">
 			<a href="${path }/email_servlet/index.do">Email</a>

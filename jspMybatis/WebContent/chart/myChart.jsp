@@ -26,7 +26,6 @@ function drawChart(
 		dataType: "json",
 		async: false
 	}).responseText;
-	console.log(jsonData);
 	
 	var data = new google.visualization.DataTable(jsonData);
 	let chart;
@@ -42,8 +41,8 @@ function drawChart(
 	chart.draw(data, {
 		title: chartSubject,
 		curveType: curveType,
-		width: 600,
-		height: 440
+		width: 800,
+		height: 640
 	});
 }
 

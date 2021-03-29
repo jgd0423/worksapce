@@ -15,6 +15,8 @@
 <script>
 
 $(document).ready(() => {
+	goPage('createJson');
+	
 	$("#btnCreateJson").click(() => {
 		goPage('createJson');
 	});

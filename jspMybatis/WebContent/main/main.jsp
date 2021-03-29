@@ -9,7 +9,7 @@
 <meta http-equiv="Cache-Control" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 <meta http-equiv="Pragma" content="no-cache" />
-<title>Mybatis Test</title>
+<title>Not Quite My Tempo</title>
 <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <body>

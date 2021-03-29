@@ -104,7 +104,7 @@ public class ChartController extends HttpServlet {
 			bufferedWriter.close();
 			
 			request.setAttribute("menu_gubun", "chart_myChart");
-			request.setAttribute("chat_subject", "차트 제목입니다.");
+			request.setAttribute("chart_subject", "회원카트 + 비회원카트");
 			request.setAttribute("chart_type", "PieChart");
 			request.setAttribute("chart_jsonFileName", newFileName);
 			
@@ -112,6 +112,37 @@ public class ChartController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher(page);
 			rd.forward(request, response);
 			
+			
+		} else if (url.indexOf("getTotalTablesCountJson.do") != -1) {
+			ChartService service = new ChartService();
+			JSONObject json = service.getTotalTablesCountData();
+			request.setAttribute("data", json);
+			
+			String img_path01 = request.getSession().getServletContext().getRealPath("/attach/json/");
+			File isDir = new File(img_path01);
+			if (!isDir.isDirectory()) {
+				isDir.mkdir();
+			}
+			String img_path02 = img_path01.replace("\\", "/");
+			String img_path03 = img_path01.replace("\\", "\\\\");
+			
+			util.fileDelete(request, img_path03);
+			
+			String newFileName = util.getDateTimeType() + "-" + util.createUuid() + ".json";
+			File file = new File(img_path03 + newFileName);
+			file.createNewFile();
+			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+			bufferedWriter.write(json.toString());
+			bufferedWriter.close();
+			
+			request.setAttribute("menu_gubun", "chart_myChart");
+			request.setAttribute("chart_subject", "테이블 별 레코드 수");
+			request.setAttribute("chart_type", "ColumnChart");
+			request.setAttribute("chart_jsonFileName", newFileName);
+			
+			page = "/chart/myChart.jsp";
+			RequestDispatcher rd = request.getRequestDispatcher(page);
+			rd.forward(request, response);
 			
 		}
 	}
