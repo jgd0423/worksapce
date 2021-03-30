@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
 
-<div id="result" style="border: 1px solid red; position: relative;"></div>
+<div id="result" style="position: relative;"></div>
 
 <script>
 

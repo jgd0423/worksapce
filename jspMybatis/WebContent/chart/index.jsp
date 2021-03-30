@@ -2,6 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../../include/inc_header.jsp" %>
 
+<head>
+	<meta charset="utf-8" />
+</head>
+
 <script src="https://www.google.com/jsapi"></script>
 
 <button type="button" id="btnCreateJson">Chart</button>

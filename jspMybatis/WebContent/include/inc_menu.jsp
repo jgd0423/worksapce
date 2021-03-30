@@ -57,12 +57,5 @@
 		<td id="smtpEmail" style="padding: 0px 20px; ${menu_name == 'email' ? 'background-color: silver;' : ''}">
 			<a href="${path }/email_servlet/index.do">Email</a>
 		</td>
-		<td style="padding: 0px 20px;">
-			<a href="#">관리자</a>
-		</td>
 	</tr>
 </table>
-
-
-==> ${menu_gubun } / ${under_bar_index} / ${menu_name}<br>
-

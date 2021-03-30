@@ -2,10 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
 
-
-span_list_size : <span id="span_list_size" style="display: ;">${allRowsCount }</span><br>
-<%-- span_answer_total : <span id="span_answer_total" style="display: ;"></span><br>--%>
-${allRowsCount }개의 레코드가 있습니다.<br>
+<div style="display: none">
+	span_list_size : <span id="span_list_size" style="display: ;">${allRowsCount }</span><br>
+	<%-- span_answer_total : <span id="span_answer_total" style="display: ;"></span><br>--%>
+</div>
 
 <table border="1" align="center" width="80%">
 	<tr>

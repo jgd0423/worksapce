@@ -22,16 +22,16 @@ public class ChartService {
 		JSONObject col2 = new JSONObject();
 		JSONArray title = new JSONArray();
 		
-		col1.put("label", "테이블명");
+		col1.put("label", "tableName");
 		col1.put("type", "string");
-		col2.put("label", "레코드");
+		col2.put("label", "record count");
 		col2.put("type", "number");
 		
 		title.add(col1);
 		title.add(col2);
 		data.put("cols", title);   // 칼럼에 객체 추가
 		
-		String[] keys = {"MEMBER", "MEMO", "GUESTBOOK", "SURVEY", "FREEBOARD", "CODINGBOARD", "PRODUCT", "CART", "NONMEMBERCART" };
+		String[] keys = { "MEMBER", "MEMO", "GUESTBOOK", "SURVEY", "FREEBOARD", "CODINGBOARD", "PRODUCT", "CART", "NONMEMBERCART" };
 	
 		
 		JSONArray body = new JSONArray();   // 실제 데이터
@@ -60,9 +60,9 @@ public class ChartService {
 		JSONObject col2 = new JSONObject();
 		JSONArray title = new JSONArray();
 		
-		col1.put("label", "상품명");
+		col1.put("label", "product");
 		col1.put("type", "string");
-		col2.put("label", "금액");
+		col2.put("label", "price");
 		col2.put("type", "number");
 		
 		title.add(col1);

@@ -20,8 +20,6 @@
 	<button type="button" onclick="chooseAll()">전체목록</button>
 </form>
 
-${allRowsCount }개의 레코드가 있습니다.
-
 <c:if test="${list.size() == 0 }">
 	<tr>
 		<td colspan="7" height="200" align="center">등록된 방명록이 없습니다.</td>

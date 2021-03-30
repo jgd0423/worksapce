@@ -2,8 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
 
-${allRowsCount }개의 레코드가 있습니다.
-
 <table border="1" align="center" width="80%">
 	<tr>
 		<td colspan="4" align="center">
