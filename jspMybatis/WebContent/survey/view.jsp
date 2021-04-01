@@ -2,8 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
 
+<div style="display: none">
+	span_answer: <span id="span_answer"></span>
+</div>
 
-span_answer: <span id="span_answer"></span>
 
 <table border="1" align="center" width="80%">
 	<tr>

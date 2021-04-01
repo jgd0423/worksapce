@@ -22,7 +22,7 @@
 				<input type="text" name="id" id="id" style="width: 100px;" />
 				<span id="spanMsg"></span>
 				<br>
-				<input type="text" name="result" id="result" style="width: 100px;" />
+				<div style="display: none;"><input type="text" name="result" id="result" style="width: 100px;" /></div>
 			</td>
 		</tr>
 		<tr>

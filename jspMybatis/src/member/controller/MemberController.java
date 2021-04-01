@@ -227,20 +227,18 @@ public class MemberController extends HttpServlet {
 		
 			
 		} else if (url.indexOf("view.do") != -1) {
-			
-			// 세션과 no가 같은 사람만 들어가게 하기
 			HttpSession session = request.getSession();
 			
 			if (session.getAttribute("cookNo") != null) {
 				cookNo = (Integer)session.getAttribute("cookNo");
 			}
 			
-			if (cookNo != no) {
+			if (cookNo == 0) {
 				response.setContentType("text/html; charset=utf-8");
 				PrintWriter out = response.getWriter();
 				out.println("<script>");
 				out.println("alert('잘못된 접근입니다.');");
-				out.println("history.back();");
+				out.println("chooseProc('list', '1', '')");
 				out.println("</script>");
 				return;
 			}
