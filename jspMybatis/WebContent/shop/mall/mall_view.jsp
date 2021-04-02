@@ -59,37 +59,8 @@
 				</c:forEach>
 			</select>
 			<button type="button" onclick="chooseProc('cart_add', '1', '${dto.no}')">장바구니담기</button>
-			<button type="button" onclick="chooseProc('buy', '1', '${dto.no}')">바로구매</button>
 			<button type="button" onclick="chooseProc('mall_list', '1', '')">쇼핑하기</button>
 			<button type="button" onclick="chooseProc('cart_list', '1', '')">장바구니</button>
 		</td>
 	</tr>
-	<%-- <tr>
-		<td conspan="2" height="50px">
-			<table border="1" width="100%" align="center">
-				<tr>
-					<td width="100px">이전상품 : </td>
-					<td>
-						<c:if test="${dto.preName == null }">
-							이전 상품이 없습니다.
-						</c:if>
-						<c:if test="${dto.preName != null }">
-							<a href="#" onclick="chooseProc('mall_view', '', '${dto.preNo}')">${dto.preName }</a>
-						</c:if>
-					</td>
-				</tr>
-				<tr>
-					<td width="100px">다음상품 : </td>
-					<td>
-						<c:if test="${dto.nxtName == null }">
-							다음 상품이 없습니다.
-						</c:if>
-						<c:if test="${dto.nxtName != null }">
-							<a href="#" onclick="chooseProc('mall_view', '', '${dto.nxtNo}')">${dto.nxtName }</a>
-						</c:if>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr> --%>
 </table>

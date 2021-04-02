@@ -51,8 +51,12 @@
 	<c:if test="${list.size() > 0 }">
 		<c:forEach var="dto" items="${list }">
 			<a named="a_${tableRowNum }"></a>
-			q_${tableRowNum } : <span id="q_${tableRowNum}">${dto.no }</span><br>
-			span_answer_${tableRowNum } : <span id="span_answer_${tableRowNum }" style="display: ;"></span><br>
+			<br>
+			<br>
+			<div style="display: none">
+				q_${tableRowNum } : <span id="q_${tableRowNum}">${dto.no }</span><br>
+				span_answer_${tableRowNum } : <span id="span_answer_${tableRowNum }" style="display: ;"></span><br>
+			</div>
 			<table border="1" width="80%">
 				<tr>
 					<td>Q) ${dto.question }</td>
