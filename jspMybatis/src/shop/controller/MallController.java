@@ -121,7 +121,7 @@ public class MallController extends HttpServlet {
 			
 			int productListSize = list.size();
 			int oneLineSize = 4;
-			int loopNumforI = (int) Math.ceil((double) (productListSize / oneLineSize)) - 1;
+			int loopNumforI = (int) Math.ceil((double) (productListSize / oneLineSize));
 			if (loopNumforI < 0) {
 				loopNumforI = 0;
 			}

@@ -43,6 +43,7 @@
 				name="noticeGubun" 
 				id="noticeGubun" 
 				value="${dto.noticeNo > 0 ? 'T' : 'F' }" 
+				style="display: none"
 			/>
 			<input 
 				type="checkbox" 
@@ -63,6 +64,7 @@
 				name="secretGubun" 
 				id="secretGubun" 
 				value="${dto.secretGubun}" 
+				style="display: none"
 			/>
 			<input 
 				type="checkbox" 

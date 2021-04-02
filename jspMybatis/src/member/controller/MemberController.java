@@ -375,7 +375,10 @@ public class MemberController extends HttpServlet {
 				int result = dao.setDelete(dto);
 				HttpSession session = request.getSession();
 				session.invalidate();
-				out.println("<script>alert('삭제완료'); chooseProc('list', '1', '');</script>");
+				//out.println("<script>alert('삭제완료'); chooseProc('list', '1', '');</script>");
+				out.println("<script>alert('삭제완료');");
+				out.println("location.href='" + path + "';");
+				out.println("</script>");
 			} else {
 				out.println("<script>alert('비밀번호오류'); chooseProc('view', '1', '" + no + "');</script>");
 			}

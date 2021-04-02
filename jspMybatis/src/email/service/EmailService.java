@@ -14,8 +14,8 @@ public class EmailService {
 
     public void mailSender(EmailDTO dto) throws Exception {
         String host = "smtp.gmail.com";
-        String username = ""; //@gmail.com 제외
-        String password = "";
+        String username = "suseongland"; //@gmail.com 제외
+        String password = "0561ekalA!";
         int port = 587;
 
         String fromName = dto.getFromName();

@@ -52,7 +52,7 @@
 		</tr>
 	</c:if>
 	<c:if test="${list.size() > 0 }">
-		<c:forEach var="i" begin="0" end="${loopNumforI}" step="1" >
+		<c:forEach var="i" begin="0" end="${loopNumforI >= 0 ? loopNumforI : 0}" step="1" >
 			<tr>
 				<c:forEach var="j" begin="${i * oneLineSize}" end="${(i * oneLineSize) + oneLineSize - 1 }" step="1" >
 					<c:set var="dto" value="${list[j] }"></c:set>

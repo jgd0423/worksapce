@@ -36,7 +36,7 @@
 	<tr>
 		<td style="align: center;">공지글</td>
 		<td>
-			<input type="text" name="nogiceGubun" id="noticeGubun" />
+			<input type="text" name="nogiceGubun" id="noticeGubun" style="display: none" />
 			<input 
 				type="checkbox" 
 				name="noticeGubunCheckBox" 
@@ -50,7 +50,7 @@
 	<tr>
 		<td style="align: center;">비밀글</td>
 		<td>
-			<input type="text" name="secretGubun" id="secretGubun" />
+			<input type="text" name="secretGubun" id="secretGubun" style="display: none" />
 			<input 
 				type="checkbox" 
 				name="secretGubunCheckBox" 
