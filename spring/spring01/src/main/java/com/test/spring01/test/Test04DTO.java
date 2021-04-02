@@ -1,4 +1,4 @@
-package com.test.spring01;
+package com.test.spring01.test;
 
 public class Test04DTO {
 	// Fields

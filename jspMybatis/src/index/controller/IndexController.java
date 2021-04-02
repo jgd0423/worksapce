@@ -26,7 +26,7 @@ public class IndexController extends HttpServlet {
 		String path = request.getContextPath();
 		String url = request.getRequestURL().toString();
 		
-		request.setAttribute("menu_gubun", "index");
+		request.setAttribute("menu_gubun", "member_index");
 		
 		String page = "/main/main.jsp";
 		RequestDispatcher rd = request.getRequestDispatcher(page);

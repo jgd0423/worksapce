@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_menu.jsp" %>
 
-<h2>test05Proc.do / exam01Result.jsp</h2>
+<h2>test06Proc.do / exam01Result.jsp</h2>
 <h2>이름 : ${dto.name }</h2>
 <h2>국어 : ${dto.kor }</h2>
 <h2>영어 : ${dto.eng }</h2>

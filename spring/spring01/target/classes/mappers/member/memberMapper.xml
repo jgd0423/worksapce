@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member">
+	<select id="getList" resultType="com.test.spring01.member.model.dto.MemberDTO">
+		SELECT * FROM member ORDER BY name
+	</select>
+	
+	<select id="getView" resultType="com.test.spring01.member.model.dto.MemberDTO">
+		SELECT * FROM member WHERE id = #{id}
+	</select>
+	
+	<insert id="setInsert">
+		INSERT INTO member (
+			id, passwd, name, email
+		)
+		VALUES (
+			#{id}, 
+			#{passwd}, 
+			#{name}, 
+			#{email}
+		)
+	</insert>
+	
+	<update id="setUpdate">
+		UPDATE member 
+		SET 
+			email = #{email}
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="setDelete">
+		DELETE FROM member WHERE id = #{id}
+	</delete>
+</mapper>

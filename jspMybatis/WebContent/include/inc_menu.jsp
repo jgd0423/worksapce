@@ -21,9 +21,11 @@
 		</td>
 	</tr>
 	<tr>
+		<%-- 
 		<td id="home" style="padding: 0px 20px; ${menu_name == 'index' ? 'background-color: silver;' : ''}">
 			<a href="${path }">HOME</a>
 		</td>
+		--%>
 		<td id="member" style="padding: 0px 20px; ${menu_name == 'member' ? 'background-color: silver;' : ''}">
 			<a href="${path }/member_servlet/index.do">회원관리</a>
 		</td>
