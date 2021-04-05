@@ -34,4 +34,8 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 	<delete id="setDelete">
 		DELETE FROM member WHERE id = #{id}
 	</delete>
+	
+	<select id="checkPasswd" resultType="int">
+		SELECT COUNT(*) FROM member WHERE id = #{id} AND passwd = #{passwd}
+	</select>
 </mapper>

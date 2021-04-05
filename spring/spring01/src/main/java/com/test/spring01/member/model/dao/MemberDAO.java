@@ -9,5 +9,6 @@ public interface MemberDAO {
 	public MemberDTO getView(String id);
 	public void setInsert(MemberDTO dto);
 	public void setUpdate(MemberDTO dto);
-	public void setDelete(MemberDTO dto);
+	public void setDelete(String id);
+	public int checkPasswd(String id, String passwd);
 }

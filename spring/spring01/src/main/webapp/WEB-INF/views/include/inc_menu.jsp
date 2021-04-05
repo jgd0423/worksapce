@@ -27,3 +27,7 @@
 <a href="${path}/memberList.do">회원관리</a>
 
 <a href="${path}/memberWrite.do">회원등록</a>
+
+<a href="${path}/examList.do">exam관리</a>
+
+<a href="${path}/examWrite.do">exam등록</a>

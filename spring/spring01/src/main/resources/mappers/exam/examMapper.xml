@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="exam">
+	<select id="getList" resultType="com.test.spring01.exam.model.dto.ExamDTO">
+		SELECT * FROM exam ORDER BY name
+	</select>
+	
+	<select id="getView" resultType="com.test.spring01.exam.model.dto.ExamDTO">
+		SELECT * FROM exam WHERE no = #{no}
+	</select>
+	
+	<insert id="setInsert">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT seq_exam.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO exam (
+			no, name, socialNumber, gender, age
+		)
+		VALUES (
+			#{no}, 
+			#{name}, 
+			#{socialNumber}, 
+			#{gender},
+			#{age}
+		)
+	</insert>
+	
+	<update id="setUpdate">
+		UPDATE exam 
+		SET 
+			name = #{name}
+		WHERE no = #{no}
+	</update>
+	
+	<delete id="setDelete">
+		DELETE FROM exam WHERE no = #{no}
+	</delete>
+</mapper>
