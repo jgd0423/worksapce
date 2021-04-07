@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
 
+<h1>home입니다.</h1>
+
 <script src="https://www.google.com/jsapi"></script>
 
 <div id="result" style="height: 100%; position: relative;"></div>

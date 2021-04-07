@@ -274,7 +274,7 @@ public class MemberController extends HttpServlet {
 				PrintWriter out = response.getWriter();
 				out.println("<script>");
 				out.println("alert('잘못된 접근입니다.');");
-				out.println("history.back();");
+				out.println("chooseProc('list', '1', '');");
 				out.println("</script>");
 				return;
 			}

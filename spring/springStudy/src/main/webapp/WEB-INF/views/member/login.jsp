@@ -29,12 +29,12 @@
 function login() {
 	if (confirm("로그인하시겠습니까?")) {
 		document.loginForm.method = 'post';
-		document.loginForm.action = '${path}/member_servlet/loginProc.do';
+		document.loginForm.action = '${path}/member/loginProc.do';
 		document.loginForm.submit();
 	}
 }
 
 function join() {
-	location.href = '${path}/member_servlet/write.do';
+	location.href = '${path}/member/write.do';
 }
 </script>

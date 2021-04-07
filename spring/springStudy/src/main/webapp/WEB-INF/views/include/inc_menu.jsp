@@ -16,7 +16,7 @@
 				${sessionScope.cookName }님 환영합니다.
 				<a href="${path }/member/goModify.do?no=${sessionScope.cookNo}">[회원정보수정]</a>
 				<a href="${path }/member/goDelete.do?no=${sessionScope.cookNo}">[회원탈퇴]</a>
-				<a href="${path }/membert/logout.do">[로그아웃]</a>
+				<a href="${path }/member/logout.do">[로그아웃]</a>
 			</c:if>
 		</td>
 	</tr>
