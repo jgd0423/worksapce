@@ -9,6 +9,6 @@ import lombok.Setter;
 @Component
 @Data
 public class Restaurant {
-	@Setter(onMethod_ = @Autowired)
+	@Setter(onMethod_ = { @Autowired })
 	private Chef chef;
 }

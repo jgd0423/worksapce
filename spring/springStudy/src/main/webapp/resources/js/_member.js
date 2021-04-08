@@ -70,6 +70,7 @@ function goPage(proc) {
 		type: "post",
 		data: param,
 		url: url,
+		cache: false,
 		success: (data) => {
 			if (proc === "list") {
 				$("#result").html(data);

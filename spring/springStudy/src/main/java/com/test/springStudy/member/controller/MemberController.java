@@ -120,7 +120,7 @@ public class MemberController {
 	
 	@RequestMapping("/writeProc.do")
 	public void member_writeProc(
-			// HttpServletResponse response,
+			HttpServletResponse response,
 			Model model,
 			@RequestParam(value="id", defaultValue="") String id,
 			@RequestParam(value="passwd", defaultValue="") String passwd,
@@ -148,21 +148,20 @@ public class MemberController {
 		
 		int result = memberDao.setInsert(dto);
 		model.addAttribute("menu_gubun", "member_writeProc");
-		// System.out.println("result - :" + result);
-/*
+
 		try {
   			response.setContentType("text/html; charset=utf-8");
 			PrintWriter out = response.getWriter();
 			out.println("<script>");
 			out.println("alert('정상적으로 등록되었습니다.');");
-			out.println("suntaek_proc('list', '1', '');");
+			out.println("chooseProc('list', '1', '');");
 			out.println("</script>");
 			out.flush();
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-*/		
+		
 	}
 	
 	@RequestMapping("/id_check.do")
@@ -200,6 +199,18 @@ public class MemberController {
 		out.println(result);
 		out.flush();
 		out.close();
+	}
+	
+	@RequestMapping("/goModify.do")
+	public String member_goModify(
+			Model model,
+			HttpServletRequest request
+			) throws UnknownHostException {
+		Map<String, Object> map = topInfo(request);
+		int no = (int)map.get("no");
+		model.addAttribute("menu_gubun", "member_modify");
+		model.addAttribute("no", no);
+		return "main/main";
 	}
 	
 	@RequestMapping("/modify.do")
@@ -277,6 +288,18 @@ public class MemberController {
 		}
 		out.flush();
 		out.close(); 
+	}
+	
+	@RequestMapping("/goDelete.do")
+	public String member_goDelete(
+			Model model,
+			HttpServletRequest request
+			) throws UnknownHostException {
+		Map<String, Object> map = topInfo(request);
+		int no = (int)map.get("no");
+		model.addAttribute("no", no);
+		model.addAttribute("menu_gubun", "member_delete");
+		return "main/main";
 	}
 	
 	@RequestMapping("/delete.do")
@@ -363,7 +386,6 @@ public class MemberController {
 			@RequestParam(value="id", defaultValue="") String id,
 			@RequestParam(value="passwd", defaultValue="") String passwd
 			) throws UnknownHostException {
-		System.out.println("here is loginProc");
 		Map<String, Object> map = topInfo(request);
 		String path = (String)map.get("path");
 		MemberDTO dto = new MemberDTO();
@@ -376,9 +398,9 @@ public class MemberController {
 		String temp = "";
 		
 		if (resultDto == null) {
-			temp = "/member/login";
+			temp = "goLogin.do";
 		} else if (resultDto.getNo() == 0) { // 실패
-			temp = "/member/login";
+			temp = "goLogin.do";
 		} else { // 성공
 			// 세션 등록
 			HttpSession session = request.getSession();
@@ -386,10 +408,10 @@ public class MemberController {
 			session.setAttribute("cookNo", resultDto.getNo());
 			session.setAttribute("cookId", resultDto.getId());
 			session.setAttribute("cookName", resultDto.getName());
-			temp = "main/main";
+			temp = "index.do";
 		}
-		System.out.println(temp);
-		return temp;
+
+		return "redirect:" + temp;
 	}
 	
 	@RequestMapping("/logout.do")

@@ -58,7 +58,7 @@ public class MemoController extends HttpServlet {
 			if (no_ != "") {
 				int no = Integer.parseInt(no_);
 				dto.setNo(no);
-				dao.setUpdate(dto);
+				dao.setUpdate(dto);	
 			} else {
 				dao.setInsert(dto);				
 			}

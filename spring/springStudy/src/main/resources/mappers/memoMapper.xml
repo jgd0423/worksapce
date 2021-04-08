@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memo">
+	<insert id="setInsert">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT seq_memo.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO memo (
+			no, writer, content, regiDate
+		)
+		VALUES (
+			#{no}, 
+			#{dto.writer}, 
+			#{dto.content}, 
+			CURRENT_TIMESTAMP
+		)
+	</insert>
+	
+	<select id="getSelectAll" resultType="com.test.springStudy.memo.model.dto.MemoDTO">
+		SELECT * FROM memo ORDER BY no DESC
+	</select>
+	
+	<delete id="setDelete">
+		DELETE FROM memo WHERE no = #{dto.no}
+	</delete>
+	
+	<select id="getAllRowsCount" resultType="int">
+		SELECT COUNT(*) FROM memo WHERE no > 0
+	</select>
+	
+	<select id="getPagingList" resultType="com.test.springStudy.memo.model.dto.MemoDTO">
+		SELECT * FROM (SELECT ROWNUM Rnum, a.* FROM (
+		SELECT * FROM memo WHERE no > 0 
+		ORDER BY no DESC
+		<![CDATA[
+		) a) WHERE Rnum >= #{startNum} AND Rnum <= #{endNum}
+		]]>
+	</select>
+	
+	<select id="getSelectOne" resultType="com.test.springStudy.memo.model.dto.MemoDTO">
+		SELECT * FROM memo WHERE no = #{dto.no}
+	</select>
+	
+	<update id="setUpdate">
+		UPDATE memo SET writer = #{dto.writer}, content = #{dto.content} WHERE no = #{dto.no}
+	</update>
+</mapper>
