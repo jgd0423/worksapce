@@ -161,7 +161,6 @@ public class MemberController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	@RequestMapping("/id_check.do")

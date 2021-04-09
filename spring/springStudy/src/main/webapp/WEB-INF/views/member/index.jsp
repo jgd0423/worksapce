@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../include/inc_header.jsp" %>
 
-<div style="display: ">
+<div style="display: none">
 	proc : <span id="span_proc"></span><br>
 	pageNumber : <span id="span_pageNumber">${pageNum }</span><br>
 	no : <span id="span_no">${no }</span><br>

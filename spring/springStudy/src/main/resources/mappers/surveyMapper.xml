@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="survey">
+	<insert id="setInsertQuestion">
+		INSERT INTO survey (
+			no, question, ans1, ans2, ans3, ans4, 
+			status, start_date, last_date, regi_date
+		) 
+		VALUES (
+			(SELECT NVL(MAX(no), 0) + 1 FROM survey), 
+			#{dto.question}, 
+			#{dto.ans1}, 
+			#{dto.ans2}, 
+			#{dto.ans3}, 
+			#{dto.ans4}, 
+			#{dto.status}, 
+			#{dto.start_date}, 
+			#{dto.last_date}, 
+			CURRENT_TIMESTAMP
+		)
+	</insert>
+	
+	<sql id="search">
+		<choose>
+			<when test="list_gubun == 'ing' ">
+				AND (CURRENT_TIMESTAMP BETWEEN start_date AND last_date) 
+			</when>
+			<when test="list_gubun == 'end' ">
+				AND CURRENT_TIMESTAMP > last_date 
+			</when>
+		</choose>
+		<if 
+			test="
+			search_option != null 
+			and search_option != '' 
+			and search_data != null 
+			and search_date != '' 
+		">
+			AND (${search_option} LIKE '%' || #{search_data} || '%')
+		</if>
+		<if 
+			test='
+			search_date_start != null 
+			and search_date_start != ""
+			and search_date_end != null
+			and search_date_end != ""
+			and search_date_check == "O"
+		'>
+			<![CDATA[
+			AND (start_date >= TO_TIMESTAMP(#{search_date_start}) 
+			AND last_date <= TO_TIMESTAMP(#{search_date_end})) 
+			]]>
+		</if>
+	</sql>
+	
+	<select id="getAllRowsCount" resultType="int">
+		SELECT COUNT(*) FROM survey WHERE 1=1 
+		<include refid="search"></include>
+	</select>
+	
+	<select id="getPagingList" resultType="com.test.springStudy.survey.model.dto.SurveyDTO">
+		SELECT * FROM (SELECT A.*, Rownum Rnum FROM (
+		
+		SELECT t1.*, 
+		(SELECT COUNT(*) FROM survey_answer t2 WHERE t2.no = t1.no) survey_counter 
+		FROM survey t1 WHERE 1=1
+		<include refid="search"></include>
+		ORDER BY no DESC
+		<![CDATA[
+		) A) WHERE Rnum >= #{startNum} AND Rnum <= #{endNum}
+		]]>
+	</select>
+	
+	<select id="getSelectOne" resultType="com.test.springStudy.survey.model.dto.SurveyDTO">
+		SELECT * FROM survey WHERE no = #{no}
+	</select>
+	
+	<insert id="setInsertAnswer">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			SELECT seq_survey_answer.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO survey_answer (
+			answer_no, no, answer, regi_date
+		) 
+		VALUES (
+			#{no}, 
+			#{dto.no},
+			#{dto.answer}, 
+			CURRENT_TIMESTAMP
+		)
+	</insert>
+	
+	<select id="getSurveyNoAnswers" resultType="map">
+		SELECT no, 
+		(SELECT COUNT(answer) FROM survey_answer WHERE no = #{no} AND answer = '1') count_of_1, 
+		(SELECT COUNT(answer) FROM survey_answer WHERE no = #{no} AND answer = '2') count_of_2, 
+		(SELECT COUNT(answer) FROM survey_answer WHERE no = #{no} AND answer = '3') count_of_3, 
+		(SELECT COUNT(answer) FROM survey_answer WHERE no = #{no} AND answer = '4') count_of_4 
+		FROM survey_answer WHERE no = #{no} GROUP BY no
+	</select>
+	
+	<update id="setUpdateQuestion">
+		UPDATE survey 
+		SET 
+			question = #{dto.question}, 
+			ans1 = #{dto.ans1}, 
+			ans2 = #{dto.ans2}, 
+			ans3 = #{dto.ans3}, 
+			ans4 = #{dto.ans4}, 
+			status = #{dto.status}, 
+			start_date = #{dto.start_date}, 
+			last_date = #{dto.last_date}
+		WHERE no = #{dto.no}
+	</update>
+	
+	<delete id="setDeleteQuestion">
+		DELETE FROM survey WHERE no = #{dto.no}
+	</delete>
+</mapper>
