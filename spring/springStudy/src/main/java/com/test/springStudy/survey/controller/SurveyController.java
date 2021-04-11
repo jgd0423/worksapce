@@ -1,19 +1,28 @@
 package com.test.springStudy.survey.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.net.UnknownHostException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.test.springStudy.common.Util;
-import com.test.springStudy.guestbook.model.dto.GuestbookDTO;
 import com.test.springStudy.survey.model.dao.SurveyDAO;
 import com.test.springStudy.survey.model.dto.SurveyAnswerDTO;
 import com.test.springStudy.survey.model.dto.SurveyDTO;
@@ -165,5 +174,278 @@ public class SurveyController {
 		surveyDao.setInsertAnswer(surveyAnswerDto);
 		
 		return "redirect:index.do";
+	}
+	
+	@RequestMapping("/result.do")
+	public String survey_result(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model model
+			) throws IOException {
+		Map<String, Object> map = topInfo(request);
+		int no = (int)map.get("no");
+		
+		SurveyDTO dto = surveyDao.getSelectOne(no);
+		Map<String, Object> surveyNoAnswers = surveyDao.getSurveyNoAnswers(no);
+		ArrayList<Integer> answersList = new ArrayList<>();
+		ArrayList<String> answersResponseRate = new ArrayList<>();
+		
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		
+		if (surveyNoAnswers == null) {
+			out.println("<script>alert('자료가 없습니다'); chooseProc('view', '1', '" + no + "');</script>");
+			out.flush();
+			out.close();
+			return null;
+		}
+		
+		if (surveyNoAnswers != null) {
+			answersList.add(((BigDecimal)surveyNoAnswers.get("COUNT_OF_1")).intValue());
+			answersList.add(((BigDecimal)surveyNoAnswers.get("COUNT_OF_2")).intValue());
+			answersList.add(((BigDecimal)surveyNoAnswers.get("COUNT_OF_3")).intValue());
+			answersList.add(((BigDecimal)surveyNoAnswers.get("COUNT_OF_4")).intValue());
+			
+			int totalAnswerCount = 0;
+			totalAnswerCount += ((BigDecimal)surveyNoAnswers.get("COUNT_OF_1")).intValue();
+			totalAnswerCount += ((BigDecimal)surveyNoAnswers.get("COUNT_OF_2")).intValue();
+			totalAnswerCount += ((BigDecimal)surveyNoAnswers.get("COUNT_OF_3")).intValue();
+			totalAnswerCount += ((BigDecimal)surveyNoAnswers.get("COUNT_OF_4")).intValue();
+			
+			for (int i = 0; i < answersList.size(); i++) {
+				String responseRate = String.format("%.2f", (double)answersList.get(i) / totalAnswerCount * 100);
+				answersResponseRate.add(responseRate);
+			}				
+		}
+		
+		model.addAttribute("dto", dto);
+		model.addAttribute("answersList", answersList);
+		model.addAttribute("answersResponseRate", answersResponseRate);
+		
+		return "survey/result";
+	}
+	
+	@RequestMapping("write.do")
+	public String survey_write(Model model) {
+		int[] yearMonthDayHourMinSec = util.getDateTime();
+		HashMap<String, Integer> yearMonthDayMap = new HashMap<>();
+		yearMonthDayMap.put("nowYear", yearMonthDayHourMinSec[0]);
+		yearMonthDayMap.put("nowMonth", yearMonthDayHourMinSec[1]);
+		yearMonthDayMap.put("nowDay", yearMonthDayHourMinSec[2]);
+		
+		model.addAttribute("yearMonthDayMap", yearMonthDayMap);
+		model.addAttribute("menu_gubun", "survey_write");
+		return "survey/write";
+	}
+	
+	@RequestMapping("writeProc.do")
+	public void survey_writeProc(
+			HttpServletResponse response,
+			Model model,
+			@RequestParam(value="question", defaultValue="") String question,
+			@RequestParam(value="ans1", defaultValue="") String ans1,
+			@RequestParam(value="ans2", defaultValue="") String ans2,
+			@RequestParam(value="ans3", defaultValue="") String ans3,
+			@RequestParam(value="ans4", defaultValue="") String ans4,
+			@RequestParam(value="status", defaultValue="") String status,
+			@RequestParam(value="startYear", defaultValue="") String startYear,
+			@RequestParam(value="startMonth", defaultValue="") String startMonth,
+			@RequestParam(value="startDay", defaultValue="") String startDay,
+			@RequestParam(value="lastYear", defaultValue="") String lastYear,
+			@RequestParam(value="lastMonth", defaultValue="") String lastMonth,
+			@RequestParam(value="lastDay", defaultValue="") String lastDay
+			) {
+		String start_date_ = "";
+		String last_date_ = "";
+		start_date_ += startYear + "-" + startMonth + "-" + startDay;
+		start_date_ += " 00:00:00.0";
+		last_date_ += lastYear + "-" + lastMonth + "-" + lastDay;
+		last_date_ += " 23:59:59.9";
+		Timestamp start_date = Timestamp.valueOf(start_date_);
+		Timestamp last_date = Timestamp.valueOf(last_date_);
+		
+		SurveyDTO dto = new SurveyDTO();
+		dto.setQuestion(question);
+		dto.setAns1(ans1);
+		dto.setAns2(ans2);
+		dto.setAns3(ans3);
+		dto.setAns4(ans4);
+		dto.setStatus(status);
+		dto.setStart_date(start_date);
+		dto.setLast_date(last_date);
+		
+		int result = surveyDao.setInsertQuestion(dto);
+		
+		try {
+  			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("chooseProc('list', '1', '');");
+			out.println("</script>");
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("/modify.do")
+	public String survey_modify(
+			HttpServletResponse response,
+			HttpServletRequest request, 
+			Model model
+			) throws UnknownHostException {
+		Map<String, Object> map = topInfo(request);
+		int no = (int)map.get("no");
+		
+		SurveyDTO dto = surveyDao.getSelectOne(no);
+		
+		Date date = new Date();
+		Timestamp start_date = dto.getStart_date();
+		date.setTime(start_date.getTime());
+		String startDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+		String startYear = startDate.split("[-]")[0];
+		String startMonth = startDate.split("[-]")[1];
+		String startDay = startDate.split("[-]")[2];
+		
+		Timestamp last_date = dto.getLast_date();
+		date.setTime(last_date.getTime());
+		String lastDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+		String lastYear = lastDate.split("[-]")[0];
+		String lastMonth = lastDate.split("[-]")[1];
+		String lastDay = lastDate.split("[-]")[2];
+		
+		int[] yearMonthDayHourMinSec = util.getDateTime();
+		HashMap<String, Integer> yearMonthDayMap = new HashMap<>();
+		yearMonthDayMap.put("nowYear", yearMonthDayHourMinSec[0]);
+		yearMonthDayMap.put("nowMonth", yearMonthDayHourMinSec[1]);
+		yearMonthDayMap.put("nowDay", yearMonthDayHourMinSec[2]);
+		
+		request.setAttribute("yearMonthDayMap", yearMonthDayMap);
+		request.setAttribute("menu_gubun", "survey_modify");
+		request.setAttribute("dto", dto);
+		request.setAttribute("startYear", startYear);
+		request.setAttribute("startMonth", startMonth);
+		request.setAttribute("startDay", startDay);
+		request.setAttribute("lastYear", lastYear);
+		request.setAttribute("lastMonth", lastMonth);
+		request.setAttribute("lastDay", lastDay);
+		
+		return "survey/modify";
+	}
+	
+	@RequestMapping("/modifyProc.do")
+	public void survey_modifyProc(
+			HttpServletResponse response,
+			HttpServletRequest request,
+			Model model,
+			@RequestParam(value="question", defaultValue="") String question,
+			@RequestParam(value="ans1", defaultValue="") String ans1,
+			@RequestParam(value="ans2", defaultValue="") String ans2,
+			@RequestParam(value="ans3", defaultValue="") String ans3,
+			@RequestParam(value="ans4", defaultValue="") String ans4,
+			@RequestParam(value="status", defaultValue="") String status,
+			@RequestParam(value="startYear", defaultValue="") String startYear,
+			@RequestParam(value="startMonth", defaultValue="") String startMonth,
+			@RequestParam(value="startDay", defaultValue="") String startDay,
+			@RequestParam(value="lastYear", defaultValue="") String lastYear,
+			@RequestParam(value="lastMonth", defaultValue="") String lastMonth,
+			@RequestParam(value="lastDay", defaultValue="") String lastDay
+			) throws UnknownHostException {
+		String start_date_ = "";
+		String last_date_ = "";
+		start_date_ += startYear + "-" + startMonth + "-" + startDay;
+		start_date_ += " 00:00:00.0";
+		last_date_ += lastYear + "-" + lastMonth + "-" + lastDay;
+		last_date_ += " 23:59:59.9";
+		Timestamp start_date = Timestamp.valueOf(start_date_);
+		Timestamp last_date = Timestamp.valueOf(last_date_);
+		
+		Map<String, Object> map = topInfo(request);
+		int no = (int)map.get("no");
+		
+		SurveyDTO dto = new SurveyDTO();
+		dto.setQuestion(question);
+		dto.setAns1(ans1);
+		dto.setAns2(ans2);
+		dto.setAns3(ans3);
+		dto.setAns4(ans4);
+		dto.setStatus(status);
+		dto.setStart_date(start_date);
+		dto.setLast_date(last_date);
+		dto.setNo(no);
+		
+		int result = surveyDao.setUpdateQuestion(dto);
+		try {
+  			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("chooseProc('list', '1', '');");
+			out.println("</script>");
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("/delete.do")
+	public String survey_delete(
+			HttpServletRequest request,
+			Model model
+			) throws UnknownHostException {
+		Map<String, Object> map = topInfo(request);
+		int no = (int)map.get("no");
+		
+		SurveyDTO dto = surveyDao.getSelectOne(no);
+		
+		model.addAttribute("menu_gubun", "survey_delete");
+		model.addAttribute("dto", dto);
+		
+		return "survey/delete";
+	}
+	
+	@RequestMapping("/deleteProc.do")
+	public void survey_deleteProc(
+			HttpServletRequest request,
+			HttpServletResponse response
+			) throws UnknownHostException {
+		Map<String, Object> map = topInfo(request);
+		int no = (int)map.get("no");
+		SurveyDTO dto = surveyDao.getSelectOne(no);
+		int result = surveyDao.setDeleteQuestion(dto);
+		try {
+  			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("chooseProc('list', '1', '');");
+			out.println("</script>");
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping("/saveProc.do")
+	@ResponseBody
+	public String survey_saveProc(
+			@RequestParam(value="answer_total", defaultValue="") String answer_total
+			) {
+		String[] answer_totalArr = answer_total.split("[|]");
+		
+		for (int i = 0; i < answer_totalArr.length; i++) {
+			String[] imsiArr = answer_totalArr[i].split(":");
+			int tempNo = Integer.parseInt(imsiArr[0]);
+			int tempAnswer = Integer.parseInt(imsiArr[1]);
+			
+			SurveyAnswerDTO answerDto = new SurveyAnswerDTO();
+			answerDto.setNo(tempNo);
+			answerDto.setAnswer(tempAnswer);
+			
+			surveyDao.setInsertAnswer(answerDto);
+		}
+		
+		return "";
 	}
 }

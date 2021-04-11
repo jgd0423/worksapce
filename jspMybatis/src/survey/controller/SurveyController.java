@@ -347,8 +347,6 @@ public class SurveyController extends HttpServlet {
 			dto.setNo(no);
 			
 			int result = dao.setDeleteQuestion(dto);
-			
-			
 		}
 	}
 }
