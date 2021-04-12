@@ -479,3 +479,6 @@ FROM
     from nonMemberCart) c INNER JOIN product p ON c.productNo = p.no 
 GROUP BY p.name 
 ORDER BY product_name ASC;
+
+
+SELECT tblName FROM boardChk WHERE tbl = 'freeboard';

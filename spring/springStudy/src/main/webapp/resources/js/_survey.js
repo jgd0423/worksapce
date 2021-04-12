@@ -19,7 +19,7 @@ function chooseProc(proc, pageNumber, no) {
 function goPage(proc) {
 	var param = {};
 	var url = $("#span_path").text() + "/survey/" + proc + ".do";
-	alert(url);
+
 	if (proc === "list") {
 		param = {
 			"pageNumber": $("#span_pageNumber").text(),

@@ -16,14 +16,14 @@ import com.test.springStudy.survey.model.dto.SurveyDTO;
 public class SurveyDAOImpl implements SurveyDAO {
 	
 	@Inject
-	SqlSession sqlsession;
+	SqlSession sqlSession;
 
 	@Override
 	public int setInsertQuestion(SurveyDTO dto) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("dto", dto);
 		
-		int result = sqlsession.insert("survey.setInsertQuestion", map);
+		int result = sqlSession.insert("survey.setInsertQuestion", map);
 		return result;
 	}
 
@@ -43,7 +43,7 @@ public class SurveyDAOImpl implements SurveyDAO {
 		map.put("search_date_end", search_date_end);
 		map.put("search_date_check", search_date_check);
 		
-		int result = sqlsession.selectOne("survey.getAllRowsCount", map);
+		int result = sqlSession.selectOne("survey.getAllRowsCount", map);
 		return result;
 	}
 
@@ -60,7 +60,7 @@ public class SurveyDAOImpl implements SurveyDAO {
 		map.put("search_date_end", search_date_end);
 		map.put("search_date_check", search_date_check);
 		
-		List<SurveyDTO> list = sqlsession.selectList("survey.getPagingList", map);
+		List<SurveyDTO> list = sqlSession.selectList("survey.getPagingList", map);
 		return list;
 	}
 
@@ -69,7 +69,7 @@ public class SurveyDAOImpl implements SurveyDAO {
 		Map<String, Object> map = new HashMap<>();
 		map.put("no", no);
 		
-		SurveyDTO result = sqlsession.selectOne("survey.getSelectOne", map);
+		SurveyDTO result = sqlSession.selectOne("survey.getSelectOne", map);
 		return result;
 	}
 
@@ -78,7 +78,7 @@ public class SurveyDAOImpl implements SurveyDAO {
 		Map<String, Object> map = new HashMap<>();
 		map.put("dto", dto);
 		
-		int result = sqlsession.insert("survey.setInsertAnswer", map);
+		int result = sqlSession.insert("survey.setInsertAnswer", map);
 		return result;
 	}
 
@@ -87,7 +87,7 @@ public class SurveyDAOImpl implements SurveyDAO {
 		Map<String, Object> map = new HashMap<>();
 		map.put("no", no);
 		
-		Map<String, Object> answersMap = sqlsession.selectOne("survey.getSurveyNoAnswers", map);
+		Map<String, Object> answersMap = sqlSession.selectOne("survey.getSurveyNoAnswers", map);
 		return answersMap;
 	}
 
@@ -96,7 +96,7 @@ public class SurveyDAOImpl implements SurveyDAO {
 		Map<String, Object> map = new HashMap<>();
 		map.put("dto", dto);
 		
-		int result = sqlsession.update("survey.setUpdateQuestion", map);
+		int result = sqlSession.update("survey.setUpdateQuestion", map);
 		return result;
 	}
 
@@ -105,7 +105,7 @@ public class SurveyDAOImpl implements SurveyDAO {
 		Map<String, Object> map = new HashMap<>();
 		map.put("dto", dto);
 
-		int result = sqlsession.delete("survey.setDeleteQuestion", map);
+		int result = sqlSession.delete("survey.setDeleteQuestion", map);
 		return result;
 	}
 }
