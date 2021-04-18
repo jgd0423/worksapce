@@ -96,12 +96,13 @@ public class SurveyController {
 		
 		List<SurveyDTO> list = surveyDao.getPagingList(startNum, endNum, list_gubun, search_option, search_data, search_date_start, search_date_end, search_date_check);
 		
-		request.setAttribute("list", list);
-		request.setAttribute("allRowsCount", allRowsCount);
-		request.setAttribute("tableRowNum", tableRowNum);
-		request.setAttribute("maxPagesCount", maxPagesCount);
-		request.setAttribute("pagingStartNum", pagingStartNum);
-		request.setAttribute("pagingEndNum", pagingEndNum);			
+		model.addAttribute("list", list);
+		model.addAttribute("allRowsCount", allRowsCount);
+		model.addAttribute("tableRowNum", tableRowNum);
+		model.addAttribute("maxPagesCount", maxPagesCount);
+		model.addAttribute("pagingStartNum", pagingStartNum);
+		model.addAttribute("pagingEndNum", pagingEndNum);
+		model.addAttribute("pageNum", pageNum);
 		
 		model.addAttribute("menu_gubun", "survey_list");
 		return "survey/list";
@@ -134,12 +135,13 @@ public class SurveyController {
 		
 		List<SurveyDTO> list = surveyDao.getPagingList(startNum, endNum, list_gubun, search_option, search_data, search_date_start, search_date_end, search_date_check);
 		
-		request.setAttribute("list", list);
-		request.setAttribute("allRowsCount", allRowsCount);
-		request.setAttribute("tableRowNum", tableRowNum);
-		request.setAttribute("maxPagesCount", maxPagesCount);
-		request.setAttribute("pagingStartNum", pagingStartNum);
-		request.setAttribute("pagingEndNum", pagingEndNum);			
+		model.addAttribute("list", list);
+		model.addAttribute("allRowsCount", allRowsCount);
+		model.addAttribute("tableRowNum", tableRowNum);
+		model.addAttribute("maxPagesCount", maxPagesCount);
+		model.addAttribute("pagingStartNum", pagingStartNum);
+		model.addAttribute("pagingEndNum", pagingEndNum);
+		model.addAttribute("pageNum", pageNum);
 		
 		model.addAttribute("menu_gubun", "questionBank_list");
 		return "survey/detailedList";
@@ -321,15 +323,15 @@ public class SurveyController {
 		yearMonthDayMap.put("nowMonth", yearMonthDayHourMinSec[1]);
 		yearMonthDayMap.put("nowDay", yearMonthDayHourMinSec[2]);
 		
-		request.setAttribute("yearMonthDayMap", yearMonthDayMap);
-		request.setAttribute("menu_gubun", "survey_modify");
-		request.setAttribute("dto", dto);
-		request.setAttribute("startYear", startYear);
-		request.setAttribute("startMonth", startMonth);
-		request.setAttribute("startDay", startDay);
-		request.setAttribute("lastYear", lastYear);
-		request.setAttribute("lastMonth", lastMonth);
-		request.setAttribute("lastDay", lastDay);
+		model.addAttribute("yearMonthDayMap", yearMonthDayMap);
+		model.addAttribute("menu_gubun", "survey_modify");
+		model.addAttribute("dto", dto);
+		model.addAttribute("startYear", startYear);
+		model.addAttribute("startMonth", startMonth);
+		model.addAttribute("startDay", startDay);
+		model.addAttribute("lastYear", lastYear);
+		model.addAttribute("lastMonth", lastMonth);
+		model.addAttribute("lastDay", lastDay);
 		
 		return "survey/modify";
 	}

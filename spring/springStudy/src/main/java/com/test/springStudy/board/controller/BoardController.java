@@ -53,8 +53,8 @@ public class BoardController {
     		Model model,
     		HttpServletRequest request
     		) throws UnknownHostException {
-    	Map<String, Object> map = topInfo(request);
-    	String tbl = (String)map.get("tbl");
+    	Map<String, Object> topInfoMap = topInfo(request);
+    	String tbl = (String)topInfoMap.get("tbl");
     	
     	model.addAttribute("menu_gubun", "board_index");
     	model.addAttribute("menu_gubun_sub", tbl);
@@ -63,11 +63,11 @@ public class BoardController {
     
     @RequestMapping("/list.do")
     public String board_list(HttpServletRequest request, Model model) throws UnknownHostException {
-		Map<String, Object> map = topInfo(request);
-		int pageNum = (int)map.get("pageNumber");
-		String search_option = (String)map.get("search_option");
-		String search_data = (String)map.get("search_data");
-		String tbl = (String)map.get("tbl");
+		Map<String, Object> topInfoMap = topInfo(request);
+		int pageNum = (int)topInfoMap.get("pageNumber");
+		String search_option = (String)topInfoMap.get("search_option");
+		String search_data = (String)topInfoMap.get("search_data");
+		String tbl = (String)topInfoMap.get("tbl");
 		
 		// paging
 		int allRowsCount = boardDao.getAllRowsCount(tbl, search_option, search_data);
@@ -84,19 +84,20 @@ public class BoardController {
 		
 		List<BoardDTO> list = boardDao.getPagingList(startNum, endNum, tbl, search_option, search_data);
 		
-		request.setAttribute("list", list);
+		model.addAttribute("list", list);
 		
-		request.setAttribute("ONE_PAGE_ROWS", ONE_PAGE_ROWS);
-		request.setAttribute("MAX_PAGING_WIDTH", MAX_PAGING_WIDTH);
-		request.setAttribute("allRowsCount", allRowsCount);
-		request.setAttribute("tableRowNum", tableRowNum);
+		model.addAttribute("ONE_PAGE_ROWS", ONE_PAGE_ROWS);
+		model.addAttribute("MAX_PAGING_WIDTH", MAX_PAGING_WIDTH);
+		model.addAttribute("allRowsCount", allRowsCount);
+		model.addAttribute("tableRowNum", tableRowNum);
+		model.addAttribute("pageNum", pageNum);
 		
-		request.setAttribute("pagingStartNum", pagingStartNum);
-		request.setAttribute("pagingEndNum", pagingEndNum);
+		model.addAttribute("pagingStartNum", pagingStartNum);
+		model.addAttribute("pagingEndNum", pagingEndNum);
 		
-		request.setAttribute("maxPagesCount", maxPagesCount);
-		request.setAttribute("pagingStartNum", pagingStartNum);
-		request.setAttribute("pagingEndNum", pagingEndNum);		
+		model.addAttribute("maxPagesCount", maxPagesCount);
+		model.addAttribute("pagingStartNum", pagingStartNum);
+		model.addAttribute("pagingEndNum", pagingEndNum);		
 		
 		model.addAttribute("menu_gubun", "board_list");
     	return "board/list";

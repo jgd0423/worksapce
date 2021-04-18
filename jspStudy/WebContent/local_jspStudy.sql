@@ -482,3 +482,4 @@ ORDER BY product_name ASC;
 
 
 SELECT tblName FROM boardChk WHERE tbl = 'freeboard';
+SELECT count(tblName) FROM boardChk;
