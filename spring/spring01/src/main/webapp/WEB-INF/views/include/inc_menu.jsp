@@ -31,3 +31,5 @@
 <a href="${path}/examList.do">exam관리</a>
 
 <a href="${path}/examWrite.do">exam등록</a>
+
+<a href="${path}/upload/uploadForm">파일업로드(1)</a>

@@ -26,7 +26,7 @@ public class Test03Controller {
 //		int age = Integer.parseInt(age_);
 //		
 //		model.addAttribute("name", name);
-//		model.addAttribute("jumin", jumin);
+//		model.addAttribute("jumin", jumin);	
 //		model.addAttribute("gender", gender);
 //		model.addAttribute("age", age);
 //		
