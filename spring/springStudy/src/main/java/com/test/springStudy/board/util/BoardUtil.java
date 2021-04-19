@@ -3,7 +3,9 @@ package com.test.springStudy.board.util;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.test.springStudy.board.model.dao.BoardDAO;
 import com.test.springStudy.board.model.dao.BoardDAOImpl;
+import com.test.springStudy.board.model.dto.BoardDTO;
 import com.test.springStudy.common.Util;
 
 public class BoardUtil extends Util {
@@ -15,14 +17,14 @@ public class BoardUtil extends Util {
 		return tbl;
 	}
 	
-	public ArrayList<String> tblStatus(String tbl) {
-		BoardDAOImpl dao = new BoardDAOImpl();
-		Map<String, Object> tblStatusMap = dao.isUsingTable(tbl);
+	public BoardDTO tblStatus(String tbl, BoardDAO boardDao) {
+//		BoardDAOImpl dao = new BoardDAOImpl();
+		BoardDTO dto = boardDao.isUsingTable(tbl);
 		
-		ArrayList<String> tblStatus = new ArrayList<>();
-		tblStatus.add((String)tblStatusMap.get("SERVICEGUBUN"));
-		tblStatus.add((String)tblStatusMap.get("TBLNAME"));
-		return tblStatus;
+//		ArrayList<String> tblStatus = new ArrayList<>();
+//		tblStatus.add((String)tblStatusMap.get("SERVICEGUBUN"));
+//		tblStatus.add((String)tblStatusMap.get("TBLNAME"));
+		return dto;
 	}
 	
 	// overloading

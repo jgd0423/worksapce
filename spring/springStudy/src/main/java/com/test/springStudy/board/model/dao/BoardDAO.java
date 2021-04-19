@@ -22,7 +22,7 @@ public interface BoardDAO {
 	public int setInsertComment(CommentDTO dto);
 	public int getAllCommentRowsCount(int no);
 	public List<CommentDTO> getCommentPagingList(int startNum, int endNum, int no);
-	public Map<String, Object> isUsingTable(String tbl);
+	public BoardDTO isUsingTable(String tbl);
 	public int setUpdateComment(CommentDTO dto);
 	public int setDeleteComment(int comment_no, String passwd);
 }

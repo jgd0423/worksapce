@@ -34,16 +34,16 @@ public class BoardController {
 
 		String tbl_ = request.getParameter("tbl");
 		String tbl = util.tblCheck(tbl_, "freeboard");
-		ArrayList<String> tblStatus = util.tblStatus(tbl);
-		String isUsingTable = tblStatus.get(0);
-		String tableName = tblStatus.get(1);
+		BoardDTO dto = util.tblStatus(tbl, boardDao);
+//		String isUsingTable = tblStatus.get(0);
+//		String tableName = tblStatus.get(1);
 		
 		Map<String, Object> map = util.basicInfo(request);
 		map.put("search_option", search_option);
 		map.put("search_data", search_data);
 		map.put("tbl", tbl);
-		map.put("isUsingTable", isUsingTable);
-		map.put("tableName", tableName);
+//		map.put("isUsingTable", isUsingTable);
+//		map.put("tableName", tableName);
 		return map;
 	}
     // --- 공통부분 ---

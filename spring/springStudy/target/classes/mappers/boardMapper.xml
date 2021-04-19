@@ -157,7 +157,7 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
 		]]>
 	</select>
 	
-	<select id="isUsingTable" resultType="map">
+	<select id="isUsingTable" resultType="com.test.springStudy.board.model.dto.CommentDTO">
 		SELECT tblName, serviceGubun FROM boardChk WHERE tbl = #{tbl}
 	</select>
 	

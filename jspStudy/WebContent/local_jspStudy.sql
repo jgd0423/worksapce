@@ -480,6 +480,7 @@ FROM
 GROUP BY p.name 
 ORDER BY product_name ASC;
 
-
+SELECT tblName, serviceGubun FROM boardChk WHERE tbl = 'freeboard';
+SELECT NVL(MAX(num), 0) FROM board WHERE tbl = 'freeboard';
 SELECT tblName FROM boardChk WHERE tbl = 'freeboard';
 SELECT count(tblName) FROM boardChk;

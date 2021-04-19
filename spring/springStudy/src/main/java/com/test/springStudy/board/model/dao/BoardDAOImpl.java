@@ -161,20 +161,20 @@ public class BoardDAOImpl implements BoardDAO {
 	}
 
 	@Override
-	public Map<String, Object> isUsingTable(String tbl) {
+	public BoardDTO isUsingTable(String tbl) {
 		Map<String, String> map = new HashMap<>();
 		map.put("tbl", tbl);
 		System.out.println("before");
-		Map<String, Object> tblStatusMap = sqlSession.selectOne("board.isUsingTable", map);
+		BoardDTO dto = sqlSession.selectOne("board.isUsingTable", map);
 		System.out.println("after");
 		
-		if (tblStatusMap == null) {
-			tblStatusMap = new HashMap<>();
-			tblStatusMap.put("SERVICEGUBUN", "F");
-			tblStatusMap.put("TBLNAME", "none");
-		}
+//		if (tblStatusMap == null) {
+//			tblStatusMap = new HashMap<>();
+//			tblStatusMap.put("SERVICEGUBUN", "F");
+//			tblStatusMap.put("TBLNAME", "none");
+//		}
 		
-		return tblStatusMap;
+		return dto;
 	}
 
 	@Override
