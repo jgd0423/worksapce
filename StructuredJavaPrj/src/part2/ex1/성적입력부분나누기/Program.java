@@ -2,7 +2,7 @@ package part2.ex1.성적입력부분나누기;
 
 import java.util.Scanner;
 
-public class Program{
+public class Program {
 	
     public static void main(String[] args) {
     	

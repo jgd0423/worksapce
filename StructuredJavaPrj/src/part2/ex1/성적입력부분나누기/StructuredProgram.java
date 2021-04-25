@@ -2,7 +2,7 @@ package part2.ex1.성적입력부분나누기;
 
 import java.util.Scanner;
 
-public class StructuredProgram{
+public class StructuredProgram {
 
     public static void main(String[] args) {
     	int[] korList = new int[3];
