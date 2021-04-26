@@ -102,8 +102,15 @@ public class ListProgram {
         exam.eng = eng;
         exam.math = math;
         
-        if (!exams의 공간이 있는지) {
-        	공간을 늘려주기
+        Exam[] exams = list.exams;
+        int size = list.current;
+        
+        if (exams.length == size) {
+        	Exam[] temp = new Exam[size + 5];
+        	for (int i = 0; i < size; i++) {
+        		temp[i] = exams[i];
+        	}
+        	list.exams = temp;
         }
         
         list.exams[list.current] = exam;
