@@ -33,12 +33,15 @@ public class ListProgram {
 	}
 	
     private static void printList(ExamList list) {
+    	printList(list, list.current);
+	}
+    
+    private static void printList(ExamList list, int size) {
         System.out.println("┌───────────────────────────┐");
         System.out.println("│           성적  출력          │");
         System.out.println("└───────────────────────────┘");
         System.out.println();
         
-        int size = list.current;
         Exam[] exams = list.exams;
         
         for (int i = 0; i < size; i++) {
