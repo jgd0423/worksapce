@@ -25,10 +25,8 @@ public class ExamList {
         System.out.println("└───────────────────────────┘");
         System.out.println();
         
-        Exam[] exams = this.exams;
-        
         for (int i = 0; i < size; i++) {
-	        Exam exam = exams[i];
+	        Exam exam = this.get(i);
 	        int kor = exam.getKor();
 	        int eng = exam.getEng();
 	        int math = exam.getMath();
@@ -46,6 +44,10 @@ public class ExamList {
         }
 	}
     
+	private Exam get(int i) {
+		return this.exams[i];
+	}
+
 	public void inputList() {
     	Scanner scan = new Scanner(System.in);
 		
@@ -83,15 +85,12 @@ public class ExamList {
 	        
         } while (math < 0 || 100 < math);
         
-        /*
-        Exam exam = new Exam();
-        exam.setKor(kor);
-        exam.setEng(eng);
-        exam.setMath(math);
-        */
-        
         Exam exam = new Exam(kor, eng, math);
         
+        add(exam);
+    }
+
+	private void add(Exam exam) {
         Exam[] exams = this.exams;
         int size = current;
         
@@ -105,5 +104,6 @@ public class ExamList {
         
         exams[current] = exam;
         current++;
-    }
+		
+	}
 }
