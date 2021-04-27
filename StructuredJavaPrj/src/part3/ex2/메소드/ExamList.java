@@ -33,8 +33,8 @@ public class ExamList {
 	        int eng = exam.getEng();
 	        int math = exam.getMath();
 	        
-	        int total = kor + eng + math;
-	        float avg = total / 3.0f;
+	        int total = exam.total();
+	        float avg = exam.avg();
 	        
 	    	System.out.printf("국어 : %d\n", kor);
 	        System.out.printf("영어 : %d\n", eng);
@@ -83,10 +83,14 @@ public class ExamList {
 	        
         } while (math < 0 || 100 < math);
         
+        /*
         Exam exam = new Exam();
         exam.setKor(kor);
         exam.setEng(eng);
         exam.setMath(math);
+        */
+        
+        Exam exam = new Exam(kor, eng, math);
         
         Exam[] exams = this.exams;
         int size = current;
