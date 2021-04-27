@@ -18,7 +18,6 @@ public class ExamList {
 	}
 
 	public void add(Exam exam) {
-        Exam[] exams = this.exams;
         int size = current;
         
         if (exams.length == size) {
