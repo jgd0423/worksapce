@@ -5,6 +5,11 @@ import java.util.Scanner;
 public class ExamList {
 	private Exam[] exams;
 	private int current;
+
+	public ExamList() {
+		exams = new Exam[3];
+		current = 0;
+	}
 	
 	public void printList() {
     	printList(current);
@@ -93,9 +98,4 @@ public class ExamList {
         exams[current] = exam;
         current++;
     }
-
-	public void init() {
-		exams = new Exam[3];
-		current = 0;
-	}
 }

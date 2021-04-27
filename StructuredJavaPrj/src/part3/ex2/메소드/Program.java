@@ -6,7 +6,6 @@ public class Program {
 
 	public static void main(String[] args) {
 		ExamList list = new ExamList();
-		list.init();
 
         int menu;
         boolean keepLoop = true;			
@@ -15,11 +14,9 @@ public class Program {
 			menu = inputMenu();
 	        switch (menu) {
 	        case 1:
-				//ExamList.inputList(list);
 	        	list.inputList();
 		        break;
 	        case 2:
-	        	//ExamList.printList(list);
 	        	list.printList();
 		        break;
 	        case 3:
