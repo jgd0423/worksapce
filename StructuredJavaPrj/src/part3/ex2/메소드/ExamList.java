@@ -7,7 +7,11 @@ public class ExamList {
 	private int current;
 
 	public ExamList() {
-		exams = new Exam[3];
+		this(3);
+	}
+	
+	public ExamList(int size) {
+		exams = new Exam[size];
 		current = 0;
 	}
 	
