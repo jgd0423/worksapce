@@ -8,6 +8,7 @@ public class ExamList {
 		this(3);
 	}
 	
+	// Aggregation Has A : ExamList객체가 만들어 질 때 Exam객체는 만들어지지 않는다.
 	public ExamList(int size) {
 		exams = new Exam[size];
 		current = 0;
