@@ -6,11 +6,7 @@ public class Program {
 	// OOPJavaPrj에 build path에서 jar를 등록한다.
 	
 	public static void main(String[] args) {
-		NewlecExam exam = new NewlecExam();
-		exam.setEng(10);
-		exam.setKor(10);
-		exam.setMath(10);
-		exam.setCom(10);
+		NewlecExam exam = new NewlecExam(1, 1, 1, 1);
 		
 		System.out.println(exam.total());
 		System.out.println(exam.avg());
