@@ -1,5 +1,3 @@
-import part3.ex2.메소드.Exam;
-
 public class Program {
 	
 	// 재사용은 소스코드를 복붙하는게 아니라 바이너리를 재사용하는 것이다.
@@ -8,7 +6,11 @@ public class Program {
 	// OOPJavaPrj에 build path에서 jar를 등록한다.
 	
 	public static void main(String[] args) {
-		Exam exam = new Exam(1, 1, 1);
+		NewlecExam exam = new NewlecExam();
+		exam.setEng(10);
+		exam.setKor(10);
+		exam.setMath(10);
+		exam.setCom(10);
 		
 		System.out.println(exam.total());
 	}
