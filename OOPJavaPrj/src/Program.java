@@ -13,5 +13,6 @@ public class Program {
 		exam.setCom(10);
 		
 		System.out.println(exam.total());
+		System.out.println(exam.avg());
 	}
 }
