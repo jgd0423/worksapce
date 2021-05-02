@@ -33,11 +33,11 @@ public abstract class Exam {
 		this.math = math;
 	}
 	
-	public int total() {
+	public abstract int total();
+	
+	protected int onTotal() {
 		return kor + eng + math;
 	}
 	
-	public float avg() {
-		return total() / 3.0f;
-	}	
+	public abstract float avg();
 }
